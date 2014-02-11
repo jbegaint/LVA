@@ -20,7 +20,7 @@ while True:
     print("Pin %s on, pin %s off" % (tab[i], tab[i-1]))
     GPIO.output(tab[i], GPIO.HIGH)
     GPIO.output(tab[i-1], GPIO.LOW)
-    sleep(0.2)
+    sleep(1)
 
     i += 1
 
