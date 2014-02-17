@@ -15,12 +15,6 @@
 
 char *LED_ARRAY[3] = { LED0, LED1, LED2 };
 
-typedef struct _data {
-	GtkWidget *start_button;
-	GtkWidget *pause_button;
-	GtkWidget *grid;
-};
-
 void quit(void)
 {
 	g_print("Bye!\n");
@@ -109,13 +103,17 @@ int main(int argc, char **argv)
 	start_button = GTK_WIDGET(gtk_builder_get_object(builder, "start_button"));
 	pause_button = GTK_WIDGET(gtk_builder_get_object(builder, "pause_button"));
 
+
+	for (int i = 0; i < N_COLS; i++) {
+		for (int j = 0; j < N_ROWS; j++) {
+			GtkWidget *image;
+			image = gtk_image_new_from_file(LED0);
+			gtk_grid_attach(GTK_GRID(led_matrix), image, i, j, 1, 1);			
+		}
+	}
+
 	/* connect signals */
 	gtk_builder_connect_signals(builder, NULL);
-
-	struct _data data;
-	data.pause_button = pause_button;
-	data.start_button = start_button;
-	data.grid = led_matrix;
 
 	g_signal_connect(start_button, "clicked", G_CALLBACK(on_launch_clicked), led_matrix);
 	g_signal_connect(pause_button, "clicked", G_CALLBACK(on_pause_clicked), led_matrix);
