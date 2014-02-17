@@ -10,8 +10,8 @@
 #define LED1 "led_1.png"
 #define LED2 "led_black.png"
 
-#define N_ROWS 14
-#define N_COLS 25
+#define N_ROWS 7
+#define N_COLS 5
 
 char *LED_ARRAY[3] = { LED0, LED1, LED2 };
 
