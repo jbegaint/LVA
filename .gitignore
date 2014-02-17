@@ -1,3 +1,6 @@
+*
+!*.*
+
 # Object files
 *.o
 *.ko
@@ -16,3 +19,6 @@
 *.exe
 *.out
 *.app
+
+*~
+*.sublime*
