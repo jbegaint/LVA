@@ -15,27 +15,39 @@
 
 char *LED_ARRAY[3] = { LED0, LED1, LED2 };
 
+static gboolean continue_loop;
+
+typedef struct _DataWrapper
+{
+	GtkWidget *grid;
+	GtkWidget *start_btn;
+	GtkWidget *pause_btn;
+} DataWrapper;
+
 void quit(void)
 {
 	g_print("Bye!\n");
 	gtk_main_quit();
 }
 
-void on_open_activate(GtkWidget * widget, gpointer user_data)
+void on_open_activate(GtkWidget *widget, gpointer user_data)
 {
 	g_print("%s clicked!\n", gtk_widget_get_name(widget));
 }
 
-void on_pause_clicked(GtkWidget * widget, gpointer user_data)
+void on_pause_clicked(GtkWidget *widget, gpointer user_data)
 {
-	GtkWidget *launch_button = NULL;
-	g_print("%s clicked!\n", gtk_widget_get_name(widget));
+
+	DataWrapper *data = (DataWrapper *) user_data;
+
+	gtk_widget_set_sensitive(data->start_btn, TRUE); 
+	gtk_widget_set_sensitive(data->pause_btn, FALSE); 
+
+	continue_loop = FALSE;
 }
 
-void on_launch_clicked(GtkWidget * widget, gpointer user_data)
+gboolean loop_random(gpointer user_data)
 {
-	/*gtk_widget_set_sensitive(widget, FALSE); */
-
 	GList *children, *l;
 	GtkWidget *grid = NULL;
 
@@ -58,9 +70,23 @@ void on_launch_clicked(GtkWidget * widget, gpointer user_data)
 
 	g_list_free(children);
 	g_free(led_state);
+
+	return continue_loop;
 }
 
-void on_window_destroy(GtkWidget * widget, gpointer user_data)
+void on_launch_clicked(GtkWidget *widget, gpointer user_data)
+{
+	continue_loop = TRUE;
+
+	DataWrapper *data = (DataWrapper *) user_data;
+
+	gtk_widget_set_sensitive(data->start_btn, FALSE); 
+	gtk_widget_set_sensitive(data->pause_btn, TRUE); 
+
+	g_timeout_add(33, loop_random, data->grid);
+}
+
+void on_window_destroy(GtkWidget *widget, gpointer user_data)
 {
 	quit();
 }
@@ -75,7 +101,6 @@ int main(int argc, char **argv)
 	GtkWidget *led_matrix = NULL;
 	GtkWidget *start_button = NULL;
 	GtkWidget *pause_button = NULL;
-
 
 	/* Gtk init */
 	gtk_init(&argc, &argv);
@@ -103,6 +128,10 @@ int main(int argc, char **argv)
 	start_button = GTK_WIDGET(gtk_builder_get_object(builder, "start_button"));
 	pause_button = GTK_WIDGET(gtk_builder_get_object(builder, "pause_button"));
 
+	DataWrapper *data = g_new(DataWrapper, 1);
+	data->grid = led_matrix;
+	data->start_btn = start_button;
+	data->pause_btn = pause_button;
 
 	for (int i = 0; i < N_COLS; i++) {
 		for (int j = 0; j < N_ROWS; j++) {
@@ -115,13 +144,17 @@ int main(int argc, char **argv)
 	/* connect signals */
 	gtk_builder_connect_signals(builder, NULL);
 
-	g_signal_connect(start_button, "clicked", G_CALLBACK(on_launch_clicked), led_matrix);
-	g_signal_connect(pause_button, "clicked", G_CALLBACK(on_pause_clicked), led_matrix);
+	g_signal_connect(start_button, "clicked", G_CALLBACK(on_launch_clicked), data);
+	g_signal_connect(pause_button, "clicked", G_CALLBACK(on_pause_clicked), data);
+
+	gtk_widget_set_sensitive(pause_button, FALSE); 
 
 	/* display main_window */
 	gtk_widget_show_all(main_window);
 
 	gtk_main();
+
+	g_free(data);
 
 	return 0;
 }
