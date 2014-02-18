@@ -18,8 +18,8 @@ def set_pin_off(pin):
 def msleep(sec):
 	sleep(sec/1000.0)
 
-[for pin in PINS setup_pin(pin)]
-[for pin in PINS set_pin_off(pin)]
+[setup_pin(pin) for pin in PINS ]
+[set_pin_off(pin) for pin in PINS ]
 
 while 1:
 	for i in range(0, 3):
