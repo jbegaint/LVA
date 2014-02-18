@@ -1,4 +1,3 @@
-#`pkg-config --cflags --libs gtk+-2.0`
 TARGET = GLeds
 
 SRC := main.c
