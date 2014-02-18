@@ -27,7 +27,6 @@ while True:
     if (i%4 == 0):
         i = 0
 
-
 # clean gpio for exit
 GPIO.cleanup()
 

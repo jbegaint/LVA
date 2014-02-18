@@ -21,17 +21,19 @@ def msleep(sec):
 [setup_pin(pin) for pin in PINS ]
 [set_pin_off(pin) for pin in PINS ]
 
+print("starting loop")
+
 while 1:
 	for i in range(0, 3):
 		set_pin_on(PINS[i])
-	msleep(T/4)
 
+	msleep(T/16)
 	set_pin_off(PINS[2])
-	msleep(T/2)
 
+        msleep(T/4)
 	set_pin_off(PINS[1])
-	msleep(T/2)
 
+	msleep(T)
 	set_pin_off(PINS[0])
 
-	msleep(20-T-T/2-T/4)
+        msleep(20 - T/4 - T/16 -T)
