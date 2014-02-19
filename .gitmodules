@@ -1,0 +1,3 @@
+[submodule "BBBIOlib"]
+	path = BBBIOlib
+	url = https://github.com/VegetableAvenger/BBBIOlib.git
