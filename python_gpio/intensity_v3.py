@@ -1,6 +1,6 @@
-#!/usr/bin/env python2
-
+#!/usr/bin/env python2 
 from utils import *
+import Adafruit_BBIO.GPIO as GPIO
 
 # global variables 
 T = 1.42
@@ -30,8 +30,7 @@ def get_dict_pins_periods():
 def main():
 	# init board
 	init_pin(SWITCH)
-	set_pin_on(SWITCH)
-
+        GPIO.output(SWITCH, GPIO.HIGH)
 	# init pins
         [init_pin(p) for p in PINS ]
 

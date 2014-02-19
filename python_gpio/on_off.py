@@ -10,9 +10,9 @@ if (len(sys.argv) != 3):
 GPIO.setup(sys.argv[1], GPIO.OUT)
 
 if (sys.argv[2] == "on"):
-    GPIO.output(sys.argv[1], GPIO.HIGH)
-elif (sys.argv[2] == "off"):
     GPIO.output(sys.argv[1], GPIO.LOW)
+elif (sys.argv[2] == "off"):
+    GPIO.output(sys.argv[1], GPIO.HIGH)
 else:
     print("Syntax error")
     exit(1)
