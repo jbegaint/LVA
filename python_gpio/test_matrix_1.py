@@ -38,11 +38,10 @@ def main():
 	set_pin_on(SWITCH)
 
 	# init pins
-	[init_pin(p) for p in PINS]
-	[init_pin(p) for p in PINS_ROWS]
+	[init_pin(p) for p in PINS + PINS_ROWS]
+	[set_pin_off(p) for p in PINS + PINS_ROWS]
 
 	while 1:
-
 		for pin in PINS_ROWS:
 			set_pin_on(pin)
 
