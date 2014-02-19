@@ -24,7 +24,7 @@ def get_dict_pins_periods():
 
 	for pin in PINS:
 		d[pin] = dict_level_to_period[dict_pins_levels[pin]]
-	print(d)
+
 	return d
 
 def main():
