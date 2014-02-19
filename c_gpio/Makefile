@@ -1,5 +1,4 @@
-CFLAGS = -Wall -Wextra -Wshadow -std=c89 -pedantic
-
+# CFLAGS = -Wall -Wextra -Wshadow -pedantic
 LIB_PATH = ../BBBIOlib/BBBio_lib/
 LDFLAGS = -L $(LIB_PATH) -lBBBio
 
