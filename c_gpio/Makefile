@@ -1,4 +1,4 @@
-# CFLAGS = -Wall -Wextra -Wshadow -pedantic
+CFLAGS = -Wall -Wextra -Wshadow -pedantic
 LIB_PATH = ../BBBIOlib/BBBio_lib/
 LDFLAGS = -L $(LIB_PATH) -lBBBio
 
@@ -6,7 +6,6 @@ all: demo_cycle
 
 demo_cycle: demo_cycle.o libBBBio.a
 	gcc $^ $(LDFLAGS) -L ${LIB_PATH} -lBBBio -o $@
-	# gcc -o $@ -c $< -L ${LIB_PATH} -lBBBio 
 
 libBBBio.a: ${LIB_PATH}BBBiolib.c ${LIB_PATH}BBBiolib.h BBBiolib_PWMSS.o BBBiolib_McSPI.o BBBiolib_ADCTSC.o
 	gcc -c ${LIB_PATH}BBBiolib.c -o ${LIB_PATH}BBBiolib.o
@@ -28,4 +27,4 @@ BBBiolib_ADCTSC.o: ${LIB_PATH}BBBiolib_ADCTSC.c ${LIB_PATH}BBBiolib_ADCTSC.h
 .PHONY: clean
 
 clean:
-	rm -f *.o
+	rm -f *.o *.a demo_cycle
