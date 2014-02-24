@@ -52,26 +52,26 @@ int main()
 	iolib_init();
 	BBBIO_sys_Enable_GPIO(BBBIO_GPIO3);
 
-	/* init pins */
-	BBBIO_GPIO_set_dir(BBBIO_GPIO3, BBBIO_GPIO_PIN_17 | BBBIO_GPIO_PIN_16 | BBBIO_GPIO_PIN_15 | BBBIO_GPIO_PIN_14, 0);
 
-	/* set all pins to low */
+	/* init pins */
 	for (p = 0; p < 4; p++)
 		out |= PINS[p];
+	BBBIO_GPIO_set_dir(BBBIO_GPIO3, out, 0);
+
+	/* set all pins to low */
 	BBBIO_GPIO_low(BBBIO_GPIO3, out);
 
-	/* loop over levels */
 	for (c = 0; c < 1000; c++) {
-		
 		time_elapsed = 0;
-
+		
+		/* loop over levels */
 		for (l = 0; l < N_LEVELS; l++) {
-	
 			out = 0;
 
 			/* get current values */
 			current = BBBIO_GPIO_get(BBBIO_GPIO3, BBBIO_GPIO_PIN_17 | BBBIO_GPIO_PIN_16 | BBBIO_GPIO_PIN_15 | BBBIO_GPIO_PIN_14);
 	
+			/* loop over pins */
 			for (p = 0; p < N_PINS; p++) {
 				/* check if pin is on, and set next status */
 				if ((PINS[p] & current) && (gpio_ptlt(p) > LEVELS[l]))
@@ -96,7 +96,6 @@ int main()
 		}
 		BBBIO_sys_delay_us((20 - T) * 1000);
 	}
-
 
 	/* bye */
 	iolib_free();
