@@ -4,7 +4,7 @@ LDFLAGS = -L $(LIB_PATH) -lBBBio
 
 all: demo_cycle
 
-demo_cycle: demo_cycle.o libBBBio.a
+demo_cycle: demo_cycle.o libBBBio.a utils.o
 	gcc $^ $(LDFLAGS) -L ${LIB_PATH} -lBBBio -o $@
 
 libBBBio.a: ${LIB_PATH}BBBiolib.c ${LIB_PATH}BBBiolib.h BBBiolib_PWMSS.o BBBiolib_McSPI.o BBBiolib_ADCTSC.o

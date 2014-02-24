@@ -1,19 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
 
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
-
-void die(char *err, ...)
-{
-	va_list e;
-
-	va_start(e, err);
-	vfprintf(stderr, err, e);
-	va_end(e);
-
-	exit(EXIT_FAILURE);
-}
+#include "utils.h"
 
 void usage(char *str)
 {
