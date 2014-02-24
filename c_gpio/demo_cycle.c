@@ -29,10 +29,10 @@ int main(int argc, char **argv)
 
 	for (c = 0; c < 1000; c++) {
 		pin_high(header, pin);
-		BBBIO_sys_delay_ms(delay);
+		iolib_delay_ms(delay);
 
 		pin_low(header, pin);
-		BBBIO_sys_delay_ms(delay);
+		iolib_delay_ms(delay);
 	}
 
 	iolib_free();

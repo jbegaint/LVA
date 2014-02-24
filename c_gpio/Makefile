@@ -2,9 +2,15 @@ CFLAGS = -Wall -Wextra -Wshadow -pedantic
 LIB_PATH = ../BBBIOlib/BBBio_lib/
 LDFLAGS = -L $(LIB_PATH) -lBBBio
 
-all: demo_cycle
+comp = libBBBio.a utils.o
 
-demo_cycle: demo_cycle.o libBBBio.a utils.o
+all: demo_one_row
+
+
+demo_one_row: demo_one_row.o $(comp)
+	gcc $^ $(LDFLAGS) -L ${LIB_PATH} -lBBBio -o $@
+
+demo_cycle: demo_cycle.o $(comp)
 	gcc $^ $(LDFLAGS) -L ${LIB_PATH} -lBBBio -o $@
 
 libBBBio.a: ${LIB_PATH}BBBiolib.c ${LIB_PATH}BBBiolib.h BBBiolib_PWMSS.o BBBiolib_McSPI.o BBBiolib_ADCTSC.o
