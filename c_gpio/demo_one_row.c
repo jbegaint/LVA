@@ -46,6 +46,8 @@ int main()
 	iolib_init();
 	BBBIO_sys_Enable_GPIO(BBBIO_GPIO3);
 
+	iolib_setdir(9, 27, BBBIO_DIR_OUT);
+	pin_high(9, 27);
 
 	/* init pins */
 	for (p = 0; p < 4; p++)
@@ -92,6 +94,7 @@ int main()
 	}
 
 	/* bye */
+	pin_low(9, 27);
 	iolib_free();
 	return 0;
 }
