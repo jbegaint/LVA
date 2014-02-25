@@ -92,6 +92,7 @@ int main()
 			time_elapsed = T / LEVELS[l];
 
 		}
+		print_bits(out);
 		BBBIO_sys_delay_us((20 - T) * 1000);
 	}
 
