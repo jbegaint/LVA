@@ -1,0 +1,5 @@
+Description='wire usb0'
+Interface=usb0
+IP=static
+Address=('192.168.7.1')
+Connection=ethernet
