@@ -72,7 +72,7 @@ int main()
 				/* check if pin is on, and set next status */
 			/*	if ((PINS[p] & current) && (gpio_ptlt(p) > LEVELS[l]))
 					out |= PINS[p];*/
-				if (gpio_ptlt(p) > LEVELS[l])
+				if (PINS_LEVELS[p] > l)
 					out |= PINS[p];
 			}
 
