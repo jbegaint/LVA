@@ -47,7 +47,7 @@ int main()
 	BBBIO_sys_Enable_GPIO(BBBIO_GPIO3);
 
 	iolib_setdir(9, 27, BBBIO_DIR_OUT);
-	pin_high(9, 27);
+	pin_low(9, 27);
 
 	/* init pins */
 	for (p = 0; p < 4; p++)
@@ -55,9 +55,9 @@ int main()
 	BBBIO_GPIO_set_dir(BBBIO_GPIO3, out, 0);
 
 	/* set all pins to low */
-	BBBIO_GPIO_high(BBBIO_GPIO3, out);
+	BBBIO_GPIO_low(BBBIO_GPIO3, out);
 
-	for (c = 0; c < 10000; c++) {
+	for (c = 0; c < 10000000; c++) {
 		time_elapsed = 0;
 		
 		/* loop over levels */
@@ -75,8 +75,8 @@ int main()
 			}
 
 			/* set pins values */
-			BBBIO_GPIO_low(BBBIO_GPIO3, out);
-			BBBIO_GPIO_high(BBBIO_GPIO3, ~out);
+			BBBIO_GPIO_high(BBBIO_GPIO3, out);
+			BBBIO_GPIO_low(BBBIO_GPIO3, ~out);
 
 			/* prevent 0 div */
 			if (LEVELS[l] == 0)
@@ -96,5 +96,6 @@ int main()
 	/* bye */
 	pin_low(9, 27);
 	iolib_free();
+	
 	return 0;
 }
