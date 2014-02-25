@@ -47,12 +47,12 @@ int main()
 	BBBIO_sys_Enable_GPIO(BBBIO_GPIO3);
 
 	iolib_setdir(9, 27, BBBIO_DIR_OUT);
-	pin_low(9, 27);
+	pin_high(9, 27);
 
 	/* init pins */
 	for (p = 0; p < 4; p++)
 		out |= PINS[p];
-	BBBIO_GPIO_set_dir(BBBIO_GPIO3, out, 0);
+	BBBIO_GPIO_set_dir(BBBIO_GPIO3, 0, out);
 
 	/* set all pins to low */
 	BBBIO_GPIO_low(BBBIO_GPIO3, out);
@@ -70,7 +70,9 @@ int main()
 			/* loop over pins */
 			for (p = 0; p < N_PINS; p++) {
 				/* check if pin is on, and set next status */
-				if ((PINS[p] & current) && (gpio_ptlt(p) > LEVELS[l]))
+			/*	if ((PINS[p] & current) && (gpio_ptlt(p) > LEVELS[l]))
+					out |= PINS[p];*/
+				if (gpio_ptlt(p) > LEVELS[l])
 					out |= PINS[p];
 			}
 
