@@ -55,7 +55,7 @@ int main()
 	/* set all pins to low */
 	BBBIO_GPIO_high(BBBIO_GPIO3, out);
 
-	for (c = 0; c < 1000; c++) {
+	for (c = 0; c < 10000; c++) {
 		time_elapsed = 0;
 		
 		/* loop over levels */
