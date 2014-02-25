@@ -22,12 +22,6 @@
 
 static float T = 1.42;
 
-struct pin_t {
-	char gpio_id;
-    int pin_id;
-    char level;
-};
-
 static int PINS[4] = {BBBIO_GPIO_PIN_17, BBBIO_GPIO_PIN_15, BBBIO_GPIO_PIN_16, BBBIO_GPIO_PIN_14};
 
 static int PINS_LEVELS[4] = {0, 3, 2, 1};
@@ -59,7 +53,7 @@ int main()
 	BBBIO_GPIO_set_dir(BBBIO_GPIO3, out, 0);
 
 	/* set all pins to low */
-	BBBIO_GPIO_low(BBBIO_GPIO3, out);
+	BBBIO_GPIO_high(BBBIO_GPIO3, out);
 
 	for (c = 0; c < 1000; c++) {
 		time_elapsed = 0;
@@ -79,8 +73,8 @@ int main()
 			}
 
 			/* set pins values */
-			BBBIO_GPIO_high(BBBIO_GPIO3, out);
-			BBBIO_GPIO_low(BBBIO_GPIO3, ~out);
+			BBBIO_GPIO_low(BBBIO_GPIO3, out);
+			BBBIO_GPIO_high(BBBIO_GPIO3, ~out);
 
 			/* prevent 0 div */
 			if (LEVELS[l] == 0)
