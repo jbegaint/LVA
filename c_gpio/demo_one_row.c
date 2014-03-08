@@ -40,7 +40,6 @@ int main()
 	int c, p, l;
 	int out;
 	int current;
-	float time_elapsed;
 
 	/* init gpio */
 	iolib_init();
@@ -52,16 +51,16 @@ int main()
 	/* init pins */
 	for (p = 0; p < 4; p++)
 		out |= PINS[p];
+
 	BBBIO_GPIO_set_dir(BBBIO_GPIO3, 0, out);
 
 	/* set all pins to low */
 	BBBIO_GPIO_low(BBBIO_GPIO3, out);
 
 	for (c = 0; c < 10000000; c++) {
-		time_elapsed = 0;
 		
 		/* loop over levels */
-		for (l = 0; l < N_LEVELS; l++) {
+		for (l = 1; l < N_LEVELS; l++) {
 			out = 0;
 
 			/* get current values */
@@ -69,27 +68,21 @@ int main()
 	
 			/* loop over pins */
 			for (p = 0; p < N_PINS; p++) {
-				/* check if pin is on, and set next status */
-			/*	if ((PINS[p] & current) && (gpio_ptlt(p) > LEVELS[l]))
-					out |= PINS[p];*/
-				if (PINS_LEVELS[p] > l)
+				if (PINS_LEVELS[p] > l) {
 					out |= PINS[p];
+				}
 			}
 
 			/* set pins values */
 			BBBIO_GPIO_high(BBBIO_GPIO3, out);
 			BBBIO_GPIO_low(BBBIO_GPIO3, ~out);
 
-			/* prevent 0 div */
-			if (LEVELS[l] == 0)
-				continue;
-			/* 
+			/*
 				wait X us 
 			 	we already waited for T/LEVELS[p-1], so let's subtract it
 			*/
 
-			BBBIO_sys_delay_us(((T / LEVELS[l]) - time_elapsed) * 1000);
-			time_elapsed = T / LEVELS[l];
+			BBBIO_sys_delay_us(((T / LEVELS[l]) - (T / LEVELS[l-1])) * 1000);
 
 		}
 		print_bits(out);
