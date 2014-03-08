@@ -27,14 +27,6 @@ static int PINS[4] = {BBBIO_GPIO_PIN_17, BBBIO_GPIO_PIN_15, BBBIO_GPIO_PIN_16, B
 static int PINS_LEVELS[4] = {0, 3, 2, 1};
 static int LEVELS[4] = {0, 16, 8, 1};
 
-/* pin to level time */
-int gpio_ptlt(int pin_id)
-{
-	int pin_level = PINS_LEVELS[pin_id];
-
-	return LEVELS[pin_level];
-}
-
 int main()
 {
 	int c, p, l;
@@ -74,8 +66,8 @@ int main()
 			}
 
 			/* set pins values */
-			BBBIO_GPIO_high(BBBIO_GPIO3, out);
-			BBBIO_GPIO_low(BBBIO_GPIO3, ~out);
+			set_pins_row_on(BBBIO_GPIO3, out);
+			set_pins_row_off(BBBIO_GPIO3, ~out);
 
 			/*
 				wait X us 
@@ -85,7 +77,6 @@ int main()
 			BBBIO_sys_delay_us(((T / LEVELS[l]) - (T / LEVELS[l-1])) * 1000);
 
 		}
-		print_bits(out);
 		BBBIO_sys_delay_us((20 - T) * 1000);
 	}
 
