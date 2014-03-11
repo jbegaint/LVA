@@ -22,7 +22,7 @@
 
 static float T = 1.42;
 
-static int PINS[4] = {BBBIO_GPIO_PIN_3, BBBIO_GPIO_PIN_2, BBBIO_GPIO_PIN_15, BBBIO_GPIO_PIN_14};
+static int PINS[4] = {BBBIO_GPIO_PIN_13, BBBIO_GPIO_PIN_12, BBBIO_GPIO_PIN_15, BBBIO_GPIO_PIN_14};
 
 static int PINS_LEVELS[4] = {0, 3, 2, 1};
 static int LEVELS[4] = {0, 16, 8, 1};
@@ -35,7 +35,7 @@ int main()
 
 	/* init gpio */
 	iolib_init();
-	BBBIO_sys_Enable_GPIO(BBBIO_GPIO0);
+	BBBIO_sys_Enable_GPIO(BBBIO_GPIO1);
 
 	iolib_setdir(9, 27, BBBIO_DIR_OUT);
 	pin_high(9, 27);
@@ -44,10 +44,10 @@ int main()
 	for (p = 0; p < 4; p++)
 		out |= PINS[p];
 
-	BBBIO_GPIO_set_dir(BBBIO_GPIO0, 0, out);
+	BBBIO_GPIO_set_dir(BBBIO_GPIO1, 0, out);
 
 	/* set all pins to low */
-	BBBIO_GPIO_low(BBBIO_GPIO0, out);
+	BBBIO_GPIO_low(BBBIO_GPIO1, out);
 
 	for (c = 0; c < 10000000; c++) {
 		
@@ -56,7 +56,7 @@ int main()
 			out = 0;
 
 			/* get current values */
-			current = BBBIO_GPIO_get(BBBIO_GPIO0, BBBIO_GPIO_PIN_17 | BBBIO_GPIO_PIN_16 | BBBIO_GPIO_PIN_15 | BBBIO_GPIO_PIN_14);
+			current = BBBIO_GPIO_get(BBBIO_GPIO1, BBBIO_GPIO_PIN_17 | BBBIO_GPIO_PIN_16 | BBBIO_GPIO_PIN_15 | BBBIO_GPIO_PIN_14);
 	
 			/* loop over pins */
 			for (p = 0; p < N_PINS; p++) {
@@ -66,8 +66,8 @@ int main()
 			}
 
 			/* set pins values */
-			set_pins_row_on(BBBIO_GPIO0, out);
-			set_pins_row_off(BBBIO_GPIO0, ~out);
+			set_pins_row_on(BBBIO_GPIO1, out);
+			set_pins_row_off(BBBIO_GPIO1, ~out);
 
 			/*
 				wait X us 
