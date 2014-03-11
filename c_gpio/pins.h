@@ -18,7 +18,7 @@ void print_pin(pin_t *pin);
 /* avoid headaches */
 void set_pins_col_off(int, int);
 void set_pins_col_on(int, int);
-void set_pins_row_ff(int, int);
+void set_pins_row_off(int, int);
 void set_pins_row_on(int, int);
 
 #endif
