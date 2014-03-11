@@ -1,76 +1,113 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
+#include "pins.h"
 #include "utils.h"
 
-#define N_PINS 4
-#define N_LEVELS 4
-
-static float T = 1.42;
-
-static int PINS[4] = {BBBIO_GPIO_PIN_13, BBBIO_GPIO_PIN_12, BBBIO_GPIO_PIN_15, BBBIO_GPIO_PIN_14};
-
+static int running = 1;
 static int PINS_LEVELS[4] = {0, 1, 2, 3};
-static int LEVELS[4] = {0, 16, 8, 1};
 
-int main()
+/*static int PINS[4] = {BBBIO_GPIO_PIN_13, BBBIO_GPIO_PIN_12, BBBIO_GPIO_PIN_15, BBBIO_GPIO_PIN_14};*/
+
+extern int LEVELS[4];
+
+static const char *pins_names[] = {"P8_11", "P8_12", "P8_15", "P8_16"};
+static const pin_t *pins; 
+static int N_PINS = ARRAY_SIZE(pins_names);
+
+void handler(int sig)
 {
-	int c, p, l;
-	int out;
-	int current;
-	int ctrl;
+	/* yes i know, we only catch SIGINT ATM.. */
+	if (sig == SIGINT) {
+		running = 0;
+		printf("Exiting...\n");
+	}
+}
+
+void setup(int *ctrl)
+{
+	int p;
 
 	/* init gpio */
 	iolib_init();
 	BBBIO_sys_Enable_GPIO(BBBIO_GPIO1);
 
-	/* init pins */
-	for (p = 0; p < 4; p++) {
-		out |= PINS[p];
-		ctrl |= PINS[p];
+	/* get pins ctrl */
+	for (p = 0; p < N_PINS; p++) {
+		*ctrl |= (pins[p]).id;
 	}
 
-	BBBIO_GPIO_set_dir(BBBIO_GPIO1, 0, out);
+	/* set pins as output */
+	BBBIO_GPIO_set_dir(BBBIO_GPIO1, 0, *ctrl);
 
 	/* set all pins to low */
-	set_pins_row_off(BBBIO_GPIO1, out);
+	set_pins_row_off_by_gpio(BBBIO_GPIO1, *ctrl);
+}
 
-	for (c = 0; c < 10000000; c++) {
+void cleanup(void)
+{
+	iolib_free();
+}
+
+int get_pins_to_set_on(int level)
+{
+	int out, p;
+
+	/* loop over pins */
+	for (p = 0; p < N_PINS; p++) {
+		if (PINS_LEVELS[p] < level) {
+			out |= (pins[p]).id;
+		}
+	}
+
+	return out;
+}
+
+void switch_leds(int ctrl)
+{
+	int l, out;
+	
+	while (running) {
 		
 		/* loop over levels */
-		for (l = 1; l < N_LEVELS; l++) {
-			out = 0;
+		/* N_LEVELS-2, indeed no need to check level 3 (off)*/
+		for (l = N_LEVELS - 2; l > 0 ; --l) {
 
-			/* get current values */
-			current = BBBIO_GPIO_get(BBBIO_GPIO1, BBBIO_GPIO_PIN_13 | BBBIO_GPIO_PIN_12 | BBBIO_GPIO_PIN_15 | BBBIO_GPIO_PIN_14);
-	
-			/* loop over pins */
-			for (p = 0; p < N_PINS; p++) {
-				if (PINS_LEVELS[p] >= l) {
-					out |= PINS[p];
-				}
-			}
+			out = get_pins_to_set_on(l);
 
 			/* set pins values */
-			set_pins_row_on(BBBIO_GPIO1, out);
-			set_pins_row_off(BBBIO_GPIO1, ctrl & (~out));
+			set_pins_row_on_by_gpio(BBBIO_GPIO1, out);
+			set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl & (~out));
 
 			/*
 				wait X us 
-			 	we already waited for T/LEVELS[p-1], so let's subtract it
+			 	we already waited for T/LEVELS[l-1], so let's subtract it
 			*/
 
-			//pin_sys_delay_us(((T / LEVELS[l]) - (T / LEVELS[l-1]))) ;
+			/* todo: helper fct here*/
 			iolib_delay_ms(((T / LEVELS[l]) - (T / LEVELS[l-1]))) ;
 
 		}
-		set_pins_row_off(BBBIO_GPIO1, BBBIO_GPIO_PIN_13 | BBBIO_GPIO_PIN_12 | BBBIO_GPIO_PIN_15 | BBBIO_GPIO_PIN_14);
+		set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl);
 		iolib_delay_ms((20 - T));
 	}
 
-	/* bye */
-	iolib_free();
+	/* end of loop, exit */
+	cleanup();
+}
+
+int main()
+{
+	int ctrl;
 	
+	pins = get_pins_by_names(pins_names, N_PINS);
+
+	setup(&ctrl);
+	switch_leds(ctrl);
+
+	signal(SIGINT, handler);
+
 	return 0;
 }

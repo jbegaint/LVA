@@ -6,7 +6,16 @@
 #include "pins.h"
 #include "utils.h"
 
-/* to be continued */
+/* sort by brightness */
+
+level_t levels_table[] = {
+	{0, LEVEL_0},
+	{1, LEVEL_1},
+	{2, LEVEL_2},
+	{3, LEVEL_3},
+};
+
+/* BBB GPIOs*/
 pin_t pins_table[] = {
 	{"P8_03", BBBIO_GPIO1, BBBIO_GPIO_PIN_6},
 	{"P8_04", BBBIO_GPIO1, BBBIO_GPIO_PIN_7},
@@ -149,22 +158,30 @@ void print_pin(pin_t *pin)
 	printf("%3d\n", i);
 }
 
-void set_pins_row_on(int gpio, int pins)
+void print_pins(pin_t **pins, int n_pins)
+{
+	printf("NAME  GPIO PIN\n");
+	for (int i = 0; i < n_pins; ++i) {
+		print_pin((*pins)+i);
+	}
+}
+
+void set_pins_row_on_by_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_low(gpio, pins);
 }
 
-void set_pins_row_off(int gpio, int pins)
+void set_pins_row_off_by_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_high(gpio, pins);
 }
 
-void set_pins_col_on(int gpio, int pins)
+void set_pins_col_on_by_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_high(gpio, pins);
 }
 
-void set_pins_col_off(int gpio, int pins)
+void set_pins_col_off_by_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_low(gpio, pins);
 }
