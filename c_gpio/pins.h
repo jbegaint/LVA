@@ -1,13 +1,16 @@
 #ifndef _PINS_H_
 #define _PINS_H_
 
+#define LEVEL0 1
+#define LEVEL1 8
+#define LEVEL2 16
+#define LEVEL3 0
+
 typedef struct pin_t {
     const char *name;
     int gpio;
     int id;
 } pin_t;
-
-int pin_sys_delay_us(unsigned long msec);
 
 pin_t *get_pins_by_names(const char **names, int n_pins);
 pin_t *get_pin_by_name(const char *name);
