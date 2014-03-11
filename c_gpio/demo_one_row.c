@@ -19,14 +19,17 @@ int main()
 	int c, p, l;
 	int out;
 	int current;
+	int ctrl;
 
 	/* init gpio */
 	iolib_init();
 	BBBIO_sys_Enable_GPIO(BBBIO_GPIO1);
 
 	/* init pins */
-	for (p = 0; p < 4; p++)
+	for (p = 0; p < 4; p++) {
 		out |= PINS[p];
+		ctrl |= PINS[p];
+	}
 
 	BBBIO_GPIO_set_dir(BBBIO_GPIO1, 0, out);
 
@@ -51,18 +54,19 @@ int main()
 
 			/* set pins values */
 			set_pins_row_on(BBBIO_GPIO1, out);
-			set_pins_row_off(BBBIO_GPIO1, ~out);
+			set_pins_row_off(BBBIO_GPIO1, ctrl & (~out));
 
 			/*
 				wait X us 
 			 	we already waited for T/LEVELS[p-1], so let's subtract it
 			*/
 
-			pin_sys_delay_us(((T / LEVELS[l]) - (T / LEVELS[l-1])) * 1000);
+			//pin_sys_delay_us(((T / LEVELS[l]) - (T / LEVELS[l-1]))) ;
+			iolib_delay_ms(((T / LEVELS[l]) - (T / LEVELS[l-1]))) ;
 
 		}
 		set_pins_row_off(BBBIO_GPIO1, BBBIO_GPIO_PIN_13 | BBBIO_GPIO_PIN_12 | BBBIO_GPIO_PIN_15 | BBBIO_GPIO_PIN_14);
-		pin_sys_delay_us((20 - T) * 1000);
+		iolib_delay_ms((20 - T));
 	}
 
 	/* bye */

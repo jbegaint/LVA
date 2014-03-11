@@ -27,12 +27,12 @@ pin_t pins_table[] = {
 	{NULL, 0, 0},
 };
 
-int pin_sys_delay_us(unsigned long msec)
+int pin_sys_delay_us(unsigned long usec)
 {
 	struct timespec a;
 
-	a.tv_nsec=(msec) * 1000L;
-	a.tv_sec=0;
+	a.tv_nsec = (usec) * 1000L;
+	a.tv_sec = 0;
 	
 	if (nanosleep(&a, NULL) != 0) {
 		fprintf(stderr, "delay_ms error: %s\n", strerror(errno));

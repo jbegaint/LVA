@@ -2,7 +2,7 @@ CFLAGS = -Wall -Wextra -Wshadow -std=gnu99 -pedantic
 LIB_PATH = ../BBBIOlib/BBBio_lib/
 LDFLAGS = -L $(LIB_PATH) -lBBBio
 
-DEPS = libBBBio.a utils.o pins.o
+DEPS = utils.o pins.o
 
 all: demo_one_row
 
