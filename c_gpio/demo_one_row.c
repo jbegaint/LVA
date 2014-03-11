@@ -9,8 +9,6 @@
 static int running = 1;
 static int PINS_LEVELS[4] = {0, 1, 2, 3};
 
-/*static int PINS[4] = {BBBIO_GPIO_PIN_13, BBBIO_GPIO_PIN_12, BBBIO_GPIO_PIN_15, BBBIO_GPIO_PIN_14};*/
-
 extern int LEVELS[4];
 
 static const char *pins_names[] = {"P8_11", "P8_12", "P8_15", "P8_16"};
@@ -51,13 +49,13 @@ void cleanup(void)
 	iolib_free();
 }
 
-int get_pins_to_set_on(int level)
+int get_pins_to_set_on(int level_id)
 {
 	int out, p;
 
 	/* loop over pins */
 	for (p = 0; p < N_PINS; p++) {
-		if (PINS_LEVELS[p] < level) {
+		if (PINS_LEVELS[p] < level_id) {
 			out |= (pins[p]).id;
 		}
 	}
@@ -75,6 +73,7 @@ void switch_leds(int ctrl)
 		/* N_LEVELS-2, indeed no need to check level 3 (off)*/
 		for (l = N_LEVELS - 2; l > 0 ; --l) {
 
+			/* todo: fct to set on/off independent of gpios */
 			out = get_pins_to_set_on(l);
 
 			/* set pins values */
@@ -86,8 +85,7 @@ void switch_leds(int ctrl)
 			 	we already waited for T/LEVELS[l-1], so let's subtract it
 			*/
 
-			/* todo: helper fct here*/
-			iolib_delay_ms(((T / LEVELS[l]) - (T / LEVELS[l-1]))) ;
+			level_sleep(l);
 
 		}
 		set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl);

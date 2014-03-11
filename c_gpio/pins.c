@@ -13,6 +13,7 @@ level_t levels_table[] = {
 	{1, LEVEL_1},
 	{2, LEVEL_2},
 	{3, LEVEL_3},
+	{-1, 0},
 };
 
 /* BBB GPIOs*/
@@ -85,6 +86,50 @@ pin_t pins_table[] = {
 	{"P9_31", BBBIO_GPIO3, BBBIO_GPIO_PIN_14},
 	{NULL, 0, 0},
 };
+
+int get_level_time(level_t level)
+{
+	return level.tm;
+}
+
+int get_level_id(level_t level)
+{
+	return level.id;
+}
+
+level_t *get_level_by_id(int level_id)
+{
+	level_t *l;
+
+	for (l = levels_table; l->id > 0; ++l) {
+		if (l->id == level_id) {
+			return l;
+		}
+	}
+	return NULL;
+}
+
+int get_level_time_by_id(int level_id)
+{
+	level_t *l;
+
+	if ((l = get_level_by_id(level_id))) {
+		return l->id;
+	}
+	else {
+		return -1;
+	}
+}
+
+void level_sleep(int level_id)
+{
+	int sleep0, sleep1;
+
+	sleep0 = get_level_time_by_id(level_id);
+	sleep1 = get_level_time_by_id(level_id - 1);
+
+	iolib_delay_ms(((T / sleep0) - (T / sleep1)));
+}
 
 pin_t *get_pins_by_names(const char **names, int n_pins)
 {

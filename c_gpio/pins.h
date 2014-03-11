@@ -20,6 +20,12 @@ typedef struct level_t {
 	int tm;
 } level_t;
 
+void level_sleep(int level_id);
+
+int get_level_id(level_t level);
+int get_level_time(level_t level);
+int get_level_time_by_id(int level_id);
+
 pin_t *get_pins_by_names(const char **names, int n_pins);
 pin_t *get_pin_by_name(const char *name);
 
