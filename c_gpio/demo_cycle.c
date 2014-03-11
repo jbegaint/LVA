@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 		iolib_delay_ms(delay);
 
 		pin_low(header, pin);
-		BBBIO_sys_delay_us(delay * 1000);
+		iolib_delay_ms(delay);
 	}
 
 	iolib_free();
