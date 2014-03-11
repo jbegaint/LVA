@@ -11,7 +11,7 @@ static float T = 1.42;
 
 static int PINS[4] = {BBBIO_GPIO_PIN_13, BBBIO_GPIO_PIN_12, BBBIO_GPIO_PIN_15, BBBIO_GPIO_PIN_14};
 
-static int PINS_LEVELS[4] = {0, 3, 2, 1};
+static int PINS_LEVELS[4] = {0, 1, 2, 3};
 static int LEVELS[4] = {0, 16, 8, 1};
 
 int main()
