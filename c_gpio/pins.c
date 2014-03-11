@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <sys/time.h>
+#include <errno.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
 #include "pins.h"
@@ -20,6 +26,19 @@ pin_t pins_table[] = {
 	{"P9_31", BBBIO_GPIO3, BBBIO_GPIO_PIN_14},
 	{NULL, 0, 0},
 };
+
+int pin_sys_delay_us(unsigned long msec)
+{
+	struct timespec a;
+
+	a.tv_nsec=(msec) * 1000L;
+	a.tv_sec=0;
+	
+	if (nanosleep(&a, NULL) != 0) {
+		fprintf(stderr, "delay_ms error: %s\n", strerror(errno));
+	}
+	return 0;
+}
 
 pin_t *get_pins_by_names(const char **names, int n_pins)
 {

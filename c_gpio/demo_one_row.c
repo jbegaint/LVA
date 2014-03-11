@@ -44,7 +44,7 @@ int main()
 	
 			/* loop over pins */
 			for (p = 0; p < N_PINS; p++) {
-				if (PINS_LEVELS[p] > l) {
+				if (PINS_LEVELS[p] >= l) {
 					out |= PINS[p];
 				}
 			}
@@ -58,10 +58,11 @@ int main()
 			 	we already waited for T/LEVELS[p-1], so let's subtract it
 			*/
 
-			BBBIO_sys_delay_us(((T / LEVELS[l]) - (T / LEVELS[l-1])) * 1000);
+			pin_sys_delay_us(((T / LEVELS[l]) - (T / LEVELS[l-1])) * 1000);
 
 		}
-		BBBIO_sys_delay_us((20 - T) * 1000);
+		set_pins_row_off(BBBIO_GPIO1, BBBIO_GPIO_PIN_13 | BBBIO_GPIO_PIN_12 | BBBIO_GPIO_PIN_15 | BBBIO_GPIO_PIN_14);
+		pin_sys_delay_us((20 - T) * 1000);
 	}
 
 	/* bye */

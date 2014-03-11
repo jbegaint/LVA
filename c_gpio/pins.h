@@ -7,6 +7,8 @@ typedef struct pin_t {
     int id;
 } pin_t;
 
+int pin_sys_delay_us(unsigned long msec);
+
 pin_t *get_pins_by_names(const char **names, int n_pins);
 pin_t *get_pin_by_name(const char *name);
 
