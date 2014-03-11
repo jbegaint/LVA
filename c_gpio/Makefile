@@ -4,7 +4,7 @@ LDFLAGS = -L $(LIB_PATH) -lBBBio
 
 DEPS = libBBBio.a utils.o pins.o
 
-all: tests
+all: demo_one_row
 
 tests: tests.o $(DEPS)
 	gcc $^ $(LDFLAGS) -o $@
