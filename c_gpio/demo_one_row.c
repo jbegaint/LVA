@@ -33,7 +33,7 @@ void setup(int *ctrl)
 	BBBIO_sys_Enable_GPIO(BBBIO_GPIO1);
 
 	/* get pins ctrl */
-	for (p = 0; p < N_PINS; p++) {
+	for (p = 0; p < N_PINS; ++p) {
 		*ctrl |= (pins[p]).id;
 	}
 
@@ -54,7 +54,7 @@ int get_pins_to_set_on(int level_id)
 	int out, p;
 
 	/* loop over pins */
-	for (p = 0; p < N_PINS; p++) {
+	for (p = 0; p < N_PINS; ++p) {
 		if (PINS_LEVELS[p] < level_id) {
 			out |= (pins[p]).id;
 		}

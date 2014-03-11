@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 	iolib_init();
 	iolib_setdir(header, pin, BBBIO_DIR_OUT);
 
-	for (c = 0; c < 1000; c++) {
+	for (c = 0; c < 1000; ++c) {
 		pin_high(header, pin);
 		iolib_delay_ms(delay);
 
