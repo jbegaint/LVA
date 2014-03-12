@@ -4,10 +4,10 @@ from time import sleep
 
 from utils import *
 
-PIN = "P9_21"
+PIN = "P8_24"
 
 init_pin(PIN)
-set_pin_on(PIN)
+set_pin_off(PIN)
 sleep(5)
 
 GPIO.cleanup()
