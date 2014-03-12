@@ -136,8 +136,16 @@ void level_sleep(int level_id)
 	else
 		tmp = T / (float) sleep0 - T / (float) sleep1;
 	
-	//todo : replace with nanosleep
-	usleep(tmp*1000);
+	level_usleep(tmp*1000);
+}
+
+void level_usleep(int us)
+{
+	struct timespec wait;
+
+	wait.tv_sec = 0;
+	wait.tv_nsec = us * 1000;
+	nanosleep(&wait, NULL);
 }
 
 pin_t *get_pins_by_names(const char **names, int n_pins)
