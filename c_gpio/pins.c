@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
 #include "pins.h"
