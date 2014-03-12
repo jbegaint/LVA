@@ -4,6 +4,8 @@
 
 #include <gtk/gtk.h>
 
+#include "../c_gpio/patterns.h"
+
 #define GLADE_FILE "Gleds.glade"
 
 #define LED0 "led_full.png"
@@ -11,16 +13,11 @@
 #define LED2 "led_2.png"
 #define LED3 "led_black.png"
 
-#define N_ROWS 7
-#define N_COLS 5
-
-#define N_LEVELS 4
-
+static GtkWidget *combo = NULL;
 static const char *LED_ARRAY[N_LEVELS] = { LED0, LED1, LED2, LED3 };
-
-static int PINS_LEVELS[7][5];
-
 static gboolean continue_loop;
+static int PATTERN = LED_BY_LED;
+static matrix_t LED_MATRIX;
 
 typedef struct _DataWrapper
 {
@@ -51,79 +48,41 @@ void on_pause_clicked(GtkWidget *widget, gpointer user_data)
 	continue_loop = FALSE;
 }
 
-gboolean loop_random(gpointer user_data)
+gboolean set_matrix_values(gpointer user_data)
 {
-	GList *children, *l;
-	GtkWidget *grid = NULL;
+	gchar *mode;
+	static gchar *old_mode = "qqqq";
 
-	grid = GTK_WIDGET(user_data);
-	gchar *led_state = NULL;
+	mode = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo));
 
-	children = gtk_container_get_children(GTK_CONTAINER(grid));
+	if (mode) {
 
-	for (l = children; l != NULL; l = l->next) {
-		GtkWidget *image = l->data;
-		g_object_get(image, "file", &led_state, NULL);
+		if (strcmp(mode, old_mode) != 0) {
+			reset_matrix(&LED_MATRIX);
+			old_mode = g_strdup(mode);
+		}
 
-		if (!led_state) {
-			gtk_image_set_from_file(GTK_IMAGE(image), LED0);
-			continue;
-		} else {
-			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[rand() % N_LEVELS]);
+		if (strcmp("led by led", mode) == 0) {
+			set_pattern_led_by_led(&LED_MATRIX);
+		}
+		else if (strcmp("led by led toggle", mode) == 0) {
+			set_pattern_led_by_led_toggle(&LED_MATRIX);
+		}
+		else if (strcmp("random", mode) == 0) {
+			set_pattern_random(&LED_MATRIX);
 		}
 	}
-
-	g_list_free(children);
-	g_free(led_state);
-
-	return continue_loop;
-}
-
-void reset_matrix(void)
-{
-	int i, j;
-
-	for (i = 0; i < N_ROWS; i++) {
-		for (j = 0; j < N_COLS; j++) {
-			PINS_LEVELS[i][j] = 3;
-		}		
-	}
-}
-
-void toggle_pin(int i, int j)
-{
-	if (PINS_LEVELS[i][j] == 0) {
-		PINS_LEVELS[i][j] = 3;
-	}
 	else {
-		PINS_LEVELS[i][j] = 0;
-	}
-}
-
-gboolean led_by_led(gpointer user_data)
-{
-	static int led_x = 0;
-	static int led_y = 0;
-
-	int i, j;
-
-	for (i = 0; i < N_ROWS; i++) {
-		for (j = 0; j < N_COLS; j++) {
-			if (i == led_y && j == led_x) {
-				toggle_pin(i, j);
-			}
-		}		
+		set_pattern_led_by_led(&LED_MATRIX);
 	}
 
-	if ((++led_x) == N_COLS) {
-		led_x = 0;
-		led_y = (++led_y) % N_ROWS;
-	}
+	/* free old_mode ? */
+	g_free(mode);
 
 	return continue_loop;
 }
 
-gboolean set_pin_values(gpointer user_data)
+gboolean set_grid_values(gpointer user_data)
 {
 	GList *children, *l;
 	GtkWidget *grid = NULL;
@@ -138,7 +97,7 @@ gboolean set_pin_values(gpointer user_data)
 			GtkWidget *image = children->data;
 
 			/* list begins at bottom-right corner of the matrix... */
-			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[PINS_LEVELS[N_ROWS-x][N_COLS-y]]);
+			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[(LED_MATRIX.values)[N_ROWS-x][N_COLS-y]]);
 
 			children = children->next;
 		}
@@ -158,8 +117,8 @@ void on_launch_clicked(GtkWidget *widget, gpointer user_data)
 	gtk_widget_set_sensitive(data->start_btn, FALSE); 
 	gtk_widget_set_sensitive(data->pause_btn, TRUE); 
 
-	g_timeout_add(33, set_pin_values, data->grid);
-	g_timeout_add(100, led_by_led, data->grid);
+	g_timeout_add(33, set_grid_values, data->grid);
+	g_timeout_add(50, set_matrix_values, data->grid);
 
 }
 
@@ -178,6 +137,7 @@ int main(int argc, char **argv)
 	GtkWidget *led_matrix = NULL;
 	GtkWidget *start_button = NULL;
 	GtkWidget *pause_button = NULL;
+	GtkWidget *vbox = NULL;
 
 	/* Gtk init */
 	gtk_init(&argc, &argv);
@@ -210,6 +170,16 @@ int main(int argc, char **argv)
 	data->start_btn = start_button;
 	data->pause_btn = pause_button;
 
+	combo = gtk_combo_box_text_new();
+
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "led by led");
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "led by led toggle");
+	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "random");
+
+	vbox = GTK_WIDGET(gtk_builder_get_object(builder, "vbox"));
+	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 10);
+
+	/* init gui matrix */
 	for (int i = 0; i < N_COLS; i++) {
 		for (int j = 0; j < N_ROWS; j++) {
 			GtkWidget *image;
@@ -229,8 +199,8 @@ int main(int argc, char **argv)
 	/* display main_window */
 	gtk_widget_show_all(main_window);
 	
-	/* clean default values (just to be sure) */
-	reset_matrix();
+	/* setup matrix */
+	setup_matrix(&LED_MATRIX, N_ROWS, N_COLS);
 
 	gtk_main();
 
