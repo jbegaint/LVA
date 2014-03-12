@@ -8,12 +8,17 @@
 
 #define LED0 "led_full.png"
 #define LED1 "led_1.png"
-#define LED2 "led_black.png"
+#define LED2 "led_2.png"
+#define LED3 "led_black.png"
 
 #define N_ROWS 7
 #define N_COLS 5
 
-char *LED_ARRAY[3] = { LED0, LED1, LED2 };
+#define N_LEVELS 4
+
+static const char *LED_ARRAY[N_LEVELS] = { LED0, LED1, LED2, LED3 };
+
+static int PINS_LEVELS[7][5];
 
 static gboolean continue_loop;
 
@@ -64,12 +69,82 @@ gboolean loop_random(gpointer user_data)
 			gtk_image_set_from_file(GTK_IMAGE(image), LED0);
 			continue;
 		} else {
-			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[rand() % 3]);
+			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[rand() % N_LEVELS]);
 		}
 	}
 
 	g_list_free(children);
 	g_free(led_state);
+
+	return continue_loop;
+}
+
+void reset_matrix(void)
+{
+	int i, j;
+
+	for (i = 0; i < N_ROWS; i++) {
+		for (j = 0; j < N_COLS; j++) {
+			PINS_LEVELS[i][j] = 3;
+		}		
+	}
+}
+
+void toggle_pin(int i, int j)
+{
+	if (PINS_LEVELS[i][j] == 0) {
+		PINS_LEVELS[i][j] = 3;
+	}
+	else {
+		PINS_LEVELS[i][j] = 0;
+	}
+}
+
+gboolean led_by_led(gpointer user_data)
+{
+	static int led_x = 0;
+	static int led_y = 0;
+
+	int i, j;
+
+	for (i = 0; i < N_ROWS; i++) {
+		for (j = 0; j < N_COLS; j++) {
+			if (i == led_y && j == led_x) {
+				toggle_pin(i, j);
+			}
+		}		
+	}
+
+	if ((++led_x) == N_COLS) {
+		led_x = 0;
+		led_y = (++led_y) % N_ROWS;
+	}
+
+	return continue_loop;
+}
+
+gboolean set_pin_values(gpointer user_data)
+{
+	GList *children, *l;
+	GtkWidget *grid = NULL;
+
+	grid = GTK_WIDGET(user_data);
+	children = gtk_container_get_children(GTK_CONTAINER(grid));
+
+	int x, y;
+
+	for (y = 1; y <= N_COLS; ++y) {
+		for (x = 1; x <= N_ROWS; ++x) {
+			GtkWidget *image = children->data;
+
+			/* list begins at bottom-right corner of the matrix... */
+			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[PINS_LEVELS[N_ROWS-x][N_COLS-y]]);
+
+			children = children->next;
+		}
+	}
+
+	g_list_free(children);
 
 	return continue_loop;
 }
@@ -83,7 +158,9 @@ void on_launch_clicked(GtkWidget *widget, gpointer user_data)
 	gtk_widget_set_sensitive(data->start_btn, FALSE); 
 	gtk_widget_set_sensitive(data->pause_btn, TRUE); 
 
-	g_timeout_add(33, loop_random, data->grid);
+	g_timeout_add(33, set_pin_values, data->grid);
+	g_timeout_add(100, led_by_led, data->grid);
+
 }
 
 void on_window_destroy(GtkWidget *widget, gpointer user_data)
@@ -136,7 +213,7 @@ int main(int argc, char **argv)
 	for (int i = 0; i < N_COLS; i++) {
 		for (int j = 0; j < N_ROWS; j++) {
 			GtkWidget *image;
-			image = gtk_image_new_from_file(LED0);
+			image = gtk_image_new_from_file(LED3);
 			gtk_grid_attach(GTK_GRID(led_matrix), image, i, j, 1, 1);			
 		}
 	}
@@ -151,6 +228,9 @@ int main(int argc, char **argv)
 
 	/* display main_window */
 	gtk_widget_show_all(main_window);
+	
+	/* clean default values (just to be sure) */
+	reset_matrix();
 
 	gtk_main();
 
