@@ -16,7 +16,7 @@ static int PINS_LEVELS[7][5] = {
 	{0, 1, 2, 3, 1},
 	{0, 1, 2, 3, 1},
 	{0, 1, 2, 3, 1},
-	{0, 1, 2, 3, 1},
+	{0, 1, 2, 0, 1},
 	{0, 1, 2, 3, 1},
 	{0, 1, 2, 3, 1},
 	{0, 1, 2, 3, 1},
@@ -42,20 +42,21 @@ void set_pins_values(void)
 	for (int i = 0; i < N_ROWS; ++i) {
 		for (int j = 0; j < N_COLS; ++j) {
 			/*PINS_LEVELS[i][j] = rand() % 4;*/
-			PINS_LEVELS[i][j] = 0;
+			PINS_LEVELS[i][j] = 3;
 		}
 	}
 
+	PINS_LEVELS[counter_row][counter_col] = 0;
 	counter_col++;
-	if (counter_col == N_COLS-1) {
-		counter_col = 0;
+
+	if (counter_col%N_COLS == 0) {
 		counter_row++;
+		counter_col = 0;
 	}
-	if (counter_row == N_ROWS-1) {
+	if (counter_row%N_ROWS == 0) {
 		counter_row = 0;
 	}
 
-	PINS_LEVELS[counter_row][counter_col] = 0;
 }
 
 void handler(int sig)
@@ -154,7 +155,7 @@ void switch_leds(int ctrl)
 
 		}
 
-		set_pins_values();
+		//set_pins_values();
 	}
 
 	/* end of loop, exit */
