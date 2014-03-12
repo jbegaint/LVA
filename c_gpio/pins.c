@@ -125,13 +125,15 @@ int get_level_time_by_id(int level_id)
 void level_sleep(int level_id)
 {
 	int sleep0, sleep1;
+	float tmp;
 
 	sleep0 = get_level_time_by_id(level_id);
 	sleep1 = get_level_time_by_id(level_id + 1);
 	
-	float tmp = T / (float)sleep0 - T / (float)sleep1;
 	if (sleep1 == 0)
-		tmp = T/sleep0;
+		tmp = T/ (float) sleep0;
+	else
+		tmp = T / (float) sleep0 - T / (float) sleep1;
 	
 	iolib_delay_ms(tmp);
 }
