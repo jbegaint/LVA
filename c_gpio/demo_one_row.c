@@ -7,15 +7,24 @@
 #include "utils.h"
 
 static int running = 1;
-static int PINS_LEVELS[4] = {0, 1, 2, 3};
+static int PINS_LEVELS[5] = {0, 1, 2, 3, 1};
 
-static const char *pins_names[] = {"P8_11", "P8_12", "P8_15", "P8_16"};
+static const char *pins_names[] = {"P8_11", "P8_12", "P8_15", "P8_16", "P8_26"};
 static const pin_t *pins; 
 static int N_PINS = ARRAY_SIZE(pins_names);
 
 void set_pins_values(void)
 {
-	
+	static int first_run = 1;
+
+	if (first_run) {
+		srand(time(NULL));
+		first_run = 0;
+	}
+
+	for (int i = 0; i < N_PINS; ++i) {
+		PINS_LEVELS[i] = rand() % 4;
+	}
 }
 
 void handler(int sig)
@@ -92,9 +101,6 @@ void switch_leds(int ctrl)
 			level_sleep(l);
 
 		}
-
-		running = 0;
-
 		set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl);
 		iolib_delay_ms((20 - T));
 
