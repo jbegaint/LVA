@@ -16,15 +16,27 @@ static int N_PINS = ARRAY_SIZE(pins_names);
 void set_pins_values(void)
 {
 	static int first_run = 1;
+	static int counter = 0;
+	static int n_pin = 0;
 
 	if (first_run) {
 		srand(time(NULL));
 		first_run = 0;
 	}
 
-	for (int i = 0; i < N_PINS; ++i) {
-		PINS_LEVELS[i] = rand() % 4;
+	if (counter != 10) {
+		counter++;
+		return;
 	}
+
+	counter = 0;
+	for (int i = 0; i < N_PINS; ++i) {
+		// PINS_LEVELS[i] = rand() % 4;
+		PINS_LEVELS[i] = 3;
+	}
+	PINS_LEVELS[n_pin] = 0;
+	n_pin = (n_pin + 1) % 5;
+
 }
 
 void handler(int sig)
