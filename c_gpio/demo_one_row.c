@@ -7,9 +7,9 @@
 #include "utils.h"
 
 static int running = 1;
-static int PINS_LEVELS[4] = {0, 1, 2, 3};
+static int PINS_LEVELS[5] = {0, 1, 2, 3, 1};
 
-static const char *pins_names[] = {"P8_11", "P8_12", "P8_15", "P8_16"};
+static const char *pins_names[] = {"P8_11", "P8_12", "P8_15", "P8_16", "P8_26"};
 static const pin_t *pins; 
 static int N_PINS = ARRAY_SIZE(pins_names);
 
