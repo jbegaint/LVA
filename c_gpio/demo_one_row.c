@@ -9,8 +9,6 @@
 static int running = 1;
 static int PINS_LEVELS[4] = {0, 1, 2, 3};
 
-extern int LEVELS[4];
-
 static const char *pins_names[] = {"P8_11", "P8_12", "P8_15", "P8_16"};
 static const pin_t *pins; 
 static int N_PINS = ARRAY_SIZE(pins_names);
