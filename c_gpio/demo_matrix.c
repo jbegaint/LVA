@@ -95,14 +95,14 @@ void cleanup(void)
 	iolib_free();
 }
 
-int get_pins_to_set_on(int level_id)
+int get_pins_to_set_on(int row_id, int level_id)
 {
 	int out, p;
 	out = 0;
 
 	/* loop over pins */
 	for (p = 0; p < N_COLS; ++p) {
-		if (PINS_LEVELS[p] <= level_id) {
+		if (PINS_LEVELS[row_id][p] <= level_id) {
 			out |= (pins_cols[p]).id;
 		}
 	}
@@ -126,7 +126,7 @@ void switch_leds(int ctrl)
 			for (l = N_LEVELS - 2; l >= 0 ; --l) {
 	
 				/* todo: fct to set on/off independent of gpios */
-				out = get_pins_to_set_on(l);
+				out = get_pins_to_set_on(row, l);
 	
 				/* set pins values */
 				set_pins_row_on_by_gpio(BBBIO_GPIO1, out);
