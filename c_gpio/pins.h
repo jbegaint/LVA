@@ -21,6 +21,7 @@ typedef struct level_t {
 } level_t;
 
 void level_sleep(int level_id);
+void level_usleep(double us);
 
 int get_level_id(level_t level);
 int get_level_time(level_t level);

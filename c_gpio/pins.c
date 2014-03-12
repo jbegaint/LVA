@@ -126,22 +126,20 @@ int get_level_time_by_id(int level_id)
 void level_sleep(int level_id)
 {
 	int sleep0, sleep1;
-	long tmp;
+	double tmp;
 
 	sleep0 = get_level_time_by_id(level_id);
 	sleep1 = get_level_time_by_id(level_id + 1);
 	
 	if (sleep1 == 0)
-		tmp = T / (long) sleep0;
+		tmp = T / (double) sleep0;
 	else
-		tmp = T / (long) sleep0 - T / (long) sleep1;
+		tmp = T / (double) sleep0 - T / (double) sleep1;
 	
-	printf("%ld\n", tmp);
-
 	level_usleep(tmp * 1000);
 }
 
-void level_usleep(long us)
+void level_usleep(double us)
 {
 	struct timespec wait;
 
