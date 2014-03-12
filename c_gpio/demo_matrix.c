@@ -31,24 +31,31 @@ static const pin_t *pins_cols;
 void set_pins_values(void)
 {
 	static int first_run = 1;
-	static int counter = 0;
+	static int counter_row = 0;
+	static int counter_col = 0;
 
 	if (first_run) {
 		srand(time(NULL));
 		first_run = 0;
 	}
 
-	if (counter != 10) {
-		counter++;
-		return;
-	}
-
-	counter = 0;
 	for (int i = 0; i < N_ROWS; ++i) {
 		for (int j = 0; j < N_COLS; ++j) {
-			PINS_LEVELS[i][j] = rand() % 4;
+			/*PINS_LEVELS[i][j] = rand() % 4;*/
+			PINS_LEVELS[i][j] = 0;
 		}
 	}
+
+	counter_col++;
+	if (counter_col == N_COLS-1) {
+		counter_col = 0;
+		counter_row++;
+	}
+	if (counter_row == N_ROWS-1) {
+		counter_row = 0;
+	}
+
+	PINS_LEVELS[counter_row][counter_col] = 0;
 }
 
 void handler(int sig)
