@@ -13,6 +13,11 @@ static const char *pins_names[] = {"P8_11", "P8_12", "P8_15", "P8_16"};
 static const pin_t *pins; 
 static int N_PINS = ARRAY_SIZE(pins_names);
 
+void set_pins_values(void)
+{
+	
+}
+
 void handler(int sig)
 {
 	/* yes i know, we only catch SIGINT ATM.. */
@@ -89,9 +94,11 @@ void switch_leds(int ctrl)
 		}
 
 		running = 0;
-			
+
 		set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl);
 		iolib_delay_ms((20 - T));
+
+		set_pins_values();
 	}
 
 	/* end of loop, exit */
