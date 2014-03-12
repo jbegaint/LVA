@@ -102,7 +102,7 @@ level_t *get_level_by_id(int level_id)
 {
 	level_t *l;
 
-	for (l = levels_table; l->id > 0; ++l) {
+	for (l = levels_table; l->id >= 0; ++l) {
 		if (l->id == level_id) {
 			return l;
 		}
@@ -115,7 +115,7 @@ int get_level_time_by_id(int level_id)
 	level_t *l;
 
 	if ((l = get_level_by_id(level_id))) {
-		return l->id;
+		return l->tm;
 	}
 	else {
 		return -1;
@@ -127,9 +127,13 @@ void level_sleep(int level_id)
 	int sleep0, sleep1;
 
 	sleep0 = get_level_time_by_id(level_id);
-	sleep1 = get_level_time_by_id(level_id - 1);
-
-	iolib_delay_ms(((T / sleep0) - (T / sleep1)));
+	sleep1 = get_level_time_by_id(level_id + 1);
+	
+	float tmp = T / (float)sleep0 - T / (float)sleep1;
+	if (sleep1 == 0)
+		tmp = T/sleep0;
+	
+	iolib_delay_ms(tmp);
 }
 
 pin_t *get_pins_by_names(const char **names, int n_pins)

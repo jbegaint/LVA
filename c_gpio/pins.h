@@ -5,7 +5,7 @@
 #define N_LEVELS 4
 
 #define LEVEL_0 1
-#define LEVEL_1 8
+#define LEVEL_1 4
 #define LEVEL_2 16
 #define LEVEL_3 0
 

@@ -50,10 +50,11 @@ void cleanup(void)
 int get_pins_to_set_on(int level_id)
 {
 	int out, p;
+	out = 0;
 
 	/* loop over pins */
 	for (p = 0; p < N_PINS; ++p) {
-		if (PINS_LEVELS[p] < level_id) {
+		if (PINS_LEVELS[p] <= level_id) {
 			out |= (pins[p]).id;
 		}
 	}
@@ -69,7 +70,7 @@ void switch_leds(int ctrl)
 		
 		/* loop over levels */
 		/* N_LEVELS-2, indeed no need to check level 3 (off)*/
-		for (l = N_LEVELS - 2; l > 0 ; --l) {
+		for (l = N_LEVELS - 2; l >= 0 ; --l) {
 
 			/* todo: fct to set on/off independent of gpios */
 			out = get_pins_to_set_on(l);
