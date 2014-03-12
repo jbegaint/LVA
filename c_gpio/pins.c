@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
 #include "pins.h"
@@ -135,7 +136,8 @@ void level_sleep(int level_id)
 	else
 		tmp = T / (float) sleep0 - T / (float) sleep1;
 	
-	iolib_delay_ms(tmp);
+	//todo : replace with nanosleep
+	usleep(tmp*1000);
 }
 
 pin_t *get_pins_by_names(const char **names, int n_pins)
