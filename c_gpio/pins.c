@@ -132,10 +132,12 @@ void level_sleep(int level_id)
 	sleep1 = get_level_time_by_id(level_id + 1);
 	
 	if (sleep1 == 0)
-		tmp = T/ (long) sleep0;
+		tmp = T / (long) sleep0;
 	else
 		tmp = T / (long) sleep0 - T / (long) sleep1;
 	
+	printf("%ld\n", tmp);
+
 	level_usleep(tmp * 1000);
 }
 

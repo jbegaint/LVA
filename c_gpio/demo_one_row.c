@@ -87,6 +87,9 @@ void switch_leds(int ctrl)
 			level_sleep(l);
 
 		}
+
+		running = 0;
+			
 		set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl);
 		iolib_delay_ms((20 - T));
 	}
