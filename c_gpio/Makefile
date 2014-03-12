@@ -4,7 +4,10 @@ LDFLAGS = -L $(LIB_PATH) -lBBBio
 
 DEPS = utils.o pins.o
 
-all: demo_one_row
+all: demo_matrix
+
+demo_matrix: demo_matrix.o $(DEPS)
+	gcc $^ $(LDFLAGS) -L ${LIB_PATH} -lBBBio -o $@
 
 tests: tests.o $(DEPS)
 	gcc $^ $(LDFLAGS) -o $@
