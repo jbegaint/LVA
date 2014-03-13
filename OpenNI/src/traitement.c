@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "traitement.h"
+#include "../include/traitement.h"
 
 /* ***************** *
  * Taille de l'image *
@@ -88,7 +88,7 @@ void writePGM_5x7(const char *filename, int ** data)
 	/* En-tete du fichier PGM */
 	fprintf(pgmFile, "P2\n#\n#\n");
 	fprintf(pgmFile, "%d %d\n", Dpl, Dpc);
-	fprintf(pgmFile, "255\n");
+	fprintf(pgmFile, "3\n");
 
 	/* Ecriture des coefficients */
 	for (i = 0 ; i < Dpc; i++)
@@ -100,7 +100,7 @@ void writePGM_5x7(const char *filename, int ** data)
 
 
 /* Recentre les valeurs entre 0 et 255 */
-int** centrage( int** depth, int X, int Y)
+int** centring( int** depth, int X, int Y)
 {	
 	int i, j, max = 0;
 
@@ -122,8 +122,8 @@ int** centrage( int** depth, int X, int Y)
 	return Tab;
 }
 
-
-int** seuillage(int** depth, int X, int Y)
+/* Seuillage des coefficients en 4 niveaux */
+int** thresholding(int** depth, int X, int Y)
 {	
 	int i, j, max = 0;
 
@@ -144,11 +144,11 @@ int** seuillage(int** depth, int X, int Y)
 			Tab[i][j]=(int)(255 * depth[i][j] / max);
 		
 			if (Tab[i][j] > 191)
-				Tab[i][j] = 255;
+				Tab[i][j] = 3;
 			else if (Tab[i][j] > 127)
-				Tab[i][j] = 181;
+				Tab[i][j] = 2;
 			else if (Tab[i][j] > 63)
-				Tab[i][j] = 63;
+				Tab[i][j] = 1;
 			else 
 				Tab[i][j]=0;
 		}

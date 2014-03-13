@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "PgmToLED.h"
+#include "../include/PgmToLED.h"
 
-int PgmToLED(int argc, char** argv)
+int main(int argc, char** argv)
 {
-
+  return EXIT_SUCCESS;
 }

@@ -1,18 +1,20 @@
-FrameToPgm: traitement.o main.o
-	gcc -Wall -g -o FrameToPgm traitement.o main.o
+make: FrameToPgm PgmToLED
 
-traitement.o: traitement.c
-	gcc -g -o traitement.o -c traitement.c -W -Wall
+FrameToPgm: ./src/traitement.o ./src/main.o
+	gcc -Wall -g -o FrameToPgm ./src/traitement.o ./src/main.o
 
-main.o: main.c 
-	gcc -g -o main.o -c main.c -W -Wall
+traitement.o: ./src/traitement.c
+	gcc -g -o ./src/traitement.o -c ./src/traitement.c -W -Wall
 
-PgmToLED: PgmToLED.o
-	gcc -Wall -g -o PgmToLED PgmToLED.o
+main.o: ./src/main.c 
+	gcc -g -o ./src/main.o -c ./src/main.c -W -Wall
 
-PgmToLED.o: PgmToLED.c
-	gcc -g -o PgmToLED.o -c PgmToLED.c -W -Wall
+PgmToLED: ./src/PgmToLED.o
+	gcc -Wall -g -o PgmToLED ./src/PgmToLED.o
+
+PgmToLED.o: ./src/PgmToLED.c
+	gcc -g -o ./src/PgmToLED.o -c ./src/PgmToLED.c -W -Wall
 
 clean:
-	rm -rf *.o
+	rm -rf ./src/*.o
 

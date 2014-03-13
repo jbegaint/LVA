@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "traitement.h"
+#include "../include/traitement.h"
 
 /* ***************** *
  * Taille de l'image *
@@ -31,32 +31,32 @@ int main(int argc, char** argv)
 	
 	/* Allocations des matrices */
 	int** Depth = (int**)malloc(Y_PIXELS * sizeof(int*));
-	
 	for (i = 0; i < X_PIXELS; i++)
 	    Depth[i] = (int*)malloc(X_PIXELS * sizeof(int));
   
+	
 	int** Image = (int**)malloc(Dpc * sizeof(int*));
-
 	for (i = 0; i < Dpc; i++)
 	    Image[i] = (int*)malloc(Dpl * sizeof(int));
  
+	
 	/* Test d'ouverture du fichier */
 	fichier = fopen(argv[1], "r");
-
 	if (fichier == NULL)
 	{
 		fprintf(stdout,"Cannot open the file\n");
 		exit(1);
 	}
+	
 
 	/* Remplissage de la matrice avec les coefficients du fichier */
 	RempliMatriceReelle(Depth, fichier);
-	Depth = centrage(Depth, X_PIXELS, Y_PIXELS);
+	Depth = centring(Depth, X_PIXELS, Y_PIXELS);
 	
 	/* Moyennage des coefficients */
 	Image = MedianDepth(Depth);
-	Image = centrage(Image, Dpl, Dpc);
-	Image = seuillage(Image, Dpl, Dpc);
+	Image = centring(Image, Dpl, Dpc);
+	Image = thresholding(Image, Dpl, Dpc);
 
 	/* Creation du fichier PGM */
 	writePGM_5x7(argv[2], Image);
