@@ -5,5 +5,6 @@
 
 int main(int argc, char** argv)
 {
-  return EXIT_SUCCESS;
+	printf("Hello world\n");
+	return EXIT_SUCCESS;
 }

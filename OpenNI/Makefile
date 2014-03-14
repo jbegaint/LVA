@@ -1,20 +1,15 @@
-make: FrameToPgm PgmToLED
+CFLAGS = -Wall -Wextra -Wshadow -std=gnu99 -pedantic
+
+all: FrameToPgm PgmToLED
 
 FrameToPgm: ./src/traitement.o ./src/main.o
-	gcc -Wall -g -o FrameToPgm ./src/traitement.o ./src/main.o
-
-traitement.o: ./src/traitement.c
-	gcc -g -o ./src/traitement.o -c ./src/traitement.c -W -Wall
-
-main.o: ./src/main.c 
-	gcc -g -o ./src/main.o -c ./src/main.c -W -Wall
+	gcc $^ $(LDFLAGS) -o $@
 
 PgmToLED: ./src/PgmToLED.o
-	gcc -Wall -g -o PgmToLED ./src/PgmToLED.o
+	gcc $^ $(LDFLAGS) -o $@
 
-PgmToLED.o: ./src/PgmToLED.c
-	gcc -g -o ./src/PgmToLED.o -c ./src/PgmToLED.c -W -Wall
+%.o: %.c
+	gcc $< $(CFLAGS) -I$(dir $<) -c -o $@
 
 clean:
 	rm -rf ./src/*.o
-
