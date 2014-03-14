@@ -7,10 +7,9 @@
 #include "../c_gpio/patterns.h"
 #include "gleds.h"
 
-static GtkWidget *combo = NULL;
 static const char *LED_ARRAY[N_LEVELS] = { LED0, LED1, LED2, LED3 };
 static gboolean continue_loop;
-static int PATTERN = LED_BY_LED;
+static gchar *mode;
 static matrix_t *LED_MATRIX;
 
 static pattern_t patterns[] = {
@@ -45,11 +44,8 @@ void on_pause_clicked(GtkWidget *widget, gpointer user_data)
 
 gboolean set_matrix_values(gpointer user_data)
 {
-	gchar *mode;
 	static gchar *old_mode = "old";
 	pattern_t *ptrn;
-
-	mode = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo));
 
 	if (strcmp(mode, old_mode) != 0) {
 		reset_matrix(LED_MATRIX);
@@ -58,12 +54,9 @@ gboolean set_matrix_values(gpointer user_data)
 
 	for (ptrn = patterns; ptrn->desc; ptrn++) {
 		if (strcmp(ptrn->desc, mode) == 0) {
-			ptrn->pattern_fct_ptr(LED_MATRIX);
+			ptrn->func_ptr(LED_MATRIX);
 		}
 	}
-
-	/* free old_mode ? */
-	g_free(mode);
 
 	return continue_loop;
 }
@@ -92,6 +85,11 @@ gboolean set_grid_values(gpointer user_data)
 	g_list_free(children);
 
 	return continue_loop;
+}
+
+void on_combo_box_update(GtkWidget *widget, gpointer user_data)
+{
+	mode = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(widget));
 }
 
 void on_launch_clicked(GtkWidget *widget, gpointer user_data)
@@ -124,6 +122,7 @@ int main(int argc, char **argv)
 	GtkWidget *pause_button = NULL;
 	GtkWidget *start_button = NULL;
 	GtkWidget *vbox = NULL;
+	GtkWidget *combo = NULL;
 
 	pattern_t *ptrn = NULL;
 
@@ -184,6 +183,8 @@ int main(int argc, char **argv)
 
 	g_signal_connect(start_button, "clicked", G_CALLBACK(on_launch_clicked), data);
 	g_signal_connect(pause_button, "clicked", G_CALLBACK(on_pause_clicked), data);
+	g_signal_connect(combo, "changed", G_CALLBACK(on_combo_box_update), NULL);
+	on_combo_box_update(combo, NULL); /* init mode value */
 
 	/* setup matrix */
 	LED_MATRIX = setup_matrix(N_ROWS, N_COLS);
@@ -195,6 +196,7 @@ int main(int argc, char **argv)
 	gtk_main();
 
 	g_free(data);
+	g_free(mode);
 
 	return 0;
 }

@@ -18,9 +18,8 @@ typedef struct matrix_t {
 typedef struct pattern_t {
 	int id;
 	const char* desc;
-	void (*pattern_fct_ptr)(matrix_t *);
+	void (*func_ptr)(matrix_t *);
 } pattern_t;
-
 
 matrix_t *setup_matrix(int n_rows, int n_cols);
 void reset_matrix(matrix_t *matrix);
