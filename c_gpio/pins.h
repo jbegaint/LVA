@@ -37,8 +37,8 @@ void print_pin(pin_t *pin);
 void print_pins(pin_t **pins, int n_pins);
 
 /* avoid headaches */
-void set_pins_col_off_by_gpio(int, int);
-void set_pins_col_on_by_gpio(int, int);
+void unselect_row_by_id_and_gpio(int, int);
+void select_row_by_id_and_gpio(int, int);
 void set_pins_row_off_by_gpio(int, int);
 void set_pins_row_on_by_gpio(int, int);
 

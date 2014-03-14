@@ -95,7 +95,7 @@ void setup(int *ctrl)
 
 	/* set all pins to low */
 	set_pins_row_off_by_gpio(BBBIO_GPIO1, *ctrl);
-	set_pins_col_off_by_gpio(BBBIO_GPIO2, row_ctrl);
+	unselect_row_by_id_and_gpio(BBBIO_GPIO2, row_ctrl);
 }
 
 void cleanup(void)
@@ -126,8 +126,7 @@ void switch_leds(int ctrl)
 		
 		for (row = 0; row < N_ROWS; ++row) {
 
-			/* select row */
-			set_pins_col_on_by_gpio(BBBIO_GPIO2, pins_rows[row].id);
+			select_row_by_id_and_gpio(BBBIO_GPIO2, pins_rows[row].id);
 
 			/* loop over levels */
 			/* N_LEVELS-2, indeed no need to check level 3 (off)*/
@@ -150,12 +149,10 @@ void switch_leds(int ctrl)
 			}
 			set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl);
 
-			/* unselect row */
-			set_pins_col_off_by_gpio(BBBIO_GPIO2, pins_rows[row].id);
-
+			unselect_row_by_id_and_gpio(BBBIO_GPIO2, pins_rows[row].id);
 		}
 
-		//set_pins_values();
+		set_pins_values();
 	}
 
 	/* end of loop, exit */

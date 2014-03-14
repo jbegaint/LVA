@@ -26,17 +26,12 @@ typedef struct _DataWrapper
 	GtkWidget *pause_btn;
 } DataWrapper;
 
-typedef struct pattern_t {
-	const char* desc;
-	void (*pattern_fct_ptr)(matrix_t *);
-} pattern_t;
-
 static pattern_t patterns[] = {
-	{"led by led", set_pattern_led_by_led},
-	{"led by led toggle", set_pattern_led_by_led_toggle},
-	{"random", set_pattern_random},
-	{"row by row", set_pattern_row_by_row},
-	{"col by col", set_pattern_col_by_col},
+	{0, "led by led", set_pattern_led_by_led},
+	{1, "led by led toggle", set_pattern_led_by_led_toggle},
+	{2, "random", set_pattern_random},
+	{3, "row by row", set_pattern_row_by_row},
+	{4, "col by col", set_pattern_col_by_col},
 	{.desc = NULL},
 };
 
@@ -65,7 +60,7 @@ void on_pause_clicked(GtkWidget *widget, gpointer user_data)
 gboolean set_matrix_values(gpointer user_data)
 {
 	gchar *mode;
-	static gchar *old_mode = "qqqq";
+	static gchar *old_mode = "old";
 	pattern_t *ptrn;
 
 	mode = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo));

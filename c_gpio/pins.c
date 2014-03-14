@@ -239,12 +239,12 @@ void set_pins_row_off_by_gpio(int gpio, int pins)
 	BBBIO_GPIO_high(gpio, pins);
 }
 
-void set_pins_col_on_by_gpio(int gpio, int pins)
+void select_row_by_id_and_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_high(gpio, pins);
 }
 
-void set_pins_col_off_by_gpio(int gpio, int pins)
+void unselect_row_by_id_and_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_low(gpio, pins);
 }
