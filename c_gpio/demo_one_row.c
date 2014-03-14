@@ -113,6 +113,7 @@ void switch_leds(int ctrl)
 			level_sleep(l);
 
 		}
+		/* todo: rename fct to select/unselect by gpio */
 		set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl);
 		iolib_delay_ms((20 - T));
 

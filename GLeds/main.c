@@ -17,7 +17,7 @@ static GtkWidget *combo = NULL;
 static const char *LED_ARRAY[N_LEVELS] = { LED0, LED1, LED2, LED3 };
 static gboolean continue_loop;
 static int PATTERN = LED_BY_LED;
-static matrix_t LED_MATRIX;
+static matrix_t *LED_MATRIX;
 
 typedef struct _DataWrapper
 {
@@ -25,6 +25,20 @@ typedef struct _DataWrapper
 	GtkWidget *start_btn;
 	GtkWidget *pause_btn;
 } DataWrapper;
+
+typedef struct pattern_t {
+	const char* desc;
+	void (*pattern_fct_ptr)(matrix_t *);
+} pattern_t;
+
+static pattern_t patterns[] = {
+	{"led by led", set_pattern_led_by_led},
+	{"led by led toggle", set_pattern_led_by_led_toggle},
+	{"random", set_pattern_random},
+	{"row by row", set_pattern_row_by_row},
+	{"col by col", set_pattern_col_by_col},
+	{.desc = NULL},
+};
 
 void quit(void)
 {
@@ -52,28 +66,26 @@ gboolean set_matrix_values(gpointer user_data)
 {
 	gchar *mode;
 	static gchar *old_mode = "qqqq";
+	pattern_t *ptrn;
 
 	mode = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo));
 
 	if (mode) {
 
 		if (strcmp(mode, old_mode) != 0) {
-			reset_matrix(&LED_MATRIX);
+			reset_matrix(LED_MATRIX);
 			old_mode = g_strdup(mode);
 		}
 
-		if (strcmp("led by led", mode) == 0) {
-			set_pattern_led_by_led(&LED_MATRIX);
+		for (ptrn = patterns; ptrn->desc; ptrn++) {
+			if (strcmp(ptrn->desc, mode) == 0) {
+				ptrn->pattern_fct_ptr(LED_MATRIX);
+			}
 		}
-		else if (strcmp("led by led toggle", mode) == 0) {
-			set_pattern_led_by_led_toggle(&LED_MATRIX);
-		}
-		else if (strcmp("random", mode) == 0) {
-			set_pattern_random(&LED_MATRIX);
-		}
+
 	}
 	else {
-		set_pattern_led_by_led(&LED_MATRIX);
+		set_pattern_led_by_led(LED_MATRIX);
 	}
 
 	/* free old_mode ? */
@@ -97,7 +109,7 @@ gboolean set_grid_values(gpointer user_data)
 			GtkWidget *image = children->data;
 
 			/* list begins at bottom-right corner of the matrix... */
-			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[(LED_MATRIX.values)[N_ROWS-x][N_COLS-y]]);
+			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[(LED_MATRIX->values)[N_ROWS-x][N_COLS-y]]);
 
 			children = children->next;
 		}
@@ -139,6 +151,8 @@ int main(int argc, char **argv)
 	GtkWidget *pause_button = NULL;
 	GtkWidget *vbox = NULL;
 
+	pattern_t *ptrn;
+
 	/* Gtk init */
 	gtk_init(&argc, &argv);
 
@@ -172,9 +186,12 @@ int main(int argc, char **argv)
 
 	combo = gtk_combo_box_text_new();
 
-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "led by led");
-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "led by led toggle");
-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "random");
+	for (ptrn = patterns; ptrn->desc; ptrn++) {
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), ptrn->desc);
+	}
+
+	/*gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "led by led toggle");*/
+	/*gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "random");*/
 
 	vbox = GTK_WIDGET(gtk_builder_get_object(builder, "vbox"));
 	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 10);
@@ -200,7 +217,7 @@ int main(int argc, char **argv)
 	gtk_widget_show_all(main_window);
 	
 	/* setup matrix */
-	setup_matrix(&LED_MATRIX, N_ROWS, N_COLS);
+	LED_MATRIX = setup_matrix(N_ROWS, N_COLS);
 
 	gtk_main();
 
