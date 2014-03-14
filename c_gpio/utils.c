@@ -15,8 +15,7 @@ void die(char *err, ...)
 
 void print_bits(int val)
 {
-	int i;
-	for (i = 31; i >= 0; i--)
+	for (int i = 31; i >= 0; --i)
 		fprintf(stdout, "%d", (val >> i) & 1);
 
 	fprintf(stdout, "\n");
