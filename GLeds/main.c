@@ -12,6 +12,10 @@ static gboolean continue_loop;
 static gchar *mode;
 static matrix_t *LED_MATRIX;
 
+/* freq in Hertz */
+static guint leds_freq = 30;
+static guint matrix_freq = 30;
+
 static pattern_t patterns[] = {
 	{0, "led by led", set_pattern_led_by_led},
 	{1, "led by led toggle", set_pattern_led_by_led_toggle},
@@ -92,6 +96,11 @@ void on_combo_box_update(GtkWidget *widget, gpointer user_data)
 	mode = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(widget));
 }
 
+int freq_to_ms(guint freq)
+{
+	return ((double) 1 / freq) * 1000;
+}
+
 void on_launch_clicked(GtkWidget *widget, gpointer user_data)
 {
 	continue_loop = TRUE;
@@ -101,9 +110,27 @@ void on_launch_clicked(GtkWidget *widget, gpointer user_data)
 	gtk_widget_set_sensitive(data->start_btn, FALSE); 
 	gtk_widget_set_sensitive(data->pause_btn, TRUE); 
 
-	g_timeout_add(33, set_grid_values, data->grid);
-	g_timeout_add(50, set_matrix_values, data->grid);
+	g_print("%d\n", freq_to_ms(leds_freq));
 
+	g_timeout_add(freq_to_ms(leds_freq), set_grid_values, data->grid);
+	g_timeout_add(freq_to_ms(matrix_freq), set_matrix_values, data->grid);
+
+}
+
+void on_spin_leds_update(GtkWidget *widget, gpointer user_data)
+{
+	leds_freq = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	continue_loop = FALSE;
+
+	on_launch_clicked(NULL, user_data);
+}
+
+void on_spin_matrix_update(GtkWidget *widget, gpointer user_data)
+{
+	matrix_freq = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	continue_loop = FALSE;
+
+	on_launch_clicked(NULL, user_data);
 }
 
 void on_window_destroy(GtkWidget *widget, gpointer user_data)
@@ -121,8 +148,9 @@ int main(int argc, char **argv)
 	GtkWidget *main_window = NULL;
 	GtkWidget *pause_button = NULL;
 	GtkWidget *start_button = NULL;
-	GtkWidget *vbox = NULL;
 	GtkWidget *combo = NULL;
+	GtkWidget *spinbutton_leds = NULL;
+	GtkWidget *spinbutton_matrix = NULL;
 
 	pattern_t *ptrn = NULL;
 
@@ -152,6 +180,9 @@ int main(int argc, char **argv)
 	start_button = GTK_WIDGET(gtk_builder_get_object(builder, "start_button"));
 	pause_button = GTK_WIDGET(gtk_builder_get_object(builder, "pause_button"));
 
+	spinbutton_leds = GTK_WIDGET(gtk_builder_get_object(builder, "spinbutton_leds"));
+	spinbutton_matrix = GTK_WIDGET(gtk_builder_get_object(builder, "spinbutton_matrix"));
+
 	/* ini data wrapper */
 	DataWrapper *data = g_new(DataWrapper, 1);
 	data->grid = led_matrix;
@@ -159,15 +190,13 @@ int main(int argc, char **argv)
 	data->pause_btn = pause_button;
 
 	/* init combo box */
-	combo = gtk_combo_box_text_new();
+	/*combo = gtk_combo_box_text_new();*/
+	combo = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext1"));
 
 	for (ptrn = patterns; ptrn->desc; ++ptrn) {
 		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), ptrn->desc);
 	}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
-
-	vbox = GTK_WIDGET(gtk_builder_get_object(builder, "hbox_toggle"));
-	gtk_box_pack_start(GTK_BOX(vbox), combo, FALSE, FALSE, 10);
 
 	/* init gui matrix */
 	for (int i = 0; i < N_COLS; ++i) {
@@ -185,6 +214,9 @@ int main(int argc, char **argv)
 	g_signal_connect(pause_button, "clicked", G_CALLBACK(on_pause_clicked), data);
 	g_signal_connect(combo, "changed", G_CALLBACK(on_combo_box_update), NULL);
 	on_combo_box_update(combo, NULL); /* init mode value */
+
+	g_signal_connect(spinbutton_matrix, "value-changed", G_CALLBACK(on_spin_matrix_update), data);
+	g_signal_connect(spinbutton_leds, "value-changed", G_CALLBACK(on_spin_leds_update), data);
 
 	/* setup matrix */
 	LED_MATRIX = setup_matrix(N_ROWS, N_COLS);
