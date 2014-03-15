@@ -13,17 +13,10 @@ static gchar *mode;
 static matrix_t *LED_MATRIX;
 
 /* freq in Hertz */
-static guint leds_freq = 30;
-static guint matrix_freq = 30;
+static guint leds_freq = 20;
+static guint matrix_freq = 20;
 
-static pattern_t patterns[] = {
-	{0, "led by led", set_pattern_led_by_led},
-	{1, "led by led toggle", set_pattern_led_by_led_toggle},
-	{2, "random", set_pattern_random},
-	{3, "row by row", set_pattern_row_by_row},
-	{4, "col by col", set_pattern_col_by_col},
-	{.desc = NULL},
-};
+extern pattern_t patterns[];
 
 void quit(void)
 {
@@ -109,8 +102,6 @@ void on_launch_clicked(GtkWidget *widget, gpointer user_data)
 
 	gtk_widget_set_sensitive(data->start_btn, FALSE); 
 	gtk_widget_set_sensitive(data->pause_btn, TRUE); 
-
-	g_print("%d\n", freq_to_ms(leds_freq));
 
 	g_timeout_add(freq_to_ms(leds_freq), set_grid_values, data->grid);
 	g_timeout_add(freq_to_ms(matrix_freq), set_matrix_values, data->grid);
@@ -215,8 +206,10 @@ int main(int argc, char **argv)
 	g_signal_connect(combo, "changed", G_CALLBACK(on_combo_box_update), NULL);
 	on_combo_box_update(combo, NULL); /* init mode value */
 
-	g_signal_connect(spinbutton_matrix, "value-changed", G_CALLBACK(on_spin_matrix_update), data);
-	g_signal_connect(spinbutton_leds, "value-changed", G_CALLBACK(on_spin_leds_update), data);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinbutton_leds), leds_freq);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinbutton_matrix), matrix_freq);
+	/*g_signal_connect(spinbutton_matrix, "value-changed", G_CALLBACK(on_spin_matrix_update), data);*/
+	/*g_signal_connect(spinbutton_leds, "value-changed", G_CALLBACK(on_spin_leds_update), data);*/
 
 	/* setup matrix */
 	LED_MATRIX = setup_matrix(N_ROWS, N_COLS);

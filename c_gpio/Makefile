@@ -35,7 +35,11 @@ BBBiolib_ADCTSC.o: ${LIB_PATH}BBBiolib_ADCTSC.c ${LIB_PATH}BBBiolib_ADCTSC.h
 %.o: %.c
 	gcc $< $(CFLAGS) -I$(dir $<) -c -o $@
 
-.PHONY: clean
+.PHONY: clean doxy
 
 clean:
-	rm -f *.o *.a demo_cycle demo_one_row
+	@rm -f *.o *.a demo_cycle demo_one_row
+	@rm -rf ./doc
+	
+doxy: 
+	@doxygen
