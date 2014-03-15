@@ -25,7 +25,7 @@ matrix_t *setup_matrix(int n_rows, int n_cols)
 	int **m;
 	matrix_t *matrix;
 
-	matrix = calloc(1, sizeof(*matrix));
+	matrix = (matrix_t *) calloc(1, sizeof(*matrix));
 
 	/* todo: check for alloc error */
 	m = (int **) calloc(n_rows, sizeof(*m));

@@ -6,6 +6,7 @@
 
 #include "../c_gpio/patterns.h"
 #include "gleds.h"
+#include "oni_utils.h"
 
 static const char *LED_ARRAY[N_LEVELS] = { LED0, LED1, LED2, LED3 };
 static gboolean continue_loop;
@@ -70,7 +71,7 @@ gboolean set_grid_values(gpointer user_data)
 
 	for (y = 1; y <= N_COLS; ++y) {
 		for (x = 1; x <= N_ROWS; ++x) {
-			GtkWidget *image = children->data;
+			GtkWidget *image = GTK_WIDGET(children->data);
 
 			/* list begins at bottom-right corner of the matrix, then goes up and left... */
 			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[(LED_MATRIX->values)[N_ROWS-x][N_COLS-y]]);
