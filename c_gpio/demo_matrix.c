@@ -4,8 +4,8 @@
 #include <time.h>
 
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
-#include "pins.h"
-#include "utils.h"
+#include "../LVA/pins.h"
+#include "../LVA/utils.h"
 
 #define N_ROWS 7
 #define N_COLS 5

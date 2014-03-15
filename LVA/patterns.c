@@ -80,7 +80,7 @@ void set_pattern_led_by_led(matrix_t *m)
 
 	if ((++led_x) == N_COLS) {
 		led_x = 0;
-		led_y = (++led_y) % N_ROWS;
+		led_y = ((led_y + 1) % N_ROWS);
 	}
 }
 
@@ -101,7 +101,7 @@ void set_pattern_led_by_led_toggle(matrix_t *m)
 
 	if ((++led_x) == N_COLS) {
 		led_x = 0;
-		led_y = (++led_y) % N_ROWS;
+		led_y = (led_y + 1) % N_ROWS;
 	}
 }
 
@@ -123,8 +123,7 @@ void set_pattern_row_by_row(matrix_t *m)
 	for (int j = 0; j < N_COLS; ++j) {
 		(m->values)[row_id][j] = 0;
 	}
-
-	row_id = (++row_id) % N_ROWS;
+	row_id = (row_id + 1) % N_ROWS;
 }
 
 void set_pattern_col_by_col(matrix_t *m)
@@ -137,7 +136,8 @@ void set_pattern_col_by_col(matrix_t *m)
 		(m->values)[i][col_id] = 0;
 	}
 
-	col_id = (++col_id) % N_COLS;
+	col_id++;
+	col_id = col_id % N_COLS;
 }
 
 

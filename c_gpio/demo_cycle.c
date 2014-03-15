@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
-#include "utils.h"
+#include "../LVA/utils.h"
 
 void usage(char *str)
 {

@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 
 #include <gtk/gtk.h>
 
-#include "../c_gpio/patterns.h"
 #include "gleds.h"
 #include "oni_utils.h"
+#include "patterns.h"
+#include "utils.h"
 
 static const char *LED_ARRAY[N_LEVELS] = { LED0, LED1, LED2, LED3 };
-static gboolean continue_loop;
+static gboolean running;
 static gchar *mode;
 static matrix_t *LED_MATRIX;
 
@@ -37,7 +39,7 @@ void on_pause_clicked(GtkWidget *widget, gpointer user_data)
 	gtk_widget_set_sensitive(data->start_btn, TRUE); 
 	gtk_widget_set_sensitive(data->pause_btn, FALSE); 
 
-	continue_loop = FALSE;
+	running = FALSE;
 }
 
 gboolean set_matrix_values(gpointer user_data)
@@ -56,33 +58,33 @@ gboolean set_matrix_values(gpointer user_data)
 		}
 	}
 
-	return continue_loop;
+	return running;
 }
 
 gboolean set_grid_values(gpointer user_data)
 {
-	GList *children, *l;
+	GList *child;
 	GtkWidget *grid = NULL;
 
 	grid = GTK_WIDGET(user_data);
-	children = gtk_container_get_children(GTK_CONTAINER(grid));
+	child = gtk_container_get_children(GTK_CONTAINER(grid));
 
 	int x, y;
 
 	for (y = 1; y <= N_COLS; ++y) {
 		for (x = 1; x <= N_ROWS; ++x) {
-			GtkWidget *image = GTK_WIDGET(children->data);
+			GtkWidget *image = GTK_WIDGET(child->data);
 
 			/* list begins at bottom-right corner of the matrix, then goes up and left... */
 			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[(LED_MATRIX->values)[N_ROWS-x][N_COLS-y]]);
 
-			children = children->next;
+			child = child->next;
 		}
 	}
 
-	g_list_free(children);
+	g_list_free(child);
 
-	return continue_loop;
+	return running;
 }
 
 void on_combo_box_update(GtkWidget *widget, gpointer user_data)
@@ -95,9 +97,9 @@ int freq_to_ms(guint freq)
 	return ((double) 1 / freq) * 1000;
 }
 
-void on_launch_clicked(GtkWidget *widget, gpointer user_data)
+void on_start_clicked(GtkWidget *widget, gpointer user_data)
 {
-	continue_loop = TRUE;
+	running = TRUE;
 
 	DataWrapper *data = (DataWrapper *) user_data;
 
@@ -109,24 +111,34 @@ void on_launch_clicked(GtkWidget *widget, gpointer user_data)
 
 }
 
+void on_launch_clicked(GtkWidget *widget, gpointer user_data)
+{
+	int s;
+
+	running = FALSE;
+
+	g_print("ok\n");
+}
+
 void on_spin_leds_update(GtkWidget *widget, gpointer user_data)
 {
 	leds_freq = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	continue_loop = FALSE;
+	running = FALSE;
 
-	on_launch_clicked(NULL, user_data);
+	on_start_clicked(NULL, user_data);
 }
 
 void on_spin_matrix_update(GtkWidget *widget, gpointer user_data)
 {
 	matrix_freq = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	continue_loop = FALSE;
+	running = FALSE;
 
-	on_launch_clicked(NULL, user_data);
+	on_start_clicked(NULL, user_data);
 }
 
 void on_window_destroy(GtkWidget *widget, gpointer user_data)
 {
+	
 	quit();
 }
 
@@ -140,6 +152,7 @@ int main(int argc, char **argv)
 	GtkWidget *main_window = NULL;
 	GtkWidget *pause_button = NULL;
 	GtkWidget *start_button = NULL;
+	GtkWidget *launch_button = NULL;
 	GtkWidget *combo = NULL;
 	GtkWidget *spinbutton_leds = NULL;
 	GtkWidget *spinbutton_matrix = NULL;
@@ -171,6 +184,7 @@ int main(int argc, char **argv)
 
 	start_button = GTK_WIDGET(gtk_builder_get_object(builder, "start_button"));
 	pause_button = GTK_WIDGET(gtk_builder_get_object(builder, "pause_button"));
+	launch_button = GTK_WIDGET(gtk_builder_get_object(builder, "launch_button"));
 
 	spinbutton_leds = GTK_WIDGET(gtk_builder_get_object(builder, "spinbutton_leds"));
 	spinbutton_matrix = GTK_WIDGET(gtk_builder_get_object(builder, "spinbutton_matrix"));
@@ -202,10 +216,14 @@ int main(int argc, char **argv)
 	/* connect signals */
 	gtk_builder_connect_signals(builder, NULL);
 
-	g_signal_connect(start_button, "clicked", G_CALLBACK(on_launch_clicked), data);
+	g_signal_connect(start_button, "clicked", G_CALLBACK(on_start_clicked), data);
 	g_signal_connect(pause_button, "clicked", G_CALLBACK(on_pause_clicked), data);
+
+	g_signal_connect(launch_button, "clicked", G_CALLBACK(on_launch_clicked), NULL);
 	g_signal_connect(combo, "changed", G_CALLBACK(on_combo_box_update), NULL);
-	on_combo_box_update(combo, NULL); /* init mode value */
+	
+	/* init mode value */
+	on_combo_box_update(combo, NULL); 
 
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinbutton_leds), leds_freq);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinbutton_matrix), matrix_freq);

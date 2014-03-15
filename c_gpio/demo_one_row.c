@@ -3,8 +3,8 @@
 #include <signal.h>
 
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
-#include "pins.h"
-#include "utils.h"
+#include "../LVA/pins.h"
+#include "../LVA/utils.h"
 
 static int running = 1;
 static int PINS_LEVELS[5] = {0, 1, 2, 3, 1};

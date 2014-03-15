@@ -2,7 +2,7 @@ CFLAGS = -Wall -Wextra -Wshadow -std=gnu99 -pedantic
 LIB_PATH = ../BBBIOlib/BBBio_lib/
 LDFLAGS = -L $(LIB_PATH) -lBBBio
 
-DEPS = utils.o pins.o
+DEPS = ../LVA/utils.o ../LVA/mpins.o
 
 all: demo_matrix
 

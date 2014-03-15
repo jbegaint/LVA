@@ -14,7 +14,7 @@ using namespace std;
 #ifdef __cplusplus
 	extern "C" {
 #endif 
-void convert_frames(char *filepath)
+void convert_frames(matrix_t *matrix, char *filepath)
 {
 	// Initial OpenNI Context
 	xn::Context xContext;
@@ -46,19 +46,14 @@ void convert_frames(char *filepath)
 		// get value
 		xn::DepthMetaData xDepthMap;
 		xDepthGenerator.GetMetaData( xDepthMap );
- /*
-		stringstream sName;
-		sName << "Frame_" << i << ".txt";
-		ofstream oFile( sName.str().c_str() );
+
 		for( unsigned int y = 0; y < xDepthMap.YRes(); ++ y )
 		{
 			for( unsigned int x = 0; x < xDepthMap.XRes(); ++ x )
 			{
-				oFile << xDepthMap( x, y ) << " ";
+				cout << xDepthMap( x, y ) << endl;
 			}
-			oFile << "\n";
 		}
-		oFile.close();*/
 	}
  
 	// stop
