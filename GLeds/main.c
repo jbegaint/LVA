@@ -55,6 +55,7 @@ gboolean set_matrix_values(gpointer user_data)
 
 	if (strcmp(mode, old_mode) != 0) {
 		reset_matrix(LED_MATRIX);
+		g_print("new pattern: %s\n", mode);
 		old_mode = g_strdup(mode);
 	}
 

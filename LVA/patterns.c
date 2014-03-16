@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <pthread.h>
+#include <string.h>
 
 #include "pins.h"
 #include "patterns.h"
@@ -106,8 +107,10 @@ void set_pattern_from_oni(matrix_t *m)
 	static pthread_t conversion_thread;
 	static thread_info_t thread_info[1];
 
+	matrix_t *tmp;
+
 	if (first_run) {
-		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);
+		oni_matrix = init_matrix(PIXELS_X, PIXELS_Y);
 
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
@@ -117,7 +120,9 @@ void set_pattern_from_oni(matrix_t *m)
 		first_run = 0;
 	}
 
-	m = get_led_matrix(thread_info->matrix);
+	tmp = get_led_matrix(thread_info->matrix);
+	memcpy(m, tmp, sizeof(*tmp));
+	/*free_matrix(tmp);*/
 
 	next_frame = 1;
 }

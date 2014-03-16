@@ -383,6 +383,7 @@
                 <child>
                   <object class="GtkSpinButton" id="spinbutton_leds">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="shadow_type">out</property>
                     <property name="adjustment">adjustment1</property>
@@ -408,6 +409,7 @@
                 <child>
                   <object class="GtkSpinButton" id="spinbutton_matrix">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment2</property>
                   </object>

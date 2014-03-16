@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "matrix.h"
 #include "utils.h"
@@ -46,19 +47,36 @@ matrix_t *init_matrix(int n_rows, int n_cols)
 void reset_matrix(matrix_t *matrix)
 {
 	for (int i = 0; i < matrix->n_rows; ++i) {
-		for (int j = 0; j < matrix->n_cols ; ++j) {
+		for (int j = 0; j < matrix->n_cols; ++j) {
 			(matrix->values)[i][j] = 3;
 		}		
 	}
 }
+
+/**
+ * @brief Free a matrix structure
+ * 
+ * @param matrix the matrix to be freed
+ */
+
+void free_matrix(matrix_t *matrix)
+{
+	for (int i = 0; i < matrix->n_rows; ++i) {
+		free((matrix->values)[i]);
+	}
+
+	free(matrix->values);
+	free(matrix);
+}
+
 
 matrix_t *get_led_matrix(matrix_t *img_matrix)
 {
 	matrix_t *led_matrix;
 
 	led_matrix = get_resized_matrix(img_matrix, N_ROWS, N_COLS);
-	threshold_matrix(led_matrix);
 	center_matrix(led_matrix);
+	threshold_matrix(led_matrix);
 
 	return led_matrix;
 }
@@ -86,12 +104,11 @@ matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 void center_matrix(matrix_t *matrix)
 {
 	int max = get_matrix_max(matrix);
-	int **depth = matrix->values;
 
 	/* centrage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
-			depth[i][j] = (int) (255 * depth[i][j] / max);
+			(matrix->values)[i][j] = (int) (255 * (matrix->values)[i][j] / max);
 		}
 	}
 }
@@ -100,21 +117,20 @@ void center_matrix(matrix_t *matrix)
 void threshold_matrix(matrix_t *matrix)
 {
 	int max = get_matrix_max(matrix);
-	int **depth = matrix->values;
 
 	/* seuillage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
-			depth[i][j] = (int) (255 * depth[i][j] / max);
+			(matrix->values)[i][j] = (int) (255 * (matrix->values)[i][j] / max);
 
-			if (depth[i][j] > 191)
-				depth[i][j] = 3;
-			else if (depth[i][j] > 127)
-				depth[i][j] = 2;
-			else if (depth[i][j] > 63)
-				depth[i][j] = 1;
+			if ((matrix->values)[i][j] > 191)
+				(matrix->values)[i][j] = 3;
+			else if ((matrix->values)[i][j] > 127)
+				(matrix->values)[i][j] = 2;
+			else if ((matrix->values)[i][j] > 63)
+				(matrix->values)[i][j] = 1;
 			else
-				depth[i][j] = 0;
+				(matrix->values)[i][j] = 0;
 		}
 	}
 }
@@ -152,4 +168,21 @@ float Moyenne(int **depth, int _x, int _y, int dx, int dy)
 			moy = moy + depth[_x + i][_y + j];
 
 	return (moy / (dx * dy));
+}
+
+
+void print_matrix_infos(matrix_t *matrix)
+{
+	printf("n_rows: %d, n_cols: %d", matrix->n_rows, matrix->n_cols);
+}
+
+void print_matrix(matrix_t *matrix)
+{
+	for (int i = 0; i < matrix->n_rows; ++i) {
+		for (int j = 0; j < matrix->n_cols; ++j) {
+			printf("%d ", (matrix->values)[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
 }
