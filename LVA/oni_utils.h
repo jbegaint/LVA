@@ -1,8 +1,6 @@
 #ifndef _ONI_UTILS_H_
 #define _ONI_UTILS_H_
 
-#include "matrix.h"
-
 #ifdef __cplusplus
 	extern "C" {
 #endif 

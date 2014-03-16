@@ -115,14 +115,15 @@ void set_pattern_from_oni(matrix_t *m)
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
 		/* launch thread with convert_frames */
-		/* todo catch errors */
+		/* todo: catch errors */
 		pthread_create(&conversion_thread, NULL, convert_frames, (void *) &thread_info);
 		first_run = 0;
 	}
 
 	tmp = get_led_matrix(thread_info->matrix);
-	memcpy(m, tmp, sizeof(*tmp));
-	/*free_matrix(tmp);*/
+
+	copy_matrix(m, tmp);
+	free_matrix(tmp);
 
 	next_frame = 1;
 }

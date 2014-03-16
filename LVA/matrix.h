@@ -23,6 +23,7 @@ void reset_matrix(matrix_t *matrix);
 void threshold_matrix(matrix_t *matrix);
 void center_matrix(matrix_t *matrix);
 void free_matrix(matrix_t *matrix);
+void copy_matrix(matrix_t *dest, matrix_t *src);
 
 int get_matrix_max(matrix_t *matrix);
 

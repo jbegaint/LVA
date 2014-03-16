@@ -6,8 +6,9 @@ using namespace std;
  
 // OpenNI Header
 #include <XnCppWrapper.h>
-#include <unistd.h>
 
+#include <unistd.h>
+#include "matrix.h"
 #include "oni_utils.h"
 #include "patterns.h"
 
@@ -57,8 +58,6 @@ void *convert_frames(void *arg)
 	// main loop
 	for (unsigned int i = 0; i < uFrames; ++i) {
 
-		cout << next_frame << endl;
-
 		/* waiting for the worms to come... */
 		while (1) {
 			/* sleep 1 ms */
@@ -81,7 +80,7 @@ void *convert_frames(void *arg)
 			}
 		}
 
-		/* stop conversion */
+		/* pause conversion */
 		next_frame = 0;
 
 	}

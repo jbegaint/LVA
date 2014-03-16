@@ -9,12 +9,13 @@ SRCXX := ../LVA/oni_utils.cpp
 OBJ := $(SRC:%.c=%.o)
 OBJXX := $(SRCXX:%.cpp=%.o)
 
-CFLAGS = -Wall -Wextra -Wshadow -std=gnu99 -pedantic -g -I$(INCDIR) -Wno-unused-parameter
+CFLAGS = -Wall -Wextra -Wshadow -std=gnu99 -pedantic -g -Wno-unused-parameter
 CFLAGS += `pkg-config gtk+-3.0 --cflags`
+CFLAGS += -I$(INCDIR) -I/usr/include/ni
 
 LDFLAGS = `pkg-config gtk+-3.0 --libs`
 LDFLAGS += `pkg-config gmodule-2.0 --libs`
-LDFLAGS += -l OpenNI -I /usr/include/ni -lstdc++ -pthread
+LDFLAGS += -lOpenNI -lstdc++ -pthread
 
 all: $(OBJ) $(OBJXX)
 	$(CC) $^ $(LDFLAGS) -o $(TARGET)
@@ -22,11 +23,10 @@ all: $(OBJ) $(OBJXX)
 %.o: %.c
 	$(CC) $< $(CFLAGS) -I$(dir $<) -c -o $@
 
-# ../LVA/oni_utils.o: ../LVA/oni_utils.cpp
 %.o: %.cpp
-	$(CXX) $< -c -o $@ $(CFLAGS) $(LDFLAGS)
+	$(CXX) $< $(CFLAGS) -I$(dir $<) -c -o $@ 
 
 .PHONY: clean
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(OBJXX)

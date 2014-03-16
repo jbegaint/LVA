@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "matrix.h"
 #include "utils.h"
@@ -61,12 +62,22 @@ void reset_matrix(matrix_t *matrix)
 
 void free_matrix(matrix_t *matrix)
 {
-	for (int i = 0; i < matrix->n_rows; ++i) {
-		free((matrix->values)[i]);
-	}
-
+	free(*(matrix->values));
 	free(matrix->values);
 	free(matrix);
+}
+
+void copy_matrix(matrix_t *dest, matrix_t *src)
+{
+	dest->n_rows = src->n_rows;
+	dest->n_cols = src->n_cols;
+
+	/* memcpy ? */
+	for (int i = 0; i < src->n_rows; ++i) {
+		for (int j = 0; j < src->n_cols; ++j) {
+			(dest->values)[i][j] = (src->values)[i][j];
+		}
+	}
 }
 
 
@@ -169,7 +180,6 @@ float Moyenne(int **depth, int _x, int _y, int dx, int dy)
 
 	return (moy / (dx * dy));
 }
-
 
 void print_matrix_infos(matrix_t *matrix)
 {

@@ -248,6 +248,7 @@ int main(int argc, char **argv)
 
 	g_free(data);
 	g_free(mode);
+	free_matrix(LED_MATRIX);
 
 	return 0;
 }
