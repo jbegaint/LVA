@@ -16,6 +16,7 @@ typedef struct matrix_t {
 } matrix_t;
 
 matrix_t *init_matrix(int n_rows, int n_cols);
+matrix_t *get_led_matrix(matrix_t *img_matrix);
 matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols);
 
 void reset_matrix(matrix_t *matrix);

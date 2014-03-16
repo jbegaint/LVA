@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "matrix.h"
+#include "utils.h"
 
 /**
  * @brief Allocate a matrix structure
@@ -51,6 +52,17 @@ void reset_matrix(matrix_t *matrix)
 	}
 }
 
+matrix_t *get_led_matrix(matrix_t *img_matrix)
+{
+	matrix_t *led_matrix;
+
+	led_matrix = get_resized_matrix(img_matrix, N_ROWS, N_COLS);
+	threshold_matrix(led_matrix);
+	center_matrix(led_matrix);
+
+	return led_matrix;
+}
+
 matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 {
 	matrix_t *new_matrix;
@@ -60,29 +72,15 @@ matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 	new_matrix = init_matrix(n_rows, n_cols);
 
 	/* Seuillage des coefficients */
-	for (int i = 0; i < n_rows; ++i)
-		for (int j = 0; j < n_cols; ++j)
+	for (int i = 0; i < n_rows; ++i) {
+		for (int j = 0; j < n_cols; ++j) {
 			(new_matrix->values)[i][j] = 
 				(int) Moyenne(matrix->values, i * dX, j * dY, dX, dY);
+		}
+	}	
 
 	return new_matrix;
 }
-
-int get_matrix_max(matrix_t *matrix)
-{
-	int max = 0;
-
-	for (int i = 0; i < matrix->n_rows; ++i) {
-		for (int j = 0; j < matrix->n_cols; ++j) {
-			if ((matrix->values)[i][j] > max) {
-				max = (matrix->values)[i][j];
-			}
-		}
-	}
-
-	return max;
-}
-
 
 /* Recentre les valeurs entre 0 et 255 */
 void center_matrix(matrix_t *matrix)
@@ -119,6 +117,29 @@ void threshold_matrix(matrix_t *matrix)
 				depth[i][j] = 0;
 		}
 	}
+}
+
+
+/*
+ * @brief Get the maximum value in the matrix
+ *
+ * @param matrix the matrix
+ *
+ * @return the max
+ */
+int get_matrix_max(matrix_t *matrix)
+{
+	int max = 0;
+
+	for (int i = 0; i < matrix->n_rows; ++i) {
+		for (int j = 0; j < matrix->n_cols; ++j) {
+			if ((matrix->values)[i][j] > max) {
+				max = (matrix->values)[i][j];
+			}
+		}
+	}
+
+	return max;
 }
 
 float Moyenne(int **depth, int _x, int _y, int dx, int dy)
