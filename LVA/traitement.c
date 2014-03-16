@@ -40,7 +40,8 @@ int **MedianDepth(int **depth)
 	/* Seuillage des coefficients */
 	for (i = 0; i < Dpc; i++)
 		for (j = 0; j < Dpl; j++)
-			Tab[i][j] = (int) Moyenne(depth, i * dX, j * dY, dX, dY);
+			Tab[i][j] =
+			    (int) Moyenne(depth, i * dX, j * dY, dX, dY);
 
 	return Tab;
 }

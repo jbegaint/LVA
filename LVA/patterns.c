@@ -29,8 +29,9 @@ matrix_t *setup_matrix(int n_rows, int n_cols)
 
 	/* todo: check for alloc error */
 	m = (int **) calloc(n_rows, sizeof(*m));
-	*m = (int *) calloc(n_rows*n_cols, sizeof(**m));
+	*m = (int *) calloc(n_rows * n_cols, sizeof(**m));
 
+	/* contiguous allocation */
 	for (int i = 1; i < n_rows; ++i) {
 		m[i] = m[i-1] + n_cols;
 	}
