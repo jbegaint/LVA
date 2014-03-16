@@ -1,12 +1,12 @@
 #ifndef _ONI_UTILS_H_
 #define _ONI_UTILS_H_
 
-#include "patterns.h"
+#include "matrix.h"
 
 #ifdef __cplusplus
 	extern "C" {
 #endif 
-void convert_frames(matrix_t *matrix, char *filepath);
+void *convert_frames(void *arg);
 #ifdef __cplusplus
 	}
 #endif 

@@ -21,6 +21,12 @@ static guint matrix_freq = 20;
 
 extern pattern_t patterns[];
 
+/* 
+	next_frame (n. ugly): tells the oni converter to convert the next frame,
+ 	we set the init value here 
+*/
+int next_frame = 1;
+
 void quit(void)
 {
 	g_print("Bye!\n");

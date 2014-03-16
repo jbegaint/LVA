@@ -6,16 +6,34 @@ using namespace std;
  
 // OpenNI Header
 #include <XnCppWrapper.h>
+#include <unistd.h>
 
 #include "oni_utils.h"
+#include "patterns.h"
 
 /* link to original author ?? */
+
+extern int next_frame;
 
 #ifdef __cplusplus
 	extern "C" {
 #endif 
-void convert_frames(matrix_t *matrix, char *filepath)
+void *convert_frames(void *arg)
 {
+	thread_info_t *thread_info;
+	matrix_t *matrix;
+	const char *filepath;
+
+
+	thread_info = (thread_info_t *) thread_info;
+	cout << "test" << endl;
+	/* segfault here */
+	matrix = thread_info->matrix;
+	filepath = thread_info->filepath;
+
+	/* opening file */
+	cout << "File:" << filepath << endl;
+
 	// Initial OpenNI Context
 	xn::Context xContext;
 	xContext.Init();
@@ -40,8 +58,15 @@ void convert_frames(matrix_t *matrix, char *filepath)
 	// main loop
 	for( unsigned int i = 0; i < uFrames; ++ i )
 	{
+		/* waiting for the worms to come... */
+		while (!next_frame) {
+			/* sleep 1 ms */
+			usleep(1000); 
+		}
+
 		xDepthGenerator.WaitAndUpdateData();
 		cout << i << "/" << uFrames << endl;
+
  
 		// get value
 		xn::DepthMetaData xDepthMap;
@@ -51,9 +76,14 @@ void convert_frames(matrix_t *matrix, char *filepath)
 		{
 			for( unsigned int x = 0; x < xDepthMap.XRes(); ++ x )
 			{
-				cout << xDepthMap( x, y ) << endl;
+				(matrix->values)[x][y] = xDepthMap( x, y );
+
 			}
 		}
+
+		/* stop conversion */
+		next_frame = 0;
+
 	}
  
 	// stop
