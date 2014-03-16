@@ -3,7 +3,7 @@ CC = gcc
 CXX = g++
 INCDIR = ../LVA/
 
-SRC := main.c ../LVA/patterns.c
+SRC := main.c ../LVA/patterns.c ../LVA/matrix.c
 OBJ := $(SRC:%.c=%.o)
 
 CFLAGS = -Wall -Wextra -Wshadow -std=gnu99 -pedantic -g -I$(INCDIR) -Wno-unused-parameter

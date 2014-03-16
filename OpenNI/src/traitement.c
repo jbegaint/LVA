@@ -16,7 +16,7 @@
 #define Dpl 5			// diodes par ligne
 
 
-void RempliMatriceReelle(int **Mat, FILE * pf)
+void RempliMatriceReelle(int **Mat, FILE *pf)
 {
 	int i, j;
 
@@ -40,8 +40,7 @@ int **MedianDepth(int **depth)
 	/* Seuillage des coefficients */
 	for (i = 0; i < Dpc; i++)
 		for (j = 0; j < Dpl; j++)
-			Tab[i][j] =
-			    (int) Moyenne(depth, i * dX, j * dY, dX, dY);
+			Tab[i][j] = (int) Moyenne(depth, i * dX, j * dY, dX, dY);
 
 	return Tab;
 }
@@ -57,43 +56,6 @@ float Moyenne(int **depth, int _x, int _y, int dx, int dy)
 			moy = moy + depth[_x + i][_y + j];
 
 	return (moy / (dx * dy));
-}
-
-
-void writePGM_5x7(const char *filename, int **data)
-{
-	FILE *pgmFile;
-	int i, j, level;
-
-	/* affichage des valeurs des coefficients dans le terminal */
-	for (i = 0; i < Dpc; i++) {
-		for (j = 0; j < Dpl; j++) {
-			level = data[i][j];
-			fprintf(stdout, "%d\t", level);
-		}
-
-		printf("\n");
-	}
-
-	/* Ouverture du fichier */
-	pgmFile = fopen(filename, "wb");
-
-	if (pgmFile == NULL) {
-		printf("Cannot open file to write");
-		exit(EXIT_FAILURE);
-	}
-
-	/* En-tete du fichier PGM */
-	fprintf(pgmFile, "P2\n#\n#\n");
-	fprintf(pgmFile, "%d %d\n", Dpl, Dpc);
-	fprintf(pgmFile, "3\n");
-
-	/* Ecriture des coefficients */
-	for (i = 0; i < Dpc; i++)
-		for (j = 0; j < Dpl; j++)
-			fprintf(pgmFile, "%d ", data[i][j]);
-
-	fclose(pgmFile);
 }
 
 

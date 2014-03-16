@@ -20,3 +20,39 @@ void print_bits(int val)
 
 	fprintf(stdout, "\n");
 }
+
+void writePGM_5x7(const char *filename, int **data)
+{
+	FILE *pgmFile;
+	int i, j, level;
+
+	/* affichage des valeurs des coefficients dans le terminal */
+	for (i = 0; i < Dpc; i++) {
+		for (j = 0; j < Dpl; j++) {
+			level = data[i][j];
+			fprintf(stdout, "%d\t", level);
+		}
+
+		printf("\n");
+	}
+
+	/* Ouverture du fichier */
+	pgmFile = fopen(filename, "wb");
+
+	if (pgmFile == NULL) {
+		printf("Cannot open file to write");
+		exit(EXIT_FAILURE);
+	}
+
+	/* En-tete du fichier PGM */
+	fprintf(pgmFile, "P2\n#\n#\n");
+	fprintf(pgmFile, "%d %d\n", Dpl, Dpc);
+	fprintf(pgmFile, "3\n");
+
+	/* Ecriture des coefficients */
+	for (i = 0; i < Dpc; i++)
+		for (j = 0; j < Dpl; j++)
+			fprintf(pgmFile, "%d ", data[i][j]);
+
+	fclose(pgmFile);
+}

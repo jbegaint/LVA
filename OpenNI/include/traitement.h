@@ -6,6 +6,5 @@ int **MedianDepth(int **depth);
 int **centring(int **depth, int X, int Y);
 int **thresholding(int **depth, int X, int Y);
 void RempliMatriceReelle(int **Mat, FILE * pf);
-void writePGM_5x7(const char *filename, int **data);
 
 #endif
