@@ -26,7 +26,6 @@ void RempliMatriceReelle(int **Mat, FILE *pf)
 }
 
 
-
 int **MedianDepth(int **depth)
 {
 	int i, j;

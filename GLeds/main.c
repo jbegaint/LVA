@@ -231,7 +231,7 @@ int main(int argc, char **argv)
 	/*g_signal_connect(spinbutton_leds, "value-changed", G_CALLBACK(on_spin_leds_update), data);*/
 
 	/* setup matrix */
-	LED_MATRIX = setup_matrix(N_ROWS, N_COLS);
+	LED_MATRIX = init_matrix(N_ROWS, N_COLS);
 
 	/* display main_window */
 	gtk_widget_set_sensitive(pause_button, FALSE); 
