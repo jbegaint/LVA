@@ -1,8 +1,10 @@
 #ifndef _MATRIX_H_
 #define _MATRIX_H_
 
-#define N_ROWS 7
-#define N_COLS 5
+/*#define N_ROWS 7*/
+/*#define N_COLS 5*/
+#define N_ROWS 14
+#define N_COLS 25
 
 #define PIXELS_X 320
 #define PIXELS_Y 240

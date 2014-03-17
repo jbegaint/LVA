@@ -3,9 +3,6 @@
 
 #include "matrix.h"
 
-#define LED_BY_LED_TOGGLE 0
-#define LED_BY_LED 1
-
 typedef struct pattern_t {
 	int id;
 	const char *desc;

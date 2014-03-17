@@ -59,7 +59,6 @@ void reset_matrix(matrix_t *matrix)
  * 
  * @param matrix the matrix to be freed
  */
-
 void free_matrix(matrix_t *matrix)
 {
 	free(*(matrix->values));
@@ -67,12 +66,18 @@ void free_matrix(matrix_t *matrix)
 	free(matrix);
 }
 
+/**
+ * @brief Copy a matrix structure
+ * 
+ * @param src the source matrix
+ * @param dest the destination matrix 
+ */
 void copy_matrix(matrix_t *dest, matrix_t *src)
 {
 	dest->n_rows = src->n_rows;
 	dest->n_cols = src->n_cols;
 
-	/* memcpy ? */
+	/* memcpy ? u*/
 	for (int i = 0; i < src->n_rows; ++i) {
 		for (int j = 0; j < src->n_cols; ++j) {
 			(dest->values)[i][j] = (src->values)[i][j];
@@ -174,9 +179,11 @@ float Moyenne(int **depth, int _x, int _y, int dx, int dy)
 	int i = 0, j = 0;
 	float moy = 0;
 
-	for (i = 0; i < dx; i++)
-		for (j = 0; j < dy; j++)
+	for (i = 0; i < dx; i++) {
+		for (j = 0; j < dy; j++) {
 			moy = moy + depth[_x + i][_y + j];
+		}
+	}
 
 	return (moy / (dx * dy));
 }
