@@ -24,4 +24,6 @@ void set_pattern_col_by_col(matrix_t *m);
 void set_pattern_from_oni(matrix_t *m);
 void set_pattern_from_pgm(matrix_t *m);
 
+void print_patterns(void);
+
 #endif

@@ -145,3 +145,14 @@ void set_pattern_from_pgm(matrix_t *m)
 
 	first_run = 0;
 }
+
+void print_patterns(void)
+{
+	pattern_t *ptrn;
+
+	printf("\nID DESC\n");
+
+	for (ptrn = patterns; ptrn->desc; ++ptrn) {
+		printf("%02d %s\n", ptrn->id, ptrn->desc);
+	}
+}

@@ -2,7 +2,7 @@ CC = gcc
 CXX = g++
 
 LVA_DIR = ../LVA
-INCDIR = LVA_DIR
+INCDIR = $(LVA_DIR)
 
 CFLAGS = -Wall -Wextra -Wshadow -std=gnu99 -pedantic -g -Wno-unused-parameter
 CFLAGS += -I$(INCDIR) -I/usr/include/ni
