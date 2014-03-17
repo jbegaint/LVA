@@ -6,7 +6,11 @@
 #include "pgm_utils.h"
 #include "matrix.h"
 
-/* Credits: Phelma 1st Year nano-projet*/
+/* 
+	Credits: Phelma 1st Year nano-projet
+	see here : http://tdinfo.phelma.grenoble-inp.fr/1Apet/td2.html
+	(slighlty modified to be used with matrix structure)
+*/
 matrix_t *read_pgm_file(char *fileName)
 {
 	FILE *filein;
@@ -122,7 +126,7 @@ int write_pgm_file(char *fileName, matrix_t *p_img, char *comment)
 		return 1;
 	}
 	/* values : les pixels, en binaire */
-	nb = fwrite(*(p_img->values), sizeof(unsigned char),
+	nb = fwrite(*(p_img->values), sizeof(int),
 		    p_img->n_cols * p_img->n_rows, fileout);
 	if (nb != p_img->n_cols * p_img->n_rows) {
 		fprintf(stderr,
