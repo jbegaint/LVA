@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+#include "matrix.h"
+
 void die(char *err, ...)
 {
 	va_list e;
@@ -27,8 +29,8 @@ void writePGM_5x7(const char *filename, int **data)
 	int i, j, level;
 
 	/* affichage des valeurs des coefficients dans le terminal */
-	for (i = 0; i < Dpc; i++) {
-		for (j = 0; j < Dpl; j++) {
+	for (i = 0; i < N_ROWS; i++) {
+		for (j = 0; j < N_COLS; j++) {
 			level = data[i][j];
 			fprintf(stdout, "%d\t", level);
 		}
@@ -46,12 +48,12 @@ void writePGM_5x7(const char *filename, int **data)
 
 	/* En-tete du fichier PGM */
 	fprintf(pgmFile, "P2\n#\n#\n");
-	fprintf(pgmFile, "%d %d\n", Dpl, Dpc);
+	fprintf(pgmFile, "%d %d\n", N_COLS, N_ROWS);
 	fprintf(pgmFile, "3\n");
 
 	/* Ecriture des coefficients */
-	for (i = 0; i < Dpc; i++)
-		for (j = 0; j < Dpl; j++)
+	for (i = 0; i < N_ROWS; i++)
+		for (j = 0; j < N_COLS; j++)
 			fprintf(pgmFile, "%d ", data[i][j]);
 
 	fclose(pgmFile);

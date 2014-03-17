@@ -22,5 +22,6 @@ void set_pattern_random(matrix_t *m);
 void set_pattern_row_by_row(matrix_t *m);
 void set_pattern_col_by_col(matrix_t *m);
 void set_pattern_from_oni(matrix_t *m);
+void set_pattern_from_pgm(matrix_t *m);
 
 #endif

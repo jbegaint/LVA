@@ -5,8 +5,10 @@
 #include "pins.h"
 #include "patterns.h"
 #include "oni_utils.h"
+#include "pgm_utils.h"
 
 #define FILE_ONI_TEST "./oni_files/Captured.oni"
+#define FILE_PGM_TEST "./test.pgm"
 
 extern int next_frame;
 
@@ -17,6 +19,7 @@ const pattern_t patterns[] = {
 	{3, "row by row", set_pattern_row_by_row},
 	{4, "col by col", set_pattern_col_by_col},
 	{5, "oni file", set_pattern_from_oni},
+	{6, "pgm file", set_pattern_from_pgm},
 	{.desc = NULL},
 };
 
@@ -126,6 +129,23 @@ void set_pattern_from_oni(matrix_t *m)
 	free_matrix(tmp);
 
 	next_frame = 1;
+}
+
+void set_pattern_from_pgm(matrix_t *m)
+{
+	static int first_run = 1;
+	matrix_t *pgm_matrix, *tmp;
+
+	if (!first_run)
+		return;
+
+	pgm_matrix = read_pgm_file(FILE_PGM_TEST);
+	tmp = get_led_matrix(pgm_matrix);
+	copy_matrix(m, tmp);
+	free_matrix(tmp);
+	/*free_matrix(pgm_matrix);*/
+
+	first_run = 0;
 }
 
 void toggle_pin(matrix_t *m, int i, int j)

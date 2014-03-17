@@ -3,7 +3,7 @@ CC = gcc
 CXX = g++
 INCDIR = ../LVA/
 
-SRC := main.c ../LVA/patterns.c ../LVA/matrix.c
+SRC := main.c ../LVA/patterns.c ../LVA/matrix.c ../LVA/pgm_utils.c ../LVA/utils.c
 SRCXX := ../LVA/oni_utils.cpp
 
 OBJ := $(SRC:%.c=%.o)
