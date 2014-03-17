@@ -96,6 +96,9 @@ matrix_t *get_led_matrix(matrix_t *img_matrix)
 {
 	matrix_t *led_matrix;
 
+	/* centre initial matrix */
+	center_matrix(img_matrix);
+
 	led_matrix = get_resized_matrix(img_matrix, N_ROWS, N_COLS);
 	center_matrix(led_matrix);
 	threshold_matrix(led_matrix);
@@ -147,13 +150,13 @@ void threshold_matrix(matrix_t *matrix)
 			(matrix->values)[i][j] = (int) (255 * (matrix->values)[i][j] / max);
 
 			if ((matrix->values)[i][j] > 191)
-				(matrix->values)[i][j] = 3;
-			else if ((matrix->values)[i][j] > 127)
-				(matrix->values)[i][j] = 2;
-			else if ((matrix->values)[i][j] > 63)
-				(matrix->values)[i][j] = 1;
-			else
 				(matrix->values)[i][j] = 0;
+			else if ((matrix->values)[i][j] > 127)
+				(matrix->values)[i][j] = 1;
+			else if ((matrix->values)[i][j] > 63)
+				(matrix->values)[i][j] = 2;
+			else
+				(matrix->values)[i][j] = 3;
 		}
 	}
 }
