@@ -10,6 +10,7 @@
 
 #define FILE_ONI_TEST "./oni_files/Captured.oni"
 #define FILE_PGM_TEST "./lena.pgm"
+/*#define FILE_PGM_TEST "./test.pgm"*/
 
 extern int next_frame;
 

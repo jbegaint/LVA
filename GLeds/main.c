@@ -10,6 +10,9 @@
 #include "patterns.h"
 #include "utils.h"
 
+#define N_ROWS 14
+#define N_COLS 25
+
 static const char *LED_ARRAY[N_LEVELS] = { LED0, LED1, LED2, LED3 };
 static gboolean running;
 static gchar *mode;
@@ -121,6 +124,7 @@ void on_start_clicked(GtkWidget *widget, gpointer user_data)
 void on_launch_clicked(GtkWidget *widget, gpointer user_data)
 {
 	int s;
+	UNUSED(s);
 
 	running = FALSE;
 
