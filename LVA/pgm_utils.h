@@ -4,6 +4,6 @@
 #include "matrix.h"
 
 matrix_t *read_pgm_file(char *fileName);
-/*int write_pgm_file(char *fileName, IMAGE_T * p_img, char *comment);*/
+int write_pgm_file(char *fileName, matrix_t *p_img, char *comment);
 
 #endif

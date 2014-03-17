@@ -6,6 +6,5 @@
 
 void die(char *err, ...);
 void print_bits(int val);
-void writePGM_5x7(const char *filename, int **data);
 
 #endif

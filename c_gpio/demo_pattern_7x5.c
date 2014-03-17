@@ -119,7 +119,7 @@ void switch_leds(int ctrl)
 			for (l = N_LEVELS - 2; l >= 0 ; --l) {
 	
 				/* todo: fct to set on/off independent of gpios */
-				out = get_pins_to_set_on(row, l);
+				outjean = get_pins_to_set_on(row, l);
 	
 				/* set pins values */
 				set_pins_row_on_by_gpio(BBBIO_GPIO1, out);

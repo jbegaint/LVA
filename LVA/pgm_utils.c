@@ -6,10 +6,7 @@
 #include "pgm_utils.h"
 #include "matrix.h"
 
-
 /* Credits: Phelma 1st Year nano-projet*/
-
-
 matrix_t *read_pgm_file(char *fileName)
 {
 	FILE *filein;
@@ -79,4 +76,59 @@ matrix_t *read_pgm_file(char *fileName)
 
 	fclose(filein);
 	return img;
+}
+
+int write_pgm_file(char *fileName, matrix_t *p_img, char *comment)
+{
+	assert(p_img && p_img->values && *(p_img->values));
+	FILE *fileout;
+	int nb;
+
+	fileout = fopen(fileName, "wb");
+	if (fileout == NULL) {
+		/* echec : gestion d'erreur */
+		fprintf(stderr,
+			"ERREUR : Impossible d'ouvrir le fichier '%s' !\n",
+			fileName);
+		return 1;
+	}
+	/* ecriture de la cle identifiant les fichier PPM P5 */
+	nb = fprintf(fileout, "P5\n");
+	if (nb <= 0) {
+		fprintf(stderr,
+			"ERREUR : erreur d'ecriture fichier (cas 1)\n");
+		return 1;
+	}
+	/* ecriture du commentaire optionnel */
+	if (comment) {
+		nb = fprintf(fileout, "# %s\n", comment);
+		if (nb <= 0) {
+			fprintf(stderr,
+				"ERREUR : erreur d'ecriture fichier (cas 2)\n");
+			return 1;
+		}
+	}
+	/* nbm, n_cols et max value des pixels */
+	nb = fprintf(fileout, "%d %d\n", p_img->n_cols, p_img->n_rows);
+	if (nb <= 0) {
+		fprintf(stderr,
+			"ERREUR : erreur d'ecriture fichier (cas 3)\n");
+		return 1;
+	}
+	nb = fprintf(fileout, "255\n");
+	if (nb <= 0) {
+		fprintf(stderr,
+			"ERREUR : erreur d'ecriture fichier (cas 4)\n");
+		return 1;
+	}
+	/* values : les pixels, en binaire */
+	nb = fwrite(*(p_img->values), sizeof(unsigned char),
+		    p_img->n_cols * p_img->n_rows, fileout);
+	if (nb != p_img->n_cols * p_img->n_rows) {
+		fprintf(stderr,
+			"ERREUR : erreur d'ecriture fichier (cas 5)\n");
+		return 1;
+	}
+	fclose(fileout);
+	return 0;
 }

@@ -1,5 +1,6 @@
-#include <stdlib.h>
 #include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "pins.h"
@@ -8,7 +9,7 @@
 #include "pgm_utils.h"
 
 #define FILE_ONI_TEST "./oni_files/Captured.oni"
-#define FILE_PGM_TEST "./test.pgm"
+#define FILE_PGM_TEST "./lena.pgm"
 
 extern int next_frame;
 
@@ -148,7 +149,7 @@ void set_pattern_from_pgm(matrix_t *m)
 
 void print_patterns(void)
 {
-	pattern_t *ptrn;
+	const pattern_t *ptrn;
 
 	printf("\nID DESC\n");
 
