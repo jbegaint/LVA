@@ -85,7 +85,13 @@ void copy_matrix(matrix_t *dest, matrix_t *src)
 	}
 }
 
-
+/**
+ * @brief Get a matrix structure for the led grid (resized, centre, threshold)
+ * 
+ * @param img_matrix the source matrix, extracted from a frame
+ * 
+ * @return a matrix structure for the led grid
+ */
 matrix_t *get_led_matrix(matrix_t *img_matrix)
 {
 	matrix_t *led_matrix;
@@ -97,6 +103,7 @@ matrix_t *get_led_matrix(matrix_t *img_matrix)
 	return led_matrix;
 }
 
+
 matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 {
 	matrix_t *new_matrix;
@@ -107,7 +114,7 @@ matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 
 	/* Seuillage des coefficients */
 	for (int i = 0; i < n_rows; ++i) {
-		for (int j = 0; j < n_cols; ++j) {
+		for (int j=  0; j < n_cols; ++j) {
 			(new_matrix->values)[i][j] = 
 				(int) Moyenne(matrix->values, i * dX, j * dY, dX, dY);
 		}
@@ -202,4 +209,14 @@ void print_matrix(matrix_t *matrix)
 		printf("\n");
 	}
 	printf("\n");
+}
+
+void matrix_toggle_pin(matrix_t *m, int i, int j)
+{
+	if ((m->values)[i][j] == 0) {
+		(m->values)[i][j] = 3;
+	}
+	else {
+		(m->values)[i][j] = 0;
+	}
 }

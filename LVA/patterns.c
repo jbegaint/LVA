@@ -36,7 +36,7 @@ void set_pattern_led_by_led(matrix_t *m)
 	for (i = 0; i < m->n_rows; ++i) {
 		for (j = 0; j < m->n_cols; ++j) {
 			if (i == led_y && j == led_x) {
-				toggle_pin(m, i, j);
+				matrix_toggle_pin(m, i, j);
 			}
 		}		
 	}
@@ -57,7 +57,7 @@ void set_pattern_led_by_led_toggle(matrix_t *m)
 	for (i = 0; i < m->n_rows; ++i) {
 		for (j = 0; j < m->n_cols; ++j) {
 			if (i == led_y && j == led_x) {
-				toggle_pin(m, i, j);
+				matrix_toggle_pin(m, i, j);
 			}
 		}		
 	}
@@ -124,7 +124,6 @@ void set_pattern_from_oni(matrix_t *m)
 	}
 
 	tmp = get_led_matrix(thread_info->matrix);
-
 	copy_matrix(m, tmp);
 	free_matrix(tmp);
 
@@ -143,17 +142,6 @@ void set_pattern_from_pgm(matrix_t *m)
 	tmp = get_led_matrix(pgm_matrix);
 	copy_matrix(m, tmp);
 	free_matrix(tmp);
-	/*free_matrix(pgm_matrix);*/
 
 	first_run = 0;
-}
-
-void toggle_pin(matrix_t *m, int i, int j)
-{
-	if ((m->values)[i][j] == 0) {
-		(m->values)[i][j] = 3;
-	}
-	else {
-		(m->values)[i][j] = 0;
-	}
 }

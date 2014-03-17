@@ -7,9 +7,6 @@
 #include "../LVA/pins.h"
 #include "../LVA/utils.h"
 
-#define N_ROWS 7
-#define N_COLS 5
-
 static int running = 1;
 
 static int PINS_LEVELS[7][5] = {

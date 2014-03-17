@@ -1,10 +1,8 @@
 #ifndef _MATRIX_H_
 #define _MATRIX_H_
 
-/*#define N_ROWS 7*/
-/*#define N_COLS 5*/
-#define N_ROWS 14
-#define N_COLS 25
+#define N_ROWS 7
+#define N_COLS 5
 
 #define PIXELS_X 320
 #define PIXELS_Y 240
@@ -34,4 +32,6 @@ float Moyenne(int **depth, int _x, int _y, int dx, int dy);
 void print_matrix_infos(matrix_t *matrix);
 void print_matrix(matrix_t *matrix);
 
+
+void matrix_toggle_pin(matrix_t *m, int i, int j);
 #endif

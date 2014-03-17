@@ -12,8 +12,6 @@ using namespace std;
 #include "oni_utils.h"
 #include "patterns.h"
 
-/* link to original author ?? */
-
 extern int next_frame;
 
 #ifdef __cplusplus
@@ -54,7 +52,6 @@ void *convert_frames(void *arg)
 	// Start
 	xContext.StartGeneratingAll();
  
-
 	// main loop
 	for (unsigned int i = 0; i < uFrames; ++i) {
 

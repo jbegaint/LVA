@@ -14,7 +14,7 @@ typedef struct thread_info_t {
 	const char *filepath;
 } thread_info_t;
 
-void toggle_pin(matrix_t *m, int i, int j);
+void matrix_toggle_pin(matrix_t *m, int i, int j);
 
 void set_pattern_led_by_led_toggle(matrix_t *matrix);
 void set_pattern_led_by_led(matrix_t *matrix);
