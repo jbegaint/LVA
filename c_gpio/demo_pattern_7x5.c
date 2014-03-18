@@ -10,9 +10,6 @@
 #include "pins.h"
 #include "utils.h"
 
-#define N_ROWS 7
-#define N_COLS 5
-
 int next_frame = 1;
 
 extern pattern_t patterns[];
