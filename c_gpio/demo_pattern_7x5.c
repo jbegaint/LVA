@@ -27,8 +27,6 @@ static matrix_t *LED_MATRIX;
 
 void (*ptrn_func_ptr)(matrix_t*);
 
-volatile int next_mat = 1;
-
 void *set_pins_values(void *arg)
 {
 	UNUSED(arg);
@@ -36,7 +34,6 @@ void *set_pins_values(void *arg)
 	/* call pattern */
 	while (1) {
 		ptrn_func_ptr(LED_MATRIX);
-		next_mat = 0;
 		usleep(100 * 1000);
 	}
 
@@ -144,9 +141,6 @@ void switch_leds(int ctrl)
 			unselect_row_by_id_and_gpio(BBBIO_GPIO2, pins_rows[row].id);
 
 		}
-
-		next_mat = 1;
-
 	}
 
 	/* end of loop, exit */
@@ -182,7 +176,7 @@ int main(int argc, char **argv)
 {
 	int ctrl;
 	pthread_t thread;
- 
+
 	if (argc != 2) {
 		usage(argv[0]);
 	}
