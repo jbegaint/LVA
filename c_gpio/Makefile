@@ -10,7 +10,7 @@ CFLAGS += -I$(INCDIR) -I/usr/include/ni
 LIB_PATH = ../BBBIOlib/BBBio_lib/
 LDFLAGS = -L $(LIB_PATH) -lBBBio -pthread -lOpenNI -lstdc++
 
-SRC := $(shell find $(LVA_DIR) -name '*.c')
+SRC := $(shell find $(LVA_DIR) -name '*.c' ! -name 'pgm_test.c')
 OBJ := $(SRC:%.c=%.o)
 
 SRCXX := $(shell find $(LVA_DIR) -name '*.cpp')

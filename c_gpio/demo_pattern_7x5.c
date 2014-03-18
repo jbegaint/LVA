@@ -32,6 +32,7 @@ void (*ptrn_func_ptr)(matrix_t*);
 void set_pins_values(void)
 {
 	/* call pattern */
+	ptrn_func_ptr(LED_MATRIX);
 
 }
 
@@ -119,7 +120,7 @@ void switch_leds(int ctrl)
 			for (l = N_LEVELS - 2; l >= 0 ; --l) {
 	
 				/* todo: fct to set on/off independent of gpios */
-				outjean = get_pins_to_set_on(row, l);
+				out = get_pins_to_set_on(row, l);
 	
 				/* set pins values */
 				set_pins_row_on_by_gpio(BBBIO_GPIO1, out);
