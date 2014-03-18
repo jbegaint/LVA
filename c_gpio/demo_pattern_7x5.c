@@ -34,12 +34,13 @@ void *set_pins_values(void *arg)
 	UNUSED(arg);
 	
 	/* call pattern */
-	if (next_mat) {
-		ptrn_func_ptr(LED_MATRIX);
-		next_mat = 0;
+	while (1) {
+		if (next_mat) {
+			ptrn_func_ptr(LED_MATRIX);
+			next_mat = 0;
+		}
+		usleep(1000);
 	}
-
-	usleep(1000);
 
 	return NULL;
 }
