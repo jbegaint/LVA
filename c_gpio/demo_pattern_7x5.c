@@ -27,13 +27,20 @@ static matrix_t *LED_MATRIX;
 
 void (*ptrn_func_ptr)(matrix_t*);
 
-void *set_pins_values(void* arg)
+static int next_mat = 1;
+
+void *set_pins_values(void *arg)
 {
 	UNUSED(arg);
+	
 	/* call pattern */
-	// ptrn_func_ptr(LED_MATRIX);
-	set_pattern_led_by_led(LED_MATRIX);
-	usleep(20000);
+	if (next_mat) {
+		ptrn_func_ptr(LED_MATRIX);
+		next_mat = 0;
+	}
+
+	usleep(1000);
+
 	return NULL;
 }
 
@@ -139,7 +146,8 @@ void switch_leds(int ctrl)
 
 		}
 
-		ptrn_func_ptr(LED_MATRIX);
+		next_mat = 1;
+
 	}
 
 	/* end of loop, exit */
@@ -174,6 +182,7 @@ void parse_arg(char *arg)
 int main(int argc, char **argv)
 {
 	int ctrl;
+	pthread_t thread;
  
 	if (argc != 2) {
 		usage(argv[0]);
@@ -185,8 +194,7 @@ int main(int argc, char **argv)
 	pins_cols = get_pins_by_names(pins_cols_names, ARRAY_SIZE(pins_cols_names));
 
 	/* start thread */
-	// pthread_t thread;
-	// pthread_create(&thread, NULL, set_pins_values, NULL);
+	pthread_create(&thread, NULL, set_pins_values, NULL);
 
 	setup(&ctrl);
 	switch_leds(ctrl);
