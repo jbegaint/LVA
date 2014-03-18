@@ -39,7 +39,7 @@ void *set_pins_values(void *arg)
 			ptrn_func_ptr(LED_MATRIX);
 			next_mat = 0;
 		}
-		usleep(1);
+		usleep(200000);
 	}
 
 	return NULL;

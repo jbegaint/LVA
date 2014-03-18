@@ -12,12 +12,12 @@ static int running = 1;
 int next_frame = 1;
 static int PINS_LEVELS[7][5] = {
 	{3, 3, 3, 3, 3},
-	{0, 1, 2, 3, 1},
-	{0, 1, 2, 3, 1},
+	{3, 1, 2, 3, 1},
+	{3, 1, 2, 3, 1},
 	{3, 2, 1, 0, 2},
-	{0, 1, 2, 3, 1},
-	{0, 1, 2, 3, 1},
-	{0, 1, 2, 3, 1},
+	{3, 1, 2, 3, 1},
+	{3, 1, 2, 3, 1},
+	{3, 1, 2, 3, 1},
 };
 
 static const char* pins_rows_names[] = {"P8_36", "P8_37", "P8_38", "P8_39", "P8_40", "P8_41", "P8_42"};
@@ -166,7 +166,7 @@ int main()
 			PINS_LEVELS[i][j]= 3;
 		}
 	}
-	PINS_LEVELS[2][2] = 0;
+	PINS_LEVELS[5][2] = 0;
 
 	pins_rows = get_pins_by_names(pins_rows_names, ARRAY_SIZE(pins_rows_names));
 	pins_cols = get_pins_by_names(pins_cols_names, ARRAY_SIZE(pins_cols_names));
