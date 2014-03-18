@@ -27,7 +27,7 @@ static matrix_t *LED_MATRIX;
 
 void (*ptrn_func_ptr)(matrix_t*);
 
-static int next_mat = 1;
+volatile int next_mat = 1;
 
 void *set_pins_values(void *arg)
 {
@@ -35,11 +35,9 @@ void *set_pins_values(void *arg)
 	
 	/* call pattern */
 	while (1) {
-		if (next_mat) {
-			ptrn_func_ptr(LED_MATRIX);
-			next_mat = 0;
-		}
-		usleep(200000);
+		ptrn_func_ptr(LED_MATRIX);
+		next_mat = 0;
+		usleep(100 * 1000);
 	}
 
 	return NULL;
