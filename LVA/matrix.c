@@ -151,13 +151,13 @@ void threshold_matrix(matrix_t *matrix)
 			(matrix->values)[i][j] = (int) (255 * (matrix->values)[i][j] / max);
 
 			if ((matrix->values)[i][j] > 191)
-				(matrix->values)[i][j] = 0;
-			else if ((matrix->values)[i][j] > 127)
-				(matrix->values)[i][j] = 1;
-			else if ((matrix->values)[i][j] > 63)
-				(matrix->values)[i][j] = 2;
-			else
 				(matrix->values)[i][j] = 3;
+			else if ((matrix->values)[i][j] > 127)
+				(matrix->values)[i][j] = 2;
+			else if ((matrix->values)[i][j] > 63)
+				(matrix->values)[i][j] = 1;
+			else
+				(matrix->values)[i][j] = 0;
 		}
 	}
 }
