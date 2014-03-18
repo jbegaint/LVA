@@ -106,18 +106,24 @@ matrix_t *get_led_matrix(matrix_t *img_matrix)
 	return led_matrix;
 }
 
+void swap_int(int *a, int *b)
+{
+	int tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
 
 matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 {
 	matrix_t *new_matrix;
-	int dX = PIXELS_Y / N_ROWS;
-	int dY = PIXELS_X / N_COLS;
+	int dX = PIXELS_Y / n_rows;
+	int dY = PIXELS_X / n_cols;
 
 	new_matrix = init_matrix(n_rows, n_cols);
 
 	/* Seuillage des coefficients */
 	for (int i = 0; i < n_rows; ++i) {
-		for (int j=  0; j < n_cols; ++j) {
+		for (int j =  0; j < n_cols; ++j) {
 			(new_matrix->values)[i][j] = 
 				(int) Moyenne(matrix->values, i * dX, j * dY, dX, dY);
 		}
