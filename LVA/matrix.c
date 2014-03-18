@@ -130,7 +130,6 @@ matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 void center_matrix(matrix_t *matrix)
 {
 	int max = get_matrix_max(matrix);
-	printf("%d\n", max);
 
 	/* centrage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
