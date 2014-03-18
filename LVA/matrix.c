@@ -149,11 +149,11 @@ void threshold_matrix(matrix_t *matrix)
 		for (int j = 0; j < matrix->n_cols; j++) {
 			(matrix->values)[i][j] = (int) (255 * (matrix->values)[i][j] / max);
 
-			if ((matrix->values)[i][j] > 191)
+			if ((matrix->values)[i][j] > 200)
 				(matrix->values)[i][j] = 3;
-			else if ((matrix->values)[i][j] > 127)
+			else if ((matrix->values)[i][j] > 150)
 				(matrix->values)[i][j] = 2;
-			else if ((matrix->values)[i][j] > 63)
+			else if ((matrix->values)[i][j] > 100)
 				(matrix->values)[i][j] = 1;
 			else
 				(matrix->values)[i][j] = 0;

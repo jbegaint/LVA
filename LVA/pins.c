@@ -90,16 +90,37 @@ pin_t pins_table[] = {
 	{NULL, 0, 0},
 };
 
+/**
+ * @brief Get the time for a level struct
+ * 
+ * @param level the level struct
+ * 
+ * @return a level time
+ */
 int get_level_time(level_t level)
 {
 	return level.tm;
 }
 
+/**
+ * @brief Get the id for a level struct
+ * 
+ * @param level the level struct
+ * 
+ * @return a level id
+ */
 int get_level_id(level_t level)
 {
 	return level.id;
 }
 
+/**
+ * @brief Find a level in levels_table
+ * 
+ * @param level_id the level id to search 
+ * 
+ * @return a pointer to the level if found, NULL otherwise
+ */
 level_t *get_level_by_id(int level_id)
 {
 	level_t *l;
@@ -112,6 +133,13 @@ level_t *get_level_by_id(int level_id)
 	return NULL;
 }
 
+/**
+ * @brief Get the level time for a level in levels_table
+ * 
+ * @param level_id the level id to search 
+ * 
+ * @return the level time, if found, -1 otherwise
+ */
 int get_level_time_by_id(int level_id)
 {
 	level_t *l;
@@ -124,6 +152,12 @@ int get_level_time_by_id(int level_id)
 	}
 }
 
+/**
+ * @brief Sleep between levels, calculate time to sleep between the current 
+ * level and the previous one
+ * 
+ * @param level_id the current level id  
+ */
 void level_sleep(int level_id)
 {
 	int sleep0, sleep1;
@@ -140,6 +174,11 @@ void level_sleep(int level_id)
 	level_usleep(tmp * 1000);
 }
 
+/*
+ * @brief Sleep, nanosleep wrapper, so it's quite accurate
+ *
+ * @param us the number of micro-seconds to sleep for
+ */
 void level_usleep(double us)
 {
 	struct timespec wait;
