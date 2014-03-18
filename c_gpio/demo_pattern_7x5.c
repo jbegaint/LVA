@@ -151,6 +151,8 @@ void parse_arg(char *arg)
 
 	pattern_id = atoi(arg);
 
+	printf("loading pattern_id: %d", pattern_id);
+
 	for (ptrn = patterns; ptrn->desc; ++ptrn) {
 		if (pattern_id == ptrn->id) {
 			ptrn_func_ptr = ptrn->func_ptr;

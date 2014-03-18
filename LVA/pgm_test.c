@@ -36,27 +36,22 @@ int main(int argc, char **argv)
 
 	img = read_pgm_file(img_name);
 	print_matrix(img);
-	getchar();
-	
+
 	center_matrix(img);
 	write_wrapper("img_center.pgm", img);
 	print_matrix(img);
-	getchar();
 
 	grid = get_resized_matrix(img, N_ROWS, N_COLS);
 	write_wrapper("grid_resized.pgm", grid);
 	print_matrix(grid);
-	getchar();
 
 	center_matrix(grid);
 	write_wrapper("grid_centered.pgm", grid);
 	print_matrix(grid);
-	getchar();
 
 	threshold_matrix(grid);
 	write_wrapper("grid_threshold.pgm", grid);
 	print_matrix(grid);
-	getchar();
 
 	return 0;
 }
