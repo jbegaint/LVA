@@ -6,11 +6,12 @@
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
 #include "../LVA/pins.h"
 #include "../LVA/utils.h"
+#include "matrix.h"
 
 static int running = 1;
-
+int next_frame = 1;
 static int PINS_LEVELS[7][5] = {
-	{0, 1, 2, 3, 1},
+	{3, 3, 3, 3, 3},
 	{0, 1, 2, 3, 1},
 	{0, 1, 2, 3, 1},
 	{3, 2, 1, 0, 2},
@@ -149,7 +150,7 @@ void switch_leds(int ctrl)
 			unselect_row_by_id_and_gpio(BBBIO_GPIO2, pins_rows[row].id);
 		}
 
-		set_pins_values();
+		//set_pins_values();
 	}
 
 	/* end of loop, exit */
@@ -159,7 +160,14 @@ void switch_leds(int ctrl)
 int main()
 {
 	int ctrl;
-	
+
+	for (int i = 0; i < N_ROWS; ++i) {
+		for (int j = 0; j < N_COLS; ++j) {
+			PINS_LEVELS[i][j]= 3;
+		}
+	}
+	PINS_LEVELS[2][2] = 0;
+
 	pins_rows = get_pins_by_names(pins_rows_names, ARRAY_SIZE(pins_rows_names));
 	pins_cols = get_pins_by_names(pins_cols_names, ARRAY_SIZE(pins_cols_names));
 

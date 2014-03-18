@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include <signal.h>
 #include <time.h>
 
@@ -26,11 +27,14 @@ static matrix_t *LED_MATRIX;
 
 void (*ptrn_func_ptr)(matrix_t*);
 
-void set_pins_values(void)
+void *set_pins_values(void* arg)
 {
+	UNUSED(arg);
 	/* call pattern */
-	ptrn_func_ptr(LED_MATRIX);
-
+	// ptrn_func_ptr(LED_MATRIX);
+	set_pattern_led_by_led(LED_MATRIX);
+	usleep(20000);
+	return NULL;
 }
 
 void usage(char *argv0)
@@ -105,11 +109,10 @@ int get_pins_to_set_on(int row_id, int level_id)
 void switch_leds(int ctrl)
 {
 	int l, out, row;
-	
+
 	while (running) {
 		
 		for (row = 0; row < N_ROWS; ++row) {
-
 			select_row_by_id_and_gpio(BBBIO_GPIO2, pins_rows[row].id);
 
 			/* loop over levels */
@@ -120,8 +123,8 @@ void switch_leds(int ctrl)
 				out = get_pins_to_set_on(row, l);
 	
 				/* set pins values */
-				set_pins_row_on_by_gpio(BBBIO_GPIO1, out);
 				set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl & (~out));
+				set_pins_row_on_by_gpio(BBBIO_GPIO1, out);
 	
 				/*
 					wait X us 
@@ -129,14 +132,14 @@ void switch_leds(int ctrl)
 				*/
 	
 				level_sleep(l);
-	
 			}
-			set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl);
+			//set_pins_row_off_by_gpio(BBBIO_GPIO1, ctrl);
 
 			unselect_row_by_id_and_gpio(BBBIO_GPIO2, pins_rows[row].id);
+
 		}
 
-		set_pins_values();
+		ptrn_func_ptr(LED_MATRIX);
 	}
 
 	/* end of loop, exit */
@@ -180,6 +183,10 @@ int main(int argc, char **argv)
 	
 	pins_rows = get_pins_by_names(pins_rows_names, ARRAY_SIZE(pins_rows_names));
 	pins_cols = get_pins_by_names(pins_cols_names, ARRAY_SIZE(pins_cols_names));
+
+	/* start thread */
+	// pthread_t thread;
+	// pthread_create(&thread, NULL, set_pins_values, NULL);
 
 	setup(&ctrl);
 	switch_leds(ctrl);
