@@ -37,7 +37,6 @@ void *set_pins_values(void *arg)
 	while (1) {
 		if (next_mat) {
 			ptrn_func_ptr(LED_MATRIX);
-			printf("matrix changed");
 			next_mat = 0;
 		}
 		usleep(1);
