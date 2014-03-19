@@ -73,7 +73,7 @@ void *convert_frames(void *arg)
 
 		for (unsigned int y = 0; y < xDepthMap.YRes(); ++y) {
 			for (unsigned int x = 0; x < xDepthMap.XRes(); ++x) {
-				(matrix->values)[x][y] = xDepthMap(x, y);
+				(matrix->values)[y][x] = xDepthMap(x, y);
 			}
 		}
 

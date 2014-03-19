@@ -111,10 +111,8 @@ void set_pattern_from_oni(matrix_t *m)
 	matrix_t *tmp;
 	matrix_t *tmp_oni;
 
-	tmp_oni = init_matrix(PIXELS_Y, PIXELS_X);
-
 	if (first_run) {
-		oni_matrix = init_matrix(PIXELS_X, PIXELS_Y);
+		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);
 
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
@@ -123,15 +121,7 @@ void set_pattern_from_oni(matrix_t *m)
 		pthread_create(&conversion_thread, NULL, convert_frames, (void *) &thread_info);
 		first_run = 0;
 	}
-
-	/* reverse matrix */
-	for (int i = 0; i < tmp_oni->n_rows; ++i) {
-		for (int j = 0; j < tmp_oni->n_cols; ++j) {
-			(tmp_oni->values)[i][j] = (oni_matrix->values)[j][i];
-		}
-	}
-
-	tmp = get_led_matrix(tmp_oni);
+	tmp = get_led_matrix(oni_matrix);
 	copy_matrix(m, tmp);
 	free_matrix(tmp);
 
