@@ -28,9 +28,6 @@ void *convert_frames(void *arg)
 	matrix = thread_info->matrix;
 	filepath = thread_info->filepath;
 
-	/* opening file */
-	cout << "File loaded: " << filepath << endl;
-
 	// Initial OpenNI Context
 	xn::Context xContext;
 	xContext.Init();
@@ -47,7 +44,6 @@ void *convert_frames(void *arg)
 	// get total frame number
 	XnUInt32 uFrames;
 	xPlayer.GetNumFrames( xDepthGenerator.GetName(), uFrames );
-	cout << "Total " << uFrames << " frames" << endl;
  
 	// Start
 	xContext.StartGeneratingAll();
@@ -56,16 +52,11 @@ void *convert_frames(void *arg)
 	for (unsigned int i = 0; i < uFrames; ++i) {
 
 		/* waiting for the worms to come... */
-		while (1) {
-			/* sleep 1 ms */
-			usleep(1000); 
-			if (next_frame == 1) {
-				break;
-			}
+		while (!next_frame) {
+		    usleep(1000);
 		}
 
 		xDepthGenerator.WaitAndUpdateData();
-		cout << "Frame: " << i << "/" << uFrames << endl;
  
 		// get value
 		xn::DepthMetaData xDepthMap;

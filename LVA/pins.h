@@ -30,8 +30,8 @@ int get_level_time_by_id(int level_id);
 pin_t *get_pins_by_names(const char **names, int n_pins);
 pin_t *get_pin_by_name(const char *name);
 
-int get_gpio_by_name(const char *name);
-int get_id_by_name(const char *name);
+int get_pin_gpio_by_name(const char *name);
+int get_pin_id_by_name(const char *name);
 
 void print_pin(pin_t *pin);
 void print_pins(pin_t **pins, int n_pins);

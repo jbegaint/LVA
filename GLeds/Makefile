@@ -9,7 +9,7 @@ SRCXX := ../LVA/oni_utils.cpp
 OBJ := $(SRC:%.c=%.o)
 OBJXX := $(SRCXX:%.cpp=%.o)
 
-CFLAGS = -Wall -Wextra -Wshadow -std=gnu99 -pedantic -Wno-unused-parameter -O2
+CFLAGS = -Wall -Wextra -Wshadow -std=gnu99 -pedantic -Wno-unused-parameter -O3
 CFLAGS += `pkg-config gtk+-3.0 --cflags`
 CFLAGS += -I$(INCDIR) -I/usr/include/ni
 

@@ -109,7 +109,6 @@ void set_pattern_from_oni(matrix_t *m)
 	static thread_info_t thread_info[1];
 
 	matrix_t *tmp;
-	matrix_t *tmp_oni;
 
 	if (first_run) {
 		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);
