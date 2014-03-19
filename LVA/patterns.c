@@ -8,10 +8,6 @@
 #include "oni_utils.h"
 #include "pgm_utils.h"
 
-#define FILE_ONI_TEST "../ONI/capture_mmbc.oni"
-#define FILE_PGM_TEST "./lena.pgm"
-/*#define FILE_PGM_TEST "./test.pgm"*/
-
 extern int next_frame;
 
 const pattern_t patterns[] = {

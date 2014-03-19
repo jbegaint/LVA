@@ -10,9 +10,6 @@
 #include "patterns.h"
 #include "utils.h"
 
-#define N_ROWS 14
-#define N_COLS 25
-
 static const char *LED_ARRAY[N_LEVELS] = { LED0, LED1, LED2, LED3 };
 static gboolean running;
 static gchar *mode;
@@ -75,23 +72,29 @@ gboolean set_grid_values(gpointer user_data)
 {
 	GList *child;
 	GtkWidget *grid = NULL;
+	gchar *led_state;
+	gchar* next_state = calloc(100, sizeof(*next_state));
 
 	grid = GTK_WIDGET(user_data);
 	child = gtk_container_get_children(GTK_CONTAINER(grid));
 
-	int x, y;
-
-	for (y = 1; y <= N_COLS; ++y) {
-		for (x = 1; x <= N_ROWS; ++x) {
+	for (int y = 1; y <= N_COLS; ++y) {
+		for (int x = 1; x <= N_ROWS; ++x) {
 			GtkWidget *image = GTK_WIDGET(child->data);
 
-			/* list begins at bottom-right corner of the matrix, then goes up and left... */
-			gtk_image_set_from_file(GTK_IMAGE(image), LED_ARRAY[(LED_MATRIX->values)[N_ROWS-x][N_COLS-y]]);
+			g_object_get(image, "file", &led_state, NULL);
 
+			/* list begins at bottom-right corner of the matrix, then goes up and left... */
+			next_state = (gchar *) LED_ARRAY[(LED_MATRIX->values)[N_ROWS-x][N_COLS-y]];
+
+			if (strcmp(led_state, next_state) != 0) {
+				gtk_image_set_from_file(GTK_IMAGE(image), next_state);
+			}
 			child = child->next;
 		}
 	}
 
+	g_free(led_state);
 	g_list_free(child);
 
 	return running;
@@ -149,7 +152,6 @@ void on_spin_matrix_update(GtkWidget *widget, gpointer user_data)
 
 void on_window_destroy(GtkWidget *widget, gpointer user_data)
 {
-	
 	quit();
 }
 
@@ -207,7 +209,6 @@ int main(int argc, char **argv)
 	data->pause_btn = pause_button;
 
 	/* init combo box */
-	/*combo = gtk_combo_box_text_new();*/
 	combo = GTK_WIDGET(gtk_builder_get_object(builder, "comboboxtext1"));
 
 	for (ptrn = patterns; ptrn->desc; ++ptrn) {
