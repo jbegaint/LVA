@@ -136,11 +136,12 @@ matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 void center_matrix(matrix_t *matrix)
 {
 	int max = get_matrix_max(matrix);
-
+	int min = get_matrix_min(matrix);
+	
 	/* centrage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
-			(matrix->values)[i][j] = (int) (255 * (matrix->values)[i][j] / max);
+			(matrix->values)[i][j] = (int) (255 * ((matrix->values)[i][j] - min) / (max - min + 1 )) ;
 		}
 	}
 }
@@ -149,17 +150,18 @@ void center_matrix(matrix_t *matrix)
 void threshold_matrix(matrix_t *matrix)
 {
 	int max = get_matrix_max(matrix);
+	int min = get_matrix_min(matrix);
 
 	/* seuillage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
-			(matrix->values)[i][j] = (int) (255 * (matrix->values)[i][j] / max);
+			(matrix->values)[i][j] = (int) (255 * ((matrix->values)[i][j] - min) / (max - min +1 )) ;
 
-			if ((matrix->values)[i][j] > 200)
+			if ((matrix->values)[i][j] > 100)
 				(matrix->values)[i][j] = 3;
-			else if ((matrix->values)[i][j] > 150)
+			else if ((matrix->values)[i][j] > 80)
 				(matrix->values)[i][j] = 2;
-			else if ((matrix->values)[i][j] > 100)
+			else if ((matrix->values)[i][j] > 60)
 				(matrix->values)[i][j] = 1;
 			else
 				(matrix->values)[i][j] = 0;
@@ -167,6 +169,27 @@ void threshold_matrix(matrix_t *matrix)
 	}
 }
 
+/*
+ * @brief Get the minimal value in the matrix
+ *
+ * @param matrix the matrix
+ *
+ * @return the min
+ */
+int get_matrix_min(matrix_t *matrix)
+{
+	int min = (matrix->values)[0][0] ;
+
+	for (int i = 0; i < matrix->n_rows; ++i) {
+		for (int j = 0; j < matrix->n_cols; ++j) {
+			if ((matrix->values)[i][j] < min) {
+				min = (matrix->values)[i][j];
+			}
+		}
+	}
+
+	return min;
+}
 
 /*
  * @brief Get the maximum value in the matrix

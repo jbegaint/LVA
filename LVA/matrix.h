@@ -26,6 +26,7 @@ void free_matrix(matrix_t *matrix);
 void copy_matrix(matrix_t *dest, matrix_t *src);
 
 int get_matrix_max(matrix_t *matrix);
+int get_matrix_min(matrix_t *matrix);
 
 float Moyenne(int **depth, int _x, int _y, int dx, int dy);
 
