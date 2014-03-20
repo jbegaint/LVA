@@ -170,7 +170,7 @@ void threshold_matrix(matrix_t *matrix)
 }
 
 /*
- * @brief Get the minimal value in the matrix
+ * @brief Get the minimal value in a matrix structure
  *
  * @param matrix the matrix
  *
@@ -192,7 +192,7 @@ int get_matrix_min(matrix_t *matrix)
 }
 
 /*
- * @brief Get the maximum value in the matrix
+ * @brief Get the maximum value in a matrix structure
  *
  * @param matrix the matrix
  *
@@ -200,7 +200,7 @@ int get_matrix_min(matrix_t *matrix)
  */
 int get_matrix_max(matrix_t *matrix)
 {
-	int max = 0;
+	int max = (matrix->values)[0][0];
 
 	for (int i = 0; i < matrix->n_rows; ++i) {
 		for (int j = 0; j < matrix->n_cols; ++j) {
