@@ -23,7 +23,7 @@ options:
 	@echo "LDFLAGS = ${LDFLAGS}"
 	@echo "LDFLAGS_GTK = ${LDFLAGS_GTK}"
 
-gleds: $(OBJ) GLeds/main.o
+gleds: $(OBJ) GLeds/gleds.o
 	@mkdir -p $(BUILD_DIR)
 	@$(CC) $^ $(LDFLAGS_GTK) -o $(BUILD_DIR)/$@ 
 
