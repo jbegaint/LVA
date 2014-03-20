@@ -53,7 +53,7 @@ void *convert_frames(void *arg)
 	for (unsigned int i = 0; i < uFrames; ++i) {
 
 		/* waiting for the worms to come... */
-		while (!*(next_frame)) {
+		while (*(next_frame) != 1) {
 		    usleep(1000);
 		}
 

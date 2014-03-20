@@ -8,8 +8,6 @@
 #include "oni_utils.h"
 #include "pgm_utils.h"
 
-static int next_frame;
-
 const pattern_t patterns[] = {
 	{0, "led by led", set_pattern_led_by_led},
 	{1, "led by led toggle", set_pattern_led_by_led_toggle},
@@ -104,9 +102,11 @@ void set_pattern_col_by_col(matrix_t *m)
 void set_pattern_from_oni(matrix_t *m)
 {
 	static matrix_t *oni_matrix;
-	static int first_run = 1;
 	static pthread_t conversion_thread;
 	static thread_info_t thread_info[1];
+
+	static int first_run = 1;
+	static int next_frame = 1;
 
 	matrix_t *tmp;
 
@@ -116,9 +116,11 @@ void set_pattern_from_oni(matrix_t *m)
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
 		thread_info->next_frame = &next_frame;
+
 		/* launch thread with convert_frames */
 		/* todo: catch errors */
 		pthread_create(&conversion_thread, NULL, convert_frames, (void *) &thread_info);
+
 		first_run = 0;
 	}
 
