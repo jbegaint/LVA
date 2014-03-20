@@ -11,8 +11,6 @@
 #include "pins.h"
 #include "utils.h"
 
-int next_frame = 1;
-
 extern pattern_t patterns[];
 
 static int running = 1;

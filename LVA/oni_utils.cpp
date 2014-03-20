@@ -12,21 +12,22 @@ using namespace std;
 #include "oni_utils.h"
 #include "patterns.h"
 
-extern int next_frame;
+/*extern int next_frame;*/
 
 #ifdef __cplusplus
 	extern "C" {
 #endif 
 void *convert_frames(void *arg)
 {
-	thread_info_t *thread_info;
-	matrix_t *matrix;
 	const char *filepath;
+	matrix_t *matrix;
+	thread_info_t *thread_info;
+	int *next_frame;
 
 	thread_info = (thread_info_t *) arg;
-	/* segfault here */
 	matrix = thread_info->matrix;
 	filepath = thread_info->filepath;
+	next_frame = thread_info->next_frame;
 
 	// Initial OpenNI Context
 	xn::Context xContext;
@@ -52,7 +53,7 @@ void *convert_frames(void *arg)
 	for (unsigned int i = 0; i < uFrames; ++i) {
 
 		/* waiting for the worms to come... */
-		while (!next_frame) {
+		while (!*(next_frame)) {
 		    usleep(1000);
 		}
 
@@ -69,7 +70,7 @@ void *convert_frames(void *arg)
 		}
 
 		/* pause conversion */
-		next_frame = 0;
+		*next_frame = 0;
 
 	}
  

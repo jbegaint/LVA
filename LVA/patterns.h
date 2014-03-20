@@ -16,6 +16,7 @@ typedef struct pattern_t {
 typedef struct thread_info_t {
 	matrix_t *matrix;
 	const char *filepath;
+	int *next_frame;
 } thread_info_t;
 
 void matrix_toggle_pin(matrix_t *m, int i, int j);

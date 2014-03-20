@@ -8,7 +8,7 @@
 #include "oni_utils.h"
 #include "pgm_utils.h"
 
-extern int next_frame;
+static int next_frame;
 
 const pattern_t patterns[] = {
 	{0, "led by led", set_pattern_led_by_led},
@@ -115,11 +115,13 @@ void set_pattern_from_oni(matrix_t *m)
 
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
+		thread_info->next_frame = &next_frame;
 		/* launch thread with convert_frames */
 		/* todo: catch errors */
 		pthread_create(&conversion_thread, NULL, convert_frames, (void *) &thread_info);
 		first_run = 0;
 	}
+
 	tmp = get_led_matrix(oni_matrix);
 	copy_matrix(m, tmp);
 	free_matrix(tmp);
