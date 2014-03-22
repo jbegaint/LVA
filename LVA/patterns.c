@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "pins.h"
 #include "patterns.h"
 #include "oni_utils.h"
 #include "pgm_utils.h"
