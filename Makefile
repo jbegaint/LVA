@@ -14,7 +14,9 @@ OBJ = $(OBJC) $(OBJXX)
 
 all: demos
 
-demos: demo_cycle demo_one_row demo_matrix demo_pattern_7x5
+demos: 
+	@mkdir -p $(BUILD_DIR)
+	@make demo_cycle demo_one_row demo_matrix demo_pattern_7x5
 
 options:
 	@echo build options:
@@ -54,7 +56,7 @@ doc:
 
 clean:
 	@rm -rf $(shell find . -name '*.o')
-	@rm -rf $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR)/*
 	@rm -rf doxygen
 
 .PHONY: all options clean doc
