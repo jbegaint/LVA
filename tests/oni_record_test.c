@@ -12,7 +12,7 @@ void print_property(CvCapture *capture, int property_id, char *str)
 	printf("%s: %lf", str, cvGetCaptureProperty(capture, property_id));
 }
 
-void *get_xtion_feed(void) 
+int main(void) 
 {
 	CvCapture *capture;
 	IplImage *depth;
@@ -57,5 +57,5 @@ void *get_xtion_feed(void)
 	cvReleaseImage(&depth);
 	cvReleaseCapture(&capture);
 
-	return NULL;
+	return 0;
 }
