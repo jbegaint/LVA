@@ -56,7 +56,7 @@ $(TESTS_DIR)/oni_record_test.o: $(TESTS_DIR)/oni_record_test.c
 # Simulator
 gleds: GLeds/gleds.o
 	@mkdir -p $(BUILD_DIR)
-	@$(CC) $^ $(LDFLAGS_GTK) -L$(LVA_DIR) -llva -o $(BUILD_DIR)/$@ 
+	@$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) $(LDFLAGS_GTK) -o $(BUILD_DIR)/$@ 
 
 GLeds/gleds.o: GLeds/gleds.c
 	@$(CC) $< $(CFLAGS) $(CFLAGS_GTK) -c -o $@
