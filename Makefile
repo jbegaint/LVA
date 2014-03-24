@@ -1,5 +1,7 @@
 # LVA global makefile
 
+#  todo: rls/ dbg mode
+
 include config.mk
 
 SRC := $(shell find $(LVA_DIR) -name '*.c')
@@ -46,10 +48,16 @@ gleds: $(OBJ) GLeds/gleds.o
 	@$(CC) $^ $(LDFLAGS) $(LDFLAGS_GTK) -o $(BUILD_DIR)/$@ 
 
 %.o: %.c
-	@$(CC) $< $(CFLAGS_GTK) -c -o $@
+	@$(CC) $< $(CFLAGS) -c -o $@
 
 %.o: %.cpp
 	@$(CXX) $< $(CFLAGS) -c -o $@ 
+
+LVA/oni_record_test.o: LVA/oni_record_test.c
+	@$(CC) $< $(CFLAGS) $(CFLAGS_OPENCV) -c -o $@
+
+GLeds/gleds.o: GLeds/gleds.c
+	@$(CC) $< $(CFLAGS) $(CFLAGS_GTK) -c -o $@
 
 doc:
 	@doxygen
