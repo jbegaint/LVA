@@ -1,6 +1,8 @@
 # LVA global makefile
 
 #  todo: rls/ dbg mode
+# help :
+# * http://stackoverflow.com/a/14665908
 
 include config.mk
 
@@ -47,14 +49,10 @@ demo_cycle: $(DEMO_DIR)/demo_cycle.o
 
 # oni recording (via opencv) test
 oni_record_test: $(TESTS_DIR)/oni_record_test.o
-	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) `pkg-config opencv --libs` -o $(BUILD_DIR)/$@ 
+	$(CC) $^ $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) $(LDFLAGS) -o $(BUILD_DIR)/$@ 
 
 $(TESTS_DIR)/oni_record_test.o: $(TESTS_DIR)/oni_record_test.c
 	@$(CC) $< $(CFLAGS) $(CFLAGS_OPENCV) -c -o $@
-
-
-cv_capture: $(TESTS_DIR)/cv_capture.c
-	$(CC) $^ $(CFLAGS) $(CFLAGS_OPENCV) $(LDFLAGS) `pkg-config opencv --libs` -o $(BUILD_DIR)/$@ 
 
 # Simulator
 gleds: GLeds/gleds.o

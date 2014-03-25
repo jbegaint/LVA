@@ -24,5 +24,5 @@ CFLAGS_GTK =`pkg-config gtk+-3.0 --cflags`
 LDFLAGS = -pthread -lOpenNI -lstdc++ -L$(BBBIOlib_DIR) -lBBBio 
 
 LDFLAGS_LVA = -L$(BUILD_DIR) -llva -Wl,-rpath $(BUILD_DIR)
-LDFLAGS_OPENCV = -shared `pkg-config opencv --libs`
+LDFLAGS_OPENCV = `pkg-config opencv --libs`
 LDFLAGS_GTK = `pkg-config gtk+-3.0 --libs` `pkg-config gmodule-2.0 --libs`

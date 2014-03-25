@@ -22,7 +22,7 @@ int main(void)
 	capture = cvCaptureFromCAM(CV_CAP_OPENNI);
 
 	if (!capture) {
-		die("error initializin openni capture");
+		die("error initializing openni capture\n");
 	}
 
 	/* need testing : CAP_OPENNI_QVGA_30HZ or CAP_OPENNI_VGA_30HZ ? */
