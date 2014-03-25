@@ -7,15 +7,29 @@
 
 #include "utils.h"
 
+void reverse_data(IplImage *src)
+{
+	for (int row = 0; row < src->height; row++) {
+		/* dafuq ? */
+		for (int col = 0; col < 2 * src->width; col++) {
+			 (src->imageData + src->widthStep*row)[col] = 
+			 ~(src->imageData + src->widthStep*row)[col] + 1; 
+		}
+		printf("\n");
+	}
+}
+
 void print_property(CvCapture *capture, int property_id, char *str)
 {
-	printf("%s: %lf", str, cvGetCaptureProperty(capture, property_id));
+	printf("%s: %lf\n", str, cvGetCaptureProperty(capture, property_id));
 }
 
 int main(void) 
 {
 	CvCapture *capture;
-	IplImage *depth;
+	IplImage *depth, *show, *small, *fat;
+	int flag = 1;
+
 	char key = 0;
 
 	/* set cam */
@@ -25,7 +39,7 @@ int main(void)
 		die("error initializing openni capture\n");
 	}
 
-	/* need testing : CAP_OPENNI_QVGA_30HZ or CAP_OPENNI_VGA_30HZ ? */
+	/* need testing : CAP_OPENNI_QVGA_30HZ or CAP_OPENNI_VGA_30HZ  */
 	cvSetCaptureProperty(capture, CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE, CV_CAP_OPENNI_VGA_30HZ);
 
 	/* print properties */
@@ -34,9 +48,9 @@ int main(void)
 	print_property(capture, CV_CAP_PROP_OPENNI_FRAME_MAX_DEPTH, "FRAME_MAX_DEPTH");
 	print_property(capture, CV_CAP_PROP_FPS, "FPS");
 
-
 	/* create window */
 	cvNamedWindow("MPlayer", CV_WINDOW_AUTOSIZE);
+	cvNamedWindow("MPlayer1", CV_WINDOW_AUTOSIZE);
 
 	/* 27 : ESC in ascii... */
 	while (key != 'q' && key != 27) {
@@ -46,15 +60,35 @@ int main(void)
 		/* params: capture, stream index*/
 		depth = cvRetrieveFrame(capture, CV_CAP_OPENNI_DEPTH_MAP);
 
-		/* display image */
-		cvShowImage("MPlayer", depth);
+		if (flag) {
+			show = cvCreateImage(cvSize(depth->width, depth->height), depth->depth, depth->nChannels);
+			fat = cvCreateImage(cvSize(depth->width, depth->height), depth->depth, depth->nChannels);
+
+			small = cvCreateImage(cvSize(25, 14), depth->depth, depth->nChannels);
+			flag = 0;
+		}
+
+		cvConvertScale(depth, show, 10, 0);
+		reverse_data(show);
+
+		cvResize(show, small, CV_INTER_LINEAR);
+		cvResize(small, fat, CV_INTER_LINEAR);
+
+		/*cvEqualizeHist(fat, fat);*/
+
+		/* display images */
+		cvShowImage("MPlayer", show);
+		cvShowImage("MPlayer1", fat);
 
 		/* capture key strokes */
 		key = cvWaitKey(10);
 	}
 
 	cvDestroyAllWindows();
-	cvReleaseImage(&depth);
+
+	/* todo: fix free segfault */
+	/*cvReleaseImage(&depth);*/
+
 	cvReleaseCapture(&capture);
 
 	return 0;
