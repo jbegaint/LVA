@@ -11,3 +11,6 @@ todo:
 * threads (playing oni)
 * threshold
 * Makefile (debug/ release)
+* clean oni record...
+* pattern thread wrapper ?
+* free in oni

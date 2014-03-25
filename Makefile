@@ -1,8 +1,7 @@
 # LVA global makefile
 
-#  todo: rls/ dbg mode
-# help :
-# * http://stackoverflow.com/a/14665908
+#	todo: rls/ dbg mode
+#	help : http://stackoverflow.com/a/14665908
 
 include config.mk
 
@@ -56,8 +55,9 @@ $(TESTS_DIR)/oni_record_test.o: $(TESTS_DIR)/oni_record_test.c
 
 # Simulator
 gleds: GLeds/gleds.o
+	@make $(LVA_LIB) 
 	@mkdir -p $(BUILD_DIR)
-	@$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) $(LDFLAGS_GTK) -o $(BUILD_DIR)/$@ 
+	@$(CC) $^ $(LDFLAGS_OPENCV) $(LDFLAGS_GTK) $(LDFLAGS_LVA) $(LDFLAGS) -o $(BUILD_DIR)/$@ 
 
 GLeds/gleds.o: GLeds/gleds.c
 	@$(CC) $< $(CFLAGS) $(CFLAGS_GTK) -c -o $@
@@ -65,7 +65,7 @@ GLeds/gleds.o: GLeds/gleds.c
 # Generic
 
 %.o: %.c
-	@$(CC) $< $(CFLAGS) -c -o $@ 
+	@$(CC) $< $(CFLAGS) $(CFLAGS_OPENCV) -c -o $@ 
 
 %.o: %.cpp
 	@$(CXX) $< $(CFLAGS) -c -o $@ 

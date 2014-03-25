@@ -15,7 +15,6 @@ void reverse_data(IplImage *src)
 			 (src->imageData + src->widthStep*row)[col] = 
 			 ~(src->imageData + src->widthStep*row)[col] + 1; 
 		}
-		printf("\n");
 	}
 }
 

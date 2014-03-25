@@ -54,7 +54,7 @@ void *convert_frames(void *arg)
 
 		/* waiting for the worms to come... */
 		while (*(next_frame) != 1) {
-		    usleep(1000);
+			usleep(1000);
 		}
 
 		xDepthGenerator.WaitAndUpdateData();
@@ -65,6 +65,7 @@ void *convert_frames(void *arg)
 
 		for (unsigned int y = 0; y < xDepthMap.YRes(); ++y) {
 			for (unsigned int x = 0; x < xDepthMap.XRes(); ++x) {
+				/* reverse mat */
 				(matrix->values)[y][x] = xDepthMap(x, y);
 			}
 		}
