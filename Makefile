@@ -1,18 +1,25 @@
 # LVA global makefile
 
+#  todo: rls/ dbg mode
+# help :
+# * http://stackoverflow.com/a/14665908
+
 include config.mk
 
-SRC := $(shell find $(LVA_DIR) -name '*.c')
-OBJC := $(SRC:%.c=%.o)
-OBJC_DBG := $(SRC:%.c=%.dbg.o)
+LVA_SRC := $(shell find $(LVA_DIR) -name '*.c')
+LVA_OBJC := $(LVA_SRC:%.c=%.o)
+LVA_OBJC_DBG := $(LVA_SRC:%.c=%.dbg.o)
 
-SRCXX := $(shell find $(LVA_DIR) -name '*.cpp')
-OBJXX := $(SRCXX:%.cpp=%.o)
-OBJXX_DBG := $(SRCXX:%.cpp=%.dbg.o)
+LVA_SRCXX := $(shell find $(LVA_DIR) -name '*.cpp')
+LVA_OBJXX := $(LVA_SRCXX:%.cpp=%.o)
+LVA_OBJXX_DBG := $(LVA_SRCXX:%.cpp=%.dbg.o)
 
-OBJ = $(OBJC) $(OBJXX)
+LVA_OBJ = $(LVA_OBJC) $(LVA_OBJXX)
 
-all: demos
+all: $(LVA_LIB)
+
+$(LVA_LIB): $(LVA_OBJ)
+	$(LD) $(LDFLAGS) -shared $^ -o $(BUILD_DIR)/$@ 
 
 demos: 
 	@mkdir -p $(BUILD_DIR)
@@ -28,25 +35,37 @@ options:
 	@echo "LDFLAGS_GTK = ${LDFLAGS_GTK}"
 
 # GPIOs demos
-demo_pattern_7x5: $(DEMO_DIR)/demo_pattern_7x5.o $(OBJ)
-	$(CC) $^ $(LDFLAGS) -o $(BUILD_DIR)/$@ 
+demo_pattern_7x5: $(DEMO_DIR)/demo_pattern_7x5.o 
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
 
-demo_matrix: $(DEMO_DIR)/demo_matrix.o $(OBJ)
-	$(CC) $^ $(LDFLAGS) -o $(BUILD_DIR)/$@ 
+demo_matrix: $(DEMO_DIR)/demo_matrix.o
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
 
-demo_one_row: $(DEMO_DIR)/demo_one_row.o $(OBJ)
-	$(CC) $^ $(LDFLAGS) -o $(BUILD_DIR)/$@ 
+demo_one_row: $(DEMO_DIR)/demo_one_row.o 
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
 
-demo_cycle: $(DEMO_DIR)/demo_cycle.o $(OBJ)
-	$(CC) $^ $(LDFLAGS) -o $(BUILD_DIR)/$@ 
+demo_cycle: $(DEMO_DIR)/demo_cycle.o 
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
+
+# oni recording (via opencv) test
+oni_record_test: $(TESTS_DIR)/oni_record_test.o
+	$(CC) $^ $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) $(LDFLAGS) -o $(BUILD_DIR)/$@ 
+
+$(TESTS_DIR)/oni_record_test.o: $(TESTS_DIR)/oni_record_test.c
+	@$(CC) $< $(CFLAGS) $(CFLAGS_OPENCV) -c -o $@
 
 # Simulator
-gleds: $(OBJ) GLeds/gleds.o
+gleds: GLeds/gleds.o
 	@mkdir -p $(BUILD_DIR)
-	@$(CC) $^ $(LDFLAGS) $(LDFLAGS_GTK) -o $(BUILD_DIR)/$@ 
+	@$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) $(LDFLAGS_GTK) -o $(BUILD_DIR)/$@ 
+
+GLeds/gleds.o: GLeds/gleds.c
+	@$(CC) $< $(CFLAGS) $(CFLAGS_GTK) -c -o $@
+
+# Generic
 
 %.o: %.c
-	@$(CC) $< $(CFLAGS_GTK) -c -o $@
+	@$(CC) $< $(CFLAGS) -c -o $@ 
 
 %.o: %.cpp
 	@$(CXX) $< $(CFLAGS) -c -o $@ 
@@ -55,8 +74,9 @@ doc:
 	@doxygen
 
 clean:
-	@rm -rf $(shell find . -name '*.o')
-	@rm -rf $(BUILD_DIR)/*
-	@rm -rf doxygen
+	@$(RM) -rf $(shell find . -name '*.o') 
+	@$(RM) -rf $(LVA_LIB)
+	@$(RM) -rf $(BUILD_DIR)/*
+	@$(RM) -rf doxygen
 
 .PHONY: all options clean doc

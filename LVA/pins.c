@@ -9,7 +9,6 @@
 #include "utils.h"
 
 /* sort by brightness */
-
 /* todo: levels.c */
 level_t levels_table[] = {
 	{0, LEVEL_0},
