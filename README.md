@@ -9,8 +9,13 @@ todo:
 * rts
 * signal (SIGINT)
 * threads (playing oni)
-* threshold
+* pthread_join ?
 * Makefile (debug/ release)
-* clean oni record...
 * pattern thread wrapper ?
-* free in oni
+* threshold
+* clean oni record...
+* free in oni record
+
+Help:
+* https://stackoverflow.com/questions/3673226/c-how-to-print-time-in-format-20090810181754-811
+

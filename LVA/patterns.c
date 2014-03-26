@@ -103,6 +103,7 @@ void set_pattern_col_by_col(matrix_t *m)
 void set_pattern_from_oni(matrix_t *m)
 {
 	static matrix_t *oni_matrix;
+
 	static pthread_t conversion_thread;
 	static thread_info_t thread_info[1];
 
@@ -118,12 +119,10 @@ void set_pattern_from_oni(matrix_t *m)
 		thread_info->filepath = FILE_ONI_TEST;
 		thread_info->next_frame = &next_frame;
 
-		/* launch thread with convert_frames */
-		/* todo: catch errors */
 		pthread_create(&conversion_thread, NULL, convert_frames, (void *) &thread_info);
-
 		first_run = 0;
 	}
+
 
 	tmp = get_led_matrix(oni_matrix);
 	copy_matrix(m, tmp);

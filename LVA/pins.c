@@ -7,6 +7,7 @@
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
 #include "pins.h"
 #include "utils.h"
+#include "matrix.h"
 
 /* sort by brightness */
 /* todo: levels.c */
@@ -317,4 +318,85 @@ void select_row_by_id_and_gpio(int gpio, int pins)
 void unselect_row_by_id_and_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_low(gpio, pins);
+}
+
+/* Generic */
+
+void enable_gpios(void)
+{
+	for (int i = 0; i < N_GPIOS; ++i) {
+		BBBIO_sys_Enable_GPIO(i);
+	}
+}
+
+void set_pins_dir_output(pin_t *pins, int n_pins)
+{
+	int ctrls[4] = {0, 0, 0, 0};
+
+	/* get pins to set as output for each gpios */
+	for (int i = 0; i < n_pins; ++i) {
+		ctrls[pins[i].gpio] |= pins[i].id;
+	}
+
+	/* set pins as output */
+
+	for (int i = 0; i < N_GPIOS; ++i) {
+		BBBIO_GPIO_set_dir(i, 0, ctrls[i]);
+	}
+}
+
+void select_row_by_pin(pin_t *pin)
+{
+	BBBIO_GPIO_high(pin->gpio, pin->id);
+}
+
+void unselect_row_by_pin(pin_t *pin)
+{
+	BBBIO_GPIO_low(pin->gpio, pin->id);
+}
+
+void unselect_rows(pin_t *pins)
+{
+	int ctrls[4] = {0, 0, 0, 0};
+
+	/* get pins to set off for each gpio */
+	for (int i = 0; i < N_ROWS; ++i) {
+		ctrls[pins[i].gpio] |= pins[i].id;
+	}
+
+	/* set pins off by gpio */
+	for (int i = 0; i < N_GPIOS; ++i) {
+		unselect_row_by_id_and_gpio(i, ctrls[i]);
+	}
+}
+
+void set_pins_row_on_for_level(matrix_t *m, pin_t *pins, int row_id, int level_id)
+{
+	int ctrls[4] = {0, 0, 0, 0};
+
+	/* get pins to set on for each gpio */
+	for (int i = 0; i < N_COLS; ++i) {
+		if ((m->values)[row_id][i] <= level_id) {
+			ctrls[pins[i].gpio] |= pins[i].id;
+		}
+	}
+
+	/* set pins on by gpio */
+	for (int i = 0; i < N_GPIOS; ++i) {
+		set_pins_row_on_by_gpio(i, ctrls[i]);
+	}
+}
+
+void set_pins_row_off(pin_t *pins)
+{
+	int ctrls[4] = {0, 0, 0, 0};
+
+	/* get pins to set on for each gpio */
+	for (int i = 0; i < N_COLS; ++i) {
+		ctrls[pins[i].gpio] |= pins[i].id;
+	}
+
+	for (int i = 0; i < N_GPIOS; ++i) {
+		set_pins_row_off_by_gpio(i, ctrls[i]);
+	}
 }

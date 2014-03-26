@@ -6,6 +6,7 @@
 
 #define N_ROWS 14
 #define N_COLS 25
+#define N_GPIOS 4
 
 #define N_LEVELS 4
 
