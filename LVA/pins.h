@@ -44,15 +44,14 @@ void select_row_by_id_and_gpio(int, int);
 void set_pins_row_off_by_gpio(int, int);
 void set_pins_row_on_by_gpio(int, int);
 
-
 void enable_gpios(void);
-void set_pins_dir_ouput(pin_t *pins, int n_pins);
-void set_pins_dir_ouput(pin_t *pins, int n_pins);
+void set_dir_pins_output(pin_t *pins, int n_pin);
+
 void select_row_by_pin(pin_t *pins);
 void unselect_row_by_pin(pin_t *pins);
-void unselect_rows(pin_t *pins);
+void unselect_rows(pin_t *pins, int n_pins);
 
 void set_pins_row_on_for_level(matrix_t *m, pin_t *pins, int row_id, int level_id);
-void set_pins_row_off(pin_t *pins);
+void set_pins_row_off(pin_t *pins, int n_pins);
 
 #endif
