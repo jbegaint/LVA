@@ -19,7 +19,7 @@ typedef struct matrix_t {
 matrix_t *init_matrix(int n_rows, int n_cols);
 matrix_t *get_led_matrix(matrix_t *img_matrix);
 matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols);
-
+matrix_t *get_cropped_matrix(matrix_t *m, int xmin, int ymin, int xmax, int ymax);
 void reset_matrix(matrix_t *matrix);
 void threshold_matrix(matrix_t *matrix);
 void center_matrix(matrix_t *matrix);

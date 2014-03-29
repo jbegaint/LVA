@@ -113,11 +113,24 @@ void swap_int(int *a, int *b)
 	*b = tmp;
 }
 
+matrix_t *get_cropped_matrix(matrix_t *m, int xmin, int ymin, int xmax, int ymax)
+{
+	matrix_t *res = init_matrix(ymax, xmax);
+
+	for (int i = ymin; i < ymax; ++i) {
+		for (int j =  xmin; j < xmax; ++j) {
+			(res->values)[i-ymin][j-xmin] = (m->values)[i][j];
+		}
+	}	
+
+	return res;
+}
+
 matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 {
 	matrix_t *new_matrix;
-	int dX = PIXELS_Y / n_rows;
-	int dY = PIXELS_X / n_cols;
+	int dX = (matrix->n_rows) / n_rows;
+	int dY = (matrix->n_cols) / n_cols;
 
 	new_matrix = init_matrix(n_rows, n_cols);
 
@@ -137,21 +150,6 @@ void center_matrix(matrix_t *matrix)
 {
 	int max = get_matrix_max(matrix);
 	int min = get_matrix_min(matrix);
-/*
-	getchar();
-	printf("min %d max %d", min, max);
-	getchar();
-*/
-	/* + abs(min) if Min <0 */
-	if (min < 0) {
-		for (int i = 0; i < matrix->n_rows; i++) {
-			for (int j = 0; j < matrix->n_cols; j++) {
-				(matrix->values)[i][j] = (matrix->values)[i][j] - min;
-			}
-		}
-		min = 0;
-		max -= min;
-	}
 
 	/* centrage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
@@ -164,19 +162,15 @@ void center_matrix(matrix_t *matrix)
 /* Seuillage des coefficients en 4 niveaux */
 void threshold_matrix(matrix_t *matrix)
 {
-/*	int max = get_matrix_max(matrix);
-	int min = get_matrix_min(matrix);*/
-
 	/* seuillage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
-			/*(matrix->values)[i][j] = (int) (255 * ((matrix->values)[i][j] - min) / (max - min +1 )) ;*/
 
 			if ((matrix->values)[i][j] > 100)
 				(matrix->values)[i][j] = 3;
-			else if ((matrix->values)[i][j] > 80)
-				(matrix->values)[i][j] = 2;
 			else if ((matrix->values)[i][j] > 60)
+				(matrix->values)[i][j] = 2;
+			else if ((matrix->values)[i][j] > 20)
 				(matrix->values)[i][j] = 1;
 			else
 				(matrix->values)[i][j] = 0;

@@ -156,11 +156,11 @@ void set_pattern_from_xtion(matrix_t *m)
 	static int first_run = 1;
 	static int next_frame = 1;
 
-	matrix_t *tmp;
+	matrix_t *tmp, *tmp1;
 
 	if (first_run) {
-		/*oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);*/
-		oni_matrix = init_matrix(N_ROWS, N_COLS);
+		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);
+		/*oni_matrix = init_matrix(N_ROWS, N_COLS);*/
 
 		thread_info->matrix = oni_matrix;
 		thread_info->next_frame = &next_frame;
@@ -172,47 +172,15 @@ void set_pattern_from_xtion(matrix_t *m)
 		first_run = 0;
 	}
 
-/*
-	if (flag) {
-		printf("matrix oni");
-		print_matrix(oni_matrix);
-		getchar();
-	}
+	tmp1 = get_cropped_matrix(oni_matrix, 20, 10, PIXELS_X - 20, PIXELS_Y - 10);
 
-	center_matrix(oni_matrix);
-	if (flag) {
-		printf("matrix oni center");
-		print_matrix(oni_matrix);
-		getchar();
-	}
-
-
-	tmp = get_resized_matrix(oni_matrix, N_ROWS, N_COLS);
-	if (flag) {
-		printf("matrix resized");
-		print_matrix(tmp);
-		getchar();
-	}*/
-
-/*	center_matrix(tmp);	
-	if (flag) {
-		printf("matrix center");
-		print_matrix(tmp);
-		getchar();
-	}
-*/
-	int flag = 0;
-
-	tmp = oni_matrix;
+	tmp = get_resized_matrix(tmp1, N_ROWS, N_COLS);
 	center_matrix(tmp);	
 	threshold_matrix(tmp);	
-	if (flag) {
-		printf("matrix threshold_matrix");
-		print_matrix(tmp);
-		getchar();
-	}
-
 	copy_matrix(m, tmp);
+
+	free_matrix(tmp1);
+	free_matrix(tmp);
 
 	next_frame = 1;
 }
