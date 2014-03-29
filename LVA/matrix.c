@@ -137,7 +137,22 @@ void center_matrix(matrix_t *matrix)
 {
 	int max = get_matrix_max(matrix);
 	int min = get_matrix_min(matrix);
-	
+/*
+	getchar();
+	printf("min %d max %d", min, max);
+	getchar();
+*/
+	/* + abs(min) if Min <0 */
+	if (min < 0) {
+		for (int i = 0; i < matrix->n_rows; i++) {
+			for (int j = 0; j < matrix->n_cols; j++) {
+				(matrix->values)[i][j] = (matrix->values)[i][j] - min;
+			}
+		}
+		min = 0;
+		max -= min;
+	}
+
 	/* centrage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
@@ -149,13 +164,13 @@ void center_matrix(matrix_t *matrix)
 /* Seuillage des coefficients en 4 niveaux */
 void threshold_matrix(matrix_t *matrix)
 {
-	int max = get_matrix_max(matrix);
-	int min = get_matrix_min(matrix);
+/*	int max = get_matrix_max(matrix);
+	int min = get_matrix_min(matrix);*/
 
 	/* seuillage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
-			(matrix->values)[i][j] = (int) (255 * ((matrix->values)[i][j] - min) / (max - min +1 )) ;
+			/*(matrix->values)[i][j] = (int) (255 * ((matrix->values)[i][j] - min) / (max - min +1 )) ;*/
 
 			if ((matrix->values)[i][j] > 100)
 				(matrix->values)[i][j] = 3;

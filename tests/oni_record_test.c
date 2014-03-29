@@ -26,10 +26,10 @@ void print_property(CvCapture *capture, int property_id, char *str)
 int main(void) 
 {
 	CvCapture *capture;
-	IplImage *depth, *show, *small, *fat;
-	int flag = 1;
+	IplImage *depth, *show, *small;
 
 	char key = 0;
+
 
 	/* set cam */
 	capture = cvCaptureFromCAM(CV_CAP_OPENNI);
@@ -51,6 +51,13 @@ int main(void)
 	cvNamedWindow("MPlayer", CV_WINDOW_AUTOSIZE);
 	cvNamedWindow("MPlayer1", CV_WINDOW_AUTOSIZE);
 
+
+	/* first run */
+	cvGrabFrame(capture);
+	depth = cvRetrieveFrame(capture, CV_CAP_OPENNI_DEPTH_MAP);
+	show = cvCreateImage(cvSize(depth->width, depth->height), depth->depth, depth->nChannels);
+	small = cvCreateImage(cvSize(25, 14), depth->depth, depth->nChannels);
+
 	/* 27 : ESC in ascii... */
 	while (key != 'q' && key != 27) {
 
@@ -59,25 +66,15 @@ int main(void)
 		/* params: capture, stream index*/
 		depth = cvRetrieveFrame(capture, CV_CAP_OPENNI_DEPTH_MAP);
 
-		if (flag) {
-			show = cvCreateImage(cvSize(depth->width, depth->height), depth->depth, depth->nChannels);
-			fat = cvCreateImage(cvSize(depth->width, depth->height), depth->depth, depth->nChannels);
-
-			small = cvCreateImage(cvSize(25, 14), depth->depth, depth->nChannels);
-			flag = 0;
-		}
-
 		cvConvertScale(depth, show, 10, 0);
 		reverse_data(show);
 
 		cvResize(show, small, CV_INTER_LINEAR);
-		cvResize(small, fat, CV_INTER_LINEAR);
 
 		/*cvEqualizeHist(fat, fat);*/
 
 		/* display images */
 		cvShowImage("MPlayer", show);
-		cvShowImage("MPlayer1", fat);
 
 		/* capture key strokes */
 		key = cvWaitKey(10);

@@ -5,7 +5,7 @@ Augmented Vision
 
 
 todo:
-* independant pin gpios setup
+~~* independant pin gpios setup~~
 * rts
 * signal (SIGINT)
 * threads (playing oni)
