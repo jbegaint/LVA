@@ -160,7 +160,6 @@ void set_pattern_from_xtion(matrix_t *m)
 
 	if (first_run) {
 		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);
-		/*oni_matrix = init_matrix(N_ROWS, N_COLS);*/
 
 		thread_info->matrix = oni_matrix;
 		thread_info->next_frame = &next_frame;
@@ -173,8 +172,8 @@ void set_pattern_from_xtion(matrix_t *m)
 	}
 
 	tmp1 = get_cropped_matrix(oni_matrix, 20, 10, PIXELS_X - 20, PIXELS_Y - 10);
-
 	tmp = get_resized_matrix(tmp1, N_ROWS, N_COLS);
+
 	center_matrix(tmp);	
 	threshold_matrix(tmp);	
 	copy_matrix(m, tmp);

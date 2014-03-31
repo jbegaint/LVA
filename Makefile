@@ -17,6 +17,8 @@ LVA_OBJ = $(LVA_OBJC) $(LVA_OBJXX)
 
 all: $(LVA_LIB)
 
+lib: $(LVA_LIB)
+
 $(LVA_LIB): $(LVA_OBJ)
 	$(LD) $(LDFLAGS) -shared $^ -o $(BUILD_DIR)/$@ 
 

@@ -77,12 +77,7 @@ void copy_matrix(matrix_t *dest, matrix_t *src)
 	dest->n_rows = src->n_rows;
 	dest->n_cols = src->n_cols;
 
-	/* memcpy ? u*/
-	for (int i = 0; i < src->n_rows; ++i) {
-		for (int j = 0; j < src->n_cols; ++j) {
-			(dest->values)[i][j] = (src->values)[i][j];
-		}
-	}
+	memcpy(*(dest->values), *(src->values), src->n_cols * src->n_rows * sizeof(**(dest->values)));
 }
 
 /**
@@ -106,14 +101,8 @@ matrix_t *get_led_matrix(matrix_t *img_matrix)
 	return led_matrix;
 }
 
-void swap_int(int *a, int *b)
-{
-	int tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-matrix_t *get_cropped_matrix(matrix_t *m, int xmin, int ymin, int xmax, int ymax)
+matrix_t *get_cropped_matrix(matrix_t *m, int xmin, int ymin, int xmax, int 
+		ymax)
 {
 	matrix_t *res = init_matrix(ymax, xmax);
 
@@ -137,8 +126,8 @@ matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 	/* Seuillage des coefficients */
 	for (int i = 0; i < n_rows; ++i) {
 		for (int j =  0; j < n_cols; ++j) {
-			(new_matrix->values)[i][j] = 
-				(int) Moyenne(matrix->values, i * dX, j * dY, dX, dY);
+			(new_matrix->values)[i][j] = (int) Moyenne(matrix->values, i * dX, j 
+					* dY, dX, dY);
 		}
 	}	
 
@@ -154,7 +143,8 @@ void center_matrix(matrix_t *matrix)
 	/* centrage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
-			(matrix->values)[i][j] = (int) (255 * ((matrix->values)[i][j] - min) / (max - min + 1 )) ;
+			(matrix->values)[i][j] = (int) (255 * ((matrix->values)[i][j] - min) 
+					/ (max - min + 1 )) ;
 		}
 	}
 }
