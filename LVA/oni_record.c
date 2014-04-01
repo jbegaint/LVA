@@ -3,13 +3,17 @@
 #include <unistd.h>
 #include <time.h>
 
-#include <cv.h>
-#include <highgui.h>
+#ifdef OPENCV
+	#include <cv.h>
+	#include <highgui.h>
+#endif
 
 #include "matrix.h"
 #include "patterns.h"
 #include "utils.h"
 
+
+#ifdef OPENCV
 void *grab_video(void *arg) 
 {
 	matrix_t *matrix;
@@ -71,3 +75,4 @@ void *grab_video(void *arg)
 */
 	return NULL;
 }
+#endif
