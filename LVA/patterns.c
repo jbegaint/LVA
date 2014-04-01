@@ -16,7 +16,9 @@ const pattern_t patterns[] = {
 	{4, "col by col", set_pattern_col_by_col},
 	{5, "oni file", set_pattern_from_oni},
 	{6, "pgm file", set_pattern_from_pgm},
+	#ifdef OPENCV
 	{7, "xtion", set_pattern_from_xtion},
+	#endif
 	{.desc = NULL},
 };
 
@@ -147,6 +149,7 @@ void set_pattern_from_pgm(matrix_t *m)
 	first_run = 0;
 }
 
+#ifdef OPENCV
 void set_pattern_from_xtion(matrix_t *m)
 {
 	static matrix_t *oni_matrix;
@@ -183,6 +186,7 @@ void set_pattern_from_xtion(matrix_t *m)
 
 	next_frame = 1;
 }
+#endif
 
 void print_patterns(void)
 {
