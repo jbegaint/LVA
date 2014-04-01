@@ -17,11 +17,11 @@ extern pattern_t patterns[];
 
 static int running = 1;
 
-static char* pins_rows_names[] = {"P8_36", "P8_37", "P8_38", "P8_39", "P8_40", "P8_41", "P8_42"};
-static char* pins_cols_names[] = {"P8_11", "P8_12", "P8_15", "P8_16", "P8_26"};
+static const char* pins_rows_names[] = {"P8_36", "P8_37", "P8_38", "P8_39", "P8_40", "P8_41", "P8_42"};
+static const char* pins_cols_names[] = {"P8_11", "P8_12", "P8_15", "P8_16", "P8_26"};
 
-static pin_t *pins_rows; 
-static pin_t *pins_cols; 
+static const pin_t *pins_rows; 
+static const pin_t *pins_cols; 
 
 static matrix_t *LED_MATRIX;
 
@@ -62,6 +62,11 @@ void setup(void)
 	iolib_init();
 	enable_gpios();
 
+	pins_rows = get_pins_by_names(pins_rows_names, 
+			ARRAY_SIZE(pins_rows_names));
+	pins_cols = get_pins_by_names(pins_cols_names, 
+			ARRAY_SIZE(pins_cols_names));
+
 	/* set dir as output */
 	set_dir_pins_output(pins_rows, N_ROWS);
 	set_dir_pins_output(pins_cols, N_COLS);
@@ -72,6 +77,7 @@ void setup(void)
 
 	/* allocate matrix */
 	LED_MATRIX = init_matrix(N_ROWS, N_COLS);
+	print_matrix(LED_MATRIX);
 }
 
 void cleanup(void)
@@ -150,13 +156,10 @@ int main(int argc, char **argv)
 
 	parse_arg(argv[1]);
 	
-	pins_rows = get_pins_by_names(pins_rows_names, ARRAY_SIZE(pins_rows_names));
-	pins_cols = get_pins_by_names(pins_cols_names, ARRAY_SIZE(pins_cols_names));
+	setup();
 
 	/* start thread */
 	pthread_create(&thread, NULL, set_pins_values, NULL);
-
-	setup();
 	switch_leds();
 
 	signal(SIGINT, handler);
