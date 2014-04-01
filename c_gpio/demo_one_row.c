@@ -6,8 +6,6 @@
 #include "../LVA/pins.h"
 #include "../LVA/utils.h"
 
-int next_frame= 0;
-
 static int running = 1;
 static int PINS_LEVELS[5] = {0, 1, 2, 3, 1};
 

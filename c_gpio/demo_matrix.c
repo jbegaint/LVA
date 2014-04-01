@@ -9,7 +9,6 @@
 #include "matrix.h"
 
 static int running = 1;
-int next_frame = 1;
 static int PINS_LEVELS[7][5] = {
 	{3, 3, 3, 3, 3},
 	{3, 1, 2, 3, 1},

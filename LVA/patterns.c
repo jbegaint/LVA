@@ -3,12 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "pins.h"
 #include "patterns.h"
 #include "oni_utils.h"
 #include "pgm_utils.h"
-
-extern int next_frame;
+#include "oni_record.h"
 
 const pattern_t patterns[] = {
 	{0, "led by led", set_pattern_led_by_led},
@@ -18,6 +16,7 @@ const pattern_t patterns[] = {
 	{4, "col by col", set_pattern_col_by_col},
 	{5, "oni file", set_pattern_from_oni},
 	{6, "pgm file", set_pattern_from_pgm},
+	{7, "xtion", set_pattern_from_xtion},
 	{.desc = NULL},
 };
 
@@ -104,23 +103,27 @@ void set_pattern_col_by_col(matrix_t *m)
 void set_pattern_from_oni(matrix_t *m)
 {
 	static matrix_t *oni_matrix;
-	static int first_run = 1;
+
 	static pthread_t conversion_thread;
 	static thread_info_t thread_info[1];
 
+	static int first_run = 1;
+	static int next_frame = 1;
+
 	matrix_t *tmp;
-	matrix_t *tmp_oni;
 
 	if (first_run) {
 		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);
 
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
-		/* launch thread with convert_frames */
-		/* todo: catch errors */
+		thread_info->next_frame = &next_frame;
+
 		pthread_create(&conversion_thread, NULL, convert_frames, (void *) &thread_info);
 		first_run = 0;
 	}
+
+
 	tmp = get_led_matrix(oni_matrix);
 	copy_matrix(m, tmp);
 	free_matrix(tmp);
@@ -142,6 +145,43 @@ void set_pattern_from_pgm(matrix_t *m)
 	free_matrix(tmp);
 
 	first_run = 0;
+}
+
+void set_pattern_from_xtion(matrix_t *m)
+{
+	static matrix_t *oni_matrix;
+	static pthread_t conversion_thread;
+	static thread_info_t thread_info[1];
+
+	static int first_run = 1;
+	static int next_frame = 1;
+
+	matrix_t *tmp, *tmp1;
+
+	if (first_run) {
+		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);
+
+		thread_info->matrix = oni_matrix;
+		thread_info->next_frame = &next_frame;
+
+		/* launch thread with convert_frames */
+		/* todo: catch errors */
+		pthread_create(&conversion_thread, NULL, grab_video, (void *) &thread_info);
+
+		first_run = 0;
+	}
+
+	tmp1 = get_cropped_matrix(oni_matrix, 20, 10, PIXELS_X - 20, PIXELS_Y - 10);
+	tmp = get_resized_matrix(tmp1, N_ROWS, N_COLS);
+
+	center_matrix(tmp);	
+	threshold_matrix(tmp);	
+	copy_matrix(m, tmp);
+
+	free_matrix(tmp1);
+	free_matrix(tmp);
+
+	next_frame = 1;
 }
 
 void print_patterns(void)
