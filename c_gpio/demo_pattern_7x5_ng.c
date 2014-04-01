@@ -77,7 +77,7 @@ void setup(void)
 void cleanup(void)
 {
 	/* set all pins to low */
-	set_pins_row_off(pins_cols);
+	set_pins_row_off(pins_cols, N_COLS);
 	unselect_rows(pins_rows, N_ROWS);
 
 	free_matrix(LED_MATRIX);
@@ -98,7 +98,7 @@ void switch_leds(void)
 			/* N_LEVELS-2, indeed no need to check level 3 (off)*/
 			for (l = N_LEVELS - 2; l >= 0 ; --l) {
 	
-				set_pins_row_off(pins_cols);
+				set_pins_row_off(pins_cols, N_COLS);
 				set_pins_row_on_for_level(LED_MATRIX, pins_cols, row, l);
 	
 				/*
