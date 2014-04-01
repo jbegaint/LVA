@@ -77,12 +77,7 @@ void copy_matrix(matrix_t *dest, matrix_t *src)
 	dest->n_rows = src->n_rows;
 	dest->n_cols = src->n_cols;
 
-	/* memcpy ? u*/
-	for (int i = 0; i < src->n_rows; ++i) {
-		for (int j = 0; j < src->n_cols; ++j) {
-			(dest->values)[i][j] = (src->values)[i][j];
-		}
-	}
+	memcpy(*(dest->values), *(src->values), src->n_cols * src->n_rows * sizeof(**(dest->values)));
 }
 
 /**
@@ -106,26 +101,33 @@ matrix_t *get_led_matrix(matrix_t *img_matrix)
 	return led_matrix;
 }
 
-void swap_int(int *a, int *b)
+matrix_t *get_cropped_matrix(matrix_t *m, int xmin, int ymin, int xmax, int 
+		ymax)
 {
-	int tmp = *a;
-	*a = *b;
-	*b = tmp;
+	matrix_t *res = init_matrix(ymax, xmax);
+
+	for (int i = ymin; i < ymax; ++i) {
+		for (int j =  xmin; j < xmax; ++j) {
+			(res->values)[i-ymin][j-xmin] = (m->values)[i][j];
+		}
+	}	
+
+	return res;
 }
 
 matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 {
 	matrix_t *new_matrix;
-	int dX = PIXELS_Y / n_rows;
-	int dY = PIXELS_X / n_cols;
+	int dX = (matrix->n_rows) / n_rows;
+	int dY = (matrix->n_cols) / n_cols;
 
 	new_matrix = init_matrix(n_rows, n_cols);
 
 	/* Seuillage des coefficients */
 	for (int i = 0; i < n_rows; ++i) {
 		for (int j =  0; j < n_cols; ++j) {
-			(new_matrix->values)[i][j] = 
-				(int) Moyenne(matrix->values, i * dX, j * dY, dX, dY);
+			(new_matrix->values)[i][j] = (int) Moyenne(matrix->values, i * dX, j 
+					* dY, dX, dY);
 		}
 	}	
 
@@ -136,11 +138,13 @@ matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 void center_matrix(matrix_t *matrix)
 {
 	int max = get_matrix_max(matrix);
+	int min = get_matrix_min(matrix);
 
 	/* centrage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
-			(matrix->values)[i][j] = (int) (255 * (matrix->values)[i][j] / max);
+			(matrix->values)[i][j] = (int) (255 * ((matrix->values)[i][j] - min) 
+					/ (max - min + 1 )) ;
 		}
 	}
 }
@@ -148,18 +152,15 @@ void center_matrix(matrix_t *matrix)
 /* Seuillage des coefficients en 4 niveaux */
 void threshold_matrix(matrix_t *matrix)
 {
-	int max = get_matrix_max(matrix);
-
 	/* seuillage des coefficients */
 	for (int i = 0; i < matrix->n_rows; i++) {
 		for (int j = 0; j < matrix->n_cols; j++) {
-			(matrix->values)[i][j] = (int) (255 * (matrix->values)[i][j] / max);
 
-			if ((matrix->values)[i][j] > 200)
+			if ((matrix->values)[i][j] > 100)
 				(matrix->values)[i][j] = 3;
-			else if ((matrix->values)[i][j] > 150)
+			else if ((matrix->values)[i][j] > 60)
 				(matrix->values)[i][j] = 2;
-			else if ((matrix->values)[i][j] > 100)
+			else if ((matrix->values)[i][j] > 20)
 				(matrix->values)[i][j] = 1;
 			else
 				(matrix->values)[i][j] = 0;
@@ -167,9 +168,30 @@ void threshold_matrix(matrix_t *matrix)
 	}
 }
 
+/*
+ * @brief Get the minimal value in a matrix structure
+ *
+ * @param matrix the matrix
+ *
+ * @return the min
+ */
+int get_matrix_min(matrix_t *matrix)
+{
+	int min = (matrix->values)[0][0] ;
+
+	for (int i = 0; i < matrix->n_rows; ++i) {
+		for (int j = 0; j < matrix->n_cols; ++j) {
+			if ((matrix->values)[i][j] < min) {
+				min = (matrix->values)[i][j];
+			}
+		}
+	}
+
+	return min;
+}
 
 /*
- * @brief Get the maximum value in the matrix
+ * @brief Get the maximum value in a matrix structure
  *
  * @param matrix the matrix
  *
@@ -177,7 +199,7 @@ void threshold_matrix(matrix_t *matrix)
  */
 int get_matrix_max(matrix_t *matrix)
 {
-	int max = 0;
+	int max = (matrix->values)[0][0];
 
 	for (int i = 0; i < matrix->n_rows; ++i) {
 		for (int j = 0; j < matrix->n_cols; ++j) {

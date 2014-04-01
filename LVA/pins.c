@@ -7,9 +7,9 @@
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
 #include "pins.h"
 #include "utils.h"
+#include "matrix.h"
 
 /* sort by brightness */
-
 /* todo: levels.c */
 level_t levels_table[] = {
 	{0, LEVEL_0},
@@ -138,7 +138,7 @@ level_t *get_level_by_id(int level_id)
  * 
  * @param level_id the level id to search 
  * 
- * @return the level time, if found, -1 otherwise
+ * @return the level time if found, -1 otherwise
  */
 int get_level_time_by_id(int level_id)
 {
@@ -209,6 +209,13 @@ pin_t *get_pins_by_names(const char **names, int n_pins)
 	return table;
 }
 
+/**
+ * @brief Retrieve a pin structure in pins_table by name
+ * 
+ * @param name the pin name
+ * 
+ * @return the pin structure if found, NULL otherwise
+ */
 pin_t *get_pin_by_name(const char *name)
 {
 	pin_t *p;
@@ -222,7 +229,14 @@ pin_t *get_pin_by_name(const char *name)
 	return NULL;
 }
 
-int get_gpio_by_name(const char *name)
+/**
+ * @brief Retrieve the pin gpio by name
+ * 
+ * @param name the pin name
+ * 
+ * @return the pin gpio, -1 otherwise
+ */
+int get_pin_gpio_by_name(const char *name)
 {
 	pin_t *p;
 
@@ -235,7 +249,14 @@ int get_gpio_by_name(const char *name)
 	return -1;
 }
 
-int get_id_by_name(const char *name)
+/**
+ * @brief Retrieve the pin id by name
+ * 
+ * @param name the pin name
+ * 
+ * @return the pin id, -1 otherwise
+ */
+int get_pin_id_by_name(const char *name)
 {
 	pin_t *p;
 
@@ -248,6 +269,11 @@ int get_id_by_name(const char *name)
 	return -1;
 }
 
+/**
+ * @brief Display a pin structure
+ * 
+ * @param pin the pin structure
+ */
 void print_pin(pin_t *pin)
 {
 	int i;
@@ -260,6 +286,12 @@ void print_pin(pin_t *pin)
 	printf("%3d\n", i);
 }
 
+/**
+ * @brief Display an array of pin structures
+ * 
+ * @param pins the pin structures array
+ * @param n_pins the number of pins in the array
+*/
 void print_pins(pin_t **pins, int n_pins)
 {
 	printf("NAME  GPIO PIN\n");
@@ -286,4 +318,89 @@ void select_row_by_id_and_gpio(int gpio, int pins)
 void unselect_row_by_id_and_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_low(gpio, pins);
+}
+
+/* Generic */
+
+void enable_gpios(void)
+{
+	for (int i = 0; i < N_GPIOS; ++i) {
+		BBBIO_sys_Enable_GPIO(i);
+	}
+}
+
+void set_ctrls(int *ctrls, pin_t *pins, int n_pins)
+{
+	/* set ctrl int to 0 by default */
+	for (int i = 0; i < n_pins; ++i) {
+		ctrls[i] = 0;
+	}
+
+	/* set bits for pins in ctrls */
+	for (int i = 0; i < n_pins; ++i) {
+		ctrls[i] |= pins[i].id;
+	}
+}
+
+void set_dir_pins_output(pin_t *pins, int n_pins)
+{
+	int ctrls[4];
+
+	set_ctrls(ctrls, pins, n_pins);
+
+	/* set pins as output for each gpio */
+	for (int i = 0; i < N_GPIOS; ++i) {
+		BBBIO_GPIO_set_dir(i, 0, ctrls[i]);
+	}
+}
+
+void select_row_by_pin(pin_t *pin)
+{
+	BBBIO_GPIO_high(pin->gpio, pin->id);
+}
+
+void unselect_row_by_pin(pin_t *pin)
+{
+	BBBIO_GPIO_low(pin->gpio, pin->id);
+}
+
+void unselect_rows(pin_t *pins, int n_pins)
+{
+	int ctrls[4];
+
+	set_ctrls(ctrls, pins, n_pins);
+
+	/* set pins off for each gpio gpio */
+	for (int i = 0; i < N_GPIOS; ++i) {
+		unselect_row_by_id_and_gpio(i, ctrls[i]);
+	}
+}
+
+void set_pins_row_on_for_level(matrix_t *m, pin_t *pins, int row_id, int level_id)
+{
+	int ctrls[4] = {0, 0, 0, 0};
+
+	/* get pins to set on for each gpio */
+	for (int i = 0; i < N_COLS; ++i) {
+		if ((m->values)[row_id][i] <= level_id) {
+			ctrls[pins[i].gpio] |= pins[i].id;
+		}
+	}
+
+	/* set pins on by gpio */
+	for (int i = 0; i < N_GPIOS; ++i) {
+		set_pins_row_on_by_gpio(i, ctrls[i]);
+	}
+}
+
+void set_pins_row_off(pin_t *pins, int n_pins)
+{
+	int ctrls[4];
+
+	set_ctrls(ctrls, pins, n_pins);
+
+	/* set pins off for each gpio */
+	for (int i = 0; i < N_GPIOS; ++i) {
+		set_pins_row_off_by_gpio(i, ctrls[i]);
+	}
 }

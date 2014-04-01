@@ -19,17 +19,15 @@ int next_frame;
 #endif 
 void *convert_frames(void *arg)
 {
-	thread_info_t *thread_info;
-	matrix_t *matrix;
 	const char *filepath;
+	matrix_t *matrix;
+	thread_info_t *thread_info;
+	int *next_frame;
 
 	thread_info = (thread_info_t *) arg;
-	/* segfault here */
 	matrix = thread_info->matrix;
 	filepath = thread_info->filepath;
-
-	/* opening file */
-	cout << "File loaded: " << filepath << endl;
+	next_frame = thread_info->next_frame;
 
 	// Initial OpenNI Context
 	xn::Context xContext;
@@ -47,7 +45,6 @@ void *convert_frames(void *arg)
 	// get total frame number
 	XnUInt32 uFrames;
 	xPlayer.GetNumFrames( xDepthGenerator.GetName(), uFrames );
-	cout << "Total " << uFrames << " frames" << endl;
  
 	// Start
 	xContext.StartGeneratingAll();
@@ -56,16 +53,11 @@ void *convert_frames(void *arg)
 	for (unsigned int i = 0; i < uFrames; ++i) {
 
 		/* waiting for the worms to come... */
-		while (1) {
-			/* sleep 1 ms */
-			usleep(1000); 
-			if (next_frame == 1) {
-				break;
-			}
+		while (*(next_frame) != 1) {
+			usleep(1000);
 		}
 
 		xDepthGenerator.WaitAndUpdateData();
-		cout << "Frame: " << i << "/" << uFrames << endl;
  
 		// get value
 		xn::DepthMetaData xDepthMap;
@@ -73,12 +65,13 @@ void *convert_frames(void *arg)
 
 		for (unsigned int y = 0; y < xDepthMap.YRes(); ++y) {
 			for (unsigned int x = 0; x < xDepthMap.XRes(); ++x) {
+				/* reverse mat */
 				(matrix->values)[y][x] = xDepthMap(x, y);
 			}
 		}
 
 		/* pause conversion */
-		next_frame = 0;
+		*next_frame = 0;
 
 	}
  
