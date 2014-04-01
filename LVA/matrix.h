@@ -35,3 +35,4 @@ float Moyenne(int **depth, int _x, int _y, int dx, int dy);
 
 void print_matrix_infos(matrix_t *matrix);
 void print_matrix(matrix_t *matrix);
+#endif
