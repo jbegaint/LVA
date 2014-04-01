@@ -15,6 +15,15 @@ LVA_OBJXX_DBG := $(LVA_SRCXX:%.cpp=%.dbg.o)
 
 LVA_OBJ = $(LVA_OBJC) $(LVA_OBJXX)
 
+# OPENCV_CHECK := $(strip $(wildcard /usr/inclAude/opencv/cv.h))
+
+# not working atm
+# ifneq (OPENCV_CHECK, )
+# CFLAGS_OPENCV = `pkg-config opencv --cflags`
+# LDFLAGS_OPENCV = `pkg-config opencv --libs`
+# CFLAGS += -DOPENCV
+# endif
+
 all: $(LVA_LIB)
 
 lib: $(LVA_LIB)
