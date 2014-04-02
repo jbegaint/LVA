@@ -17,7 +17,7 @@ extern pattern_t patterns[];
 
 static int running = 1;
 
-static const char* pins_rows_names[] = {"P8_26", "P8_37", "P8_38", "P8_39", "P8_40", "P8_41", "P8_42"};
+static const char* pins_rows_names[] = {"P8_17", "P8_37", "P8_38", "P8_39", "P8_40", "P8_41", "P8_42"};
 static const char* pins_cols_names[] = {"P8_11", "P8_12", "P8_15", "P8_16", "P8_26"};
 
 static const pin_t *pins_rows; 
@@ -49,11 +49,8 @@ void usage(char *argv0)
 
 void handler(int sig)
 {
-	/* yes i know, we only catch SIGINT ATM.. */
-	if (sig == SIGINT) {
-		running = 0;
-		printf("Exiting...\n");
-	}
+	running = 0;
+	printf("Exiting...\n");
 }
 
 void setup(void)
@@ -155,13 +152,14 @@ int main(int argc, char **argv)
 
 	parse_arg(argv[1]);
 	
+	signal(SIGINT, handler);
+
 	setup();
 
 	/* start thread */
 	pthread_create(&thread, NULL, set_pins_values, NULL);
 	switch_leds();
 
-	signal(SIGINT, handler);
 
 	return 0;
 }
