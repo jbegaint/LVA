@@ -77,7 +77,6 @@ void setup(void)
 
 	/* allocate matrix */
 	LED_MATRIX = init_matrix(N_ROWS, N_COLS);
-	print_matrix(LED_MATRIX);
 }
 
 void cleanup(void)
