@@ -317,7 +317,6 @@ void select_row_by_id_and_gpio(int gpio, int pins)
 
 void unselect_row_by_id_and_gpio(int gpio, int pins)
 {
-	printf("gpios: %d pins: %d \n", gpio, pins);
 	BBBIO_GPIO_low(gpio, pins);
 }
 
@@ -330,33 +329,20 @@ void enable_gpios(void)
 	}
 }
 
-void set_ctrls(int *ctrls, pin_t *pins, int n_pins)
+void set_dir_pins_output(pin_t *pins, int n_pins)
 {
-	/* set ctrl int to 0 by default */
-	for (int i = 0; i < n_pins; ++i) {
-		ctrls[i] = 0;
-	}
+	int ctrls[4] = {0, 0, 0, 0};
 
 	/* set bits for pins in ctrls */
 	for (int i = 0; i < n_pins; ++i) {
 		ctrls[pins[i].gpio] |= pins[i].id;
 	}
-}
-
-void set_dir_pins_output(pin_t *pins, int n_pins)
-{
-	int ctrls[4];
-
-	set_ctrls(ctrls, pins, n_pins);
-
-	for (int i = 0; i < N_GPIOS; ++i){
-		printf("%d ", ctrls[i]);
-	}
 
 	/* set pins as output for each gpio */
 	for (int i = 0; i < N_GPIOS; ++i) {
-		if (ctrls[i] != 0)
+		if (ctrls[i] != 0) {
 			BBBIO_GPIO_set_dir(i, 0, ctrls[i]);
+		}
 	}
 }
 
@@ -372,20 +358,14 @@ void unselect_row_by_pin(pin_t *pin)
 
 void unselect_rows(pin_t *pins, int n_pins)
 {
-	int ctrls[4];
-
-	set_ctrls(ctrls, pins, n_pins);
-
-	/* set pins off for each gpio gpio */
+	/* set pins off for each gpio */
 	for (int i = 0; i < N_GPIOS; ++i) {
-		if (ctrls[i] != 0)
-			unselect_row_by_id_and_gpio(i, ctrls[i]);
+		unselect_row_by_id_and_gpio(i, 0xFFFFFFFF);
 	}
 }
 
 void set_pins_row_on_for_level(matrix_t *m, pin_t *pins, int row_id, int level_id)
 {
-	/* we can't use set_ctrls here, as we need to check the level */
 	int ctrls[4] = {0, 0, 0, 0};
 
 	/* get pins to set on for each gpio */
@@ -403,9 +383,12 @@ void set_pins_row_on_for_level(matrix_t *m, pin_t *pins, int row_id, int level_i
 
 void set_pins_row_off(pin_t *pins, int n_pins)
 {
-	int ctrls[4];
+	int ctrls[4] = {0, 0, 0, 0};
 
-	set_ctrls(ctrls, pins, n_pins);
+	/* get pins to set on for each gpio */
+	for (int i = 0; i < N_COLS; ++i) {
+		ctrls[pins[i].gpio] |= pins[i].id;
+	}
 
 	/* set pins off for each gpio */
 	for (int i = 0; i < N_GPIOS; ++i) {

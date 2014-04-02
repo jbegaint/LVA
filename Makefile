@@ -15,14 +15,12 @@ LVA_OBJXX_DBG := $(LVA_SRCXX:%.cpp=%.dbg.o)
 
 LVA_OBJ = $(LVA_OBJC) $(LVA_OBJXX)
 
-# OPENCV_CHECK := $(strip $(wildcard /usr/inclAude/opencv/cv.h))
-
-# not working atm
-# ifneq (OPENCV_CHECK, )
-# CFLAGS_OPENCV = `pkg-config opencv --cflags`
-# LDFLAGS_OPENCV = `pkg-config opencv --libs`
-# CFLAGS += -DOPENCV
-# endif
+# check for opencv
+ifneq ($(wildcard /usr/include/opencv/cv.h),)
+	CFLAGS_OPENCV = `pkg-config opencv --cflags`
+	LDFLAGS_OPENCV = `pkg-config opencv --libs`
+	CFLAGS += -DOPENCV
+endif
 
 all: $(LVA_LIB)
 
@@ -66,15 +64,6 @@ oni_record_test: $(TESTS_DIR)/oni_record_test.o
 
 $(TESTS_DIR)/oni_record_test.o: $(TESTS_DIR)/oni_record_test.c
 	@$(CC) $< $(CFLAGS) $(CFLAGS_OPENCV) -c -o $@
-
-# Simulator
-gleds: GLeds/gleds.o
-	@make $(LVA_LIB) 
-	@mkdir -p $(BUILD_DIR)
-	@$(CC) $^ $(LDFLAGS_OPENCV) $(LDFLAGS_GTK) $(LDFLAGS_LVA) $(LDFLAGS) -o $(BUILD_DIR)/$@ 
-
-GLeds/gleds.o: GLeds/gleds.c
-	@$(CC) $< $(CFLAGS) $(CFLAGS_GTK) -c -o $@
 
 # Generic
 %.o: %.c

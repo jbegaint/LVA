@@ -75,7 +75,7 @@ build() {
 
   cmake ${_cmakeopts[@]} .
 
-  make
+  make 
 }
 
 package_opencv() {
