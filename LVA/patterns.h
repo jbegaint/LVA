@@ -28,14 +28,12 @@ void set_pattern_row_by_row(matrix_t *m);
 void set_pattern_col_by_col(matrix_t *m);
 void set_pattern_from_oni(matrix_t *m);
 void set_pattern_from_pgm(matrix_t *m);
+void set_pattern_full(matrix_t *m);
 
 #ifdef OPENCV
 void set_pattern_from_xtion(matrix_t *m);
 #endif
 
-/*void pattern_launch_thread(matrix_t *m, void *extra_arg);*/
-
 void print_patterns(void);
-
 
 #endif

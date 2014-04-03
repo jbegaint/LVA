@@ -188,6 +188,15 @@ void set_pattern_from_xtion(matrix_t *m)
 }
 #endif
 
+void set_pattern_full(matrix_t *m) 
+{
+	for (int i = 0; i < m->n_rows; ++i) {
+		for (int j = 0; j < m->n_cols; ++j) {
+			(m->values)[i][j] = 0;
+		}
+	}
+}
+
 void print_patterns(void)
 {
 	const pattern_t *ptrn;
