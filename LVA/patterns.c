@@ -16,8 +16,9 @@ const pattern_t patterns[] = {
 	{4, "col by col", set_pattern_col_by_col},
 	{5, "oni file", set_pattern_from_oni},
 	{6, "pgm file", set_pattern_from_pgm},
+	{7, "full", set_pattern_full}, 
 	#ifdef OPENCV
-	{7, "xtion", set_pattern_from_xtion},
+	{8, "xtion", set_pattern_from_xtion},
 	#endif
 	{.desc = NULL},
 };
