@@ -17,7 +17,7 @@ extern pattern_t patterns[];
 
 static int running = 1;
 
-static const char* pins_rows_names[] = {"P8_17", "P8_37", "P8_38", "P8_39", "P8_40", "P8_41", "P8_42"};
+static const char* pins_rows_names[] = {"P8_36", "P8_37", "P8_38", "P8_39", "P8_40", "P8_41", "P8_42"};
 static const char* pins_cols_names[] = {"P8_11", "P8_12", "P8_15", "P8_16", "P8_26"};
 
 static const pin_t *pins_rows; 
