@@ -175,6 +175,7 @@ void set_pattern_from_xtion(matrix_t *m)
 		first_run = 0;
 	}
 
+	/* todo: clean hard written values */
 	tmp1 = get_cropped_matrix(oni_matrix, 20, 10, PIXELS_X - 20, PIXELS_Y - 10);
 	tmp = get_resized_matrix(tmp1, N_ROWS, N_COLS);
 
