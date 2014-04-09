@@ -95,9 +95,6 @@ void set_led_values(void)
 				set_pins_row_off(pins_cols, N_COLS);
 				set_pins_row_on_for_level(LED_MATRIX, pins_cols, row, l);
 	
-				/* wait X us */ 
-				/* we already waited for T/LEVELS[l-1], so let's subtract it */
-	
 				level_sleep(l);
 			}
 			unselect_row_by_pin(&pins_rows[row]);

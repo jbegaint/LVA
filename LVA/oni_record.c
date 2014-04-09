@@ -4,8 +4,8 @@
 #include <time.h>
 
 #ifdef OPENCV
-	#include <cv.h>
-	#include <highgui.h>
+#include <cv.h>
+#include <highgui.h>
 #endif
 
 #include "matrix.h"
@@ -55,7 +55,7 @@ void *grab_video(void *arg)
 
 		for (int i = 0; i < depth->height; ++i) {
 			for (int j = 0; j < depth->width; ++j) {
-				(matrix->values)[i][j] = CV_IMAGE_ELEM(depth, unsigned short, i, j);
+				(matrix->values)[i][depth->width - j] = CV_IMAGE_ELEM(depth, unsigned short, i, j);
 			}
 		}
 
