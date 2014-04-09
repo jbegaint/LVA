@@ -11,6 +11,7 @@ using namespace std;
 #include "matrix.h"
 #include "oni_utils.h"
 #include "patterns.h"
+#include "utils.h"
 
 #ifdef __cplusplus
 	extern "C" {

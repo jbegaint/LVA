@@ -7,6 +7,8 @@
 #include "oni_utils.h"
 #include "pgm_utils.h"
 #include "oni_record.h"
+#include "xn_record.h"
+#include "utils.h"
 
 const pattern_t patterns[] = {
 	{0, "led by led", set_pattern_led_by_led},
@@ -17,9 +19,9 @@ const pattern_t patterns[] = {
 	{5, "oni file", set_pattern_from_oni},
 	{6, "pgm file", set_pattern_from_pgm},
 	{7, "full", set_pattern_full}, 
-	{8, "xtion", set_pattern_from_xn},
+	{8, "xtion (xn)", set_pattern_from_xn},
 	#ifdef OPENCV
-	{9, "xtion", set_pattern_from_xtion},
+	{9, "xtion (opencv)", set_pattern_from_xtion},
 	#endif
 	{.desc = NULL},
 };
