@@ -1,4 +1,0 @@
-LVA
-===
-
-Augmented Vision

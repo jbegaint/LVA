@@ -12,8 +12,6 @@ using namespace std;
 #include "oni_utils.h"
 #include "patterns.h"
 
-/*extern int next_frame;*/
-
 #ifdef __cplusplus
 	extern "C" {
 #endif 
