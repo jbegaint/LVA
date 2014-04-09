@@ -160,7 +160,7 @@ void set_pattern_from_xn(matrix_t *m)
 	static thread_info_t thread_info[1];
 
 	static int first_run = 1;
-	static int next_frame = 1;
+	static int next_frame = THREAD_RUNNING;
 
 	matrix_t *tmp, *tmp1;
 
@@ -188,7 +188,7 @@ void set_pattern_from_xn(matrix_t *m)
 	free_matrix(tmp1);
 	free_matrix(tmp);
 
-	next_frame = 1;
+	next_frame = THREAD_RUNNING;
 }
 
 #ifdef OPENCV

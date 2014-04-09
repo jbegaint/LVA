@@ -5,10 +5,11 @@ Augmented Vision
 
 
 todo:
-~~* independant pin gpios setup~~
-* rts
-* signal (SIGINT)
-* threads (playing oni)
+
+* ~~independant pin gpios setup~~
+* ~~rts~~
+* ~~signal (SIGINT)~~
+* ~~threads (playing oni)~~
 * pthread_join ?
 * Makefile (debug/ release)
 * pattern thread wrapper ?

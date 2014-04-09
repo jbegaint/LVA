@@ -67,9 +67,8 @@ $(TESTS_DIR)/oni_record_test.o: $(TESTS_DIR)/oni_record_test.c
 
 # Simulator
 gleds: GLeds/gleds.o
-	@make $(LVA_LIB) 
 	@mkdir -p $(BUILD_DIR)
-	@$(CC) $^ $(LDFLAGS_OPENCV) $(LDFLAGS_GTK) $(LDFLAGS_LVA) $(LDFLAGS) -o $(BUILD_DIR)/$@ 
+	@$(CC) $^  $(LDFLAGS_GTK) $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) $(LDFLAGS) -o $(BUILD_DIR)/$@ 
 
 GLeds/gleds.o: GLeds/gleds.c
 	@$(CC) $< $(CFLAGS) $(CFLAGS_GTK) -c -o $@
