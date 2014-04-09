@@ -1,3 +1,7 @@
+/*
+	Mostly based on : https://github.com/OpenNI/OpenNI/blob/master/Samples/NiCRead/NiCRead.c
+*/
+
 #include <XnOpenNI.h>
 
 #include "xn_record.h"
@@ -73,9 +77,9 @@ void *xngrab_video(void *arg)
 	matrix = thread_info->matrix;
 	next_frame = thread_info->next_frame;
 
-	while (*(next_frame) != THREAD_EXIT) {
+	while (*(next_frame) != THREAD_QUIT) {
 
-		while (*(next_frame) != 1) {
+		while (*(next_frame) != THREAD_RUNNING) {
 			usleep(100);
 		}
 
