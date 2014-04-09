@@ -4,8 +4,8 @@
 #include <time.h>
 
 #ifdef OPENCV
-	#include <cv.h>
-	#include <highgui.h>
+#include <cv.h>
+#include <highgui.h>
 #endif
 
 #include "matrix.h"
