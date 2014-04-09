@@ -1,11 +1,14 @@
 /*
 	Mostly based on : https://github.com/OpenNI/OpenNI/blob/master/Samples/NiCRead/NiCRead.c
 */
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
 
 #include <XnOpenNI.h>
 
 #include "xn_record.h"
-
 #include "matrix.h"
 #include "patterns.h"
 #include "utils.h"
@@ -20,28 +23,32 @@ XnBool fileExists(const char *fn)
 void *xngrab_video(void *arg)
 {
 	XnStatus nRetVal = XN_STATUS_OK;
-	XnContext *pContext;
+	XnContext* pContext;
 	XnNodeHandle hScriptNode;
-	XnEnumerationErrors *pErrors;
+	XnEnumerationErrors* pErrors;
 	XnNodeHandle hDepth;
-	XnDepthMetaData *pDepthMD;
-	const XnDepthPixel *pDepthMap;
+	XnDepthMetaData* pDepthMD;
+	const XnDepthPixel* pDepthMap;
 	XnDepthPixel middlePoint;
 	const char *fn = NULL;
+
+	/* get parameters */
+	matrix_t *matrix;
+	int *next_frame;
+	thread_info_t *thread_info;
+
+	thread_info = (thread_info_t *) arg;
+	matrix = thread_info->matrix;
+	next_frame = thread_info->next_frame;
 
 	nRetVal = xnEnumerationErrorsAllocate(&pErrors);
 	CHECK_RC(nRetVal, "Allocate errors object");
 
-	if (fileExists(SAMPLE_XML_PATH)) {
-		fn = SAMPLE_XML_PATH;
-	}
-	else if (fileExists(SAMPLE_XML_PATH_LOCAL)) {
+	if (fileExists(SAMPLE_XML_PATH_LOCAL)) {
 		fn = SAMPLE_XML_PATH_LOCAL;
-	} 
+	}
 	else {
-		printf("Could not find '%s' nor '%s'. Aborting.\n", SAMPLE_XML_PATH,
-			SAMPLE_XML_PATH_LOCAL);
-		/* todo: handle error */
+		printf("Could not find '%s'. Aborting.\n", SAMPLE_XML_PATH_LOCAL);
 		return XN_STATUS_ERROR;
 	}
 
@@ -54,7 +61,7 @@ void *xngrab_video(void *arg)
 		printf("%s\n", strError);
 		xnEnumerationErrorsFree(pErrors);
 		return (nRetVal);
-	} 
+	}
 	else if (nRetVal != XN_STATUS_OK) {
 		printf("Open failed: %s\n", xnGetStatusString(nRetVal));
 		xnEnumerationErrorsFree(pErrors);
@@ -67,24 +74,15 @@ void *xngrab_video(void *arg)
 	CHECK_RC(nRetVal, "Find depth generator");
 
 	pDepthMD = xnAllocateDepthMetaData();
-
-	/* get parameters */
-	matrix_t *matrix;
-	int *next_frame;
-	thread_info_t *thread_info;
-
-	thread_info = (thread_info_t *) arg;
-	matrix = thread_info->matrix;
-	next_frame = thread_info->next_frame;
-
+	
 	while (*(next_frame) != THREAD_QUIT) {
 
-		while (*(next_frame) != THREAD_RUNNING) {
+		while (*(next_frame) == THREAD_PAUSED) {
 			usleep(100);
 		}
 
 		nRetVal = xnWaitOneUpdateAll(pContext, hDepth);
-		
+
 		if (nRetVal != XN_STATUS_OK) {
 			printf("UpdateData failed: %s\n", xnGetStatusString(nRetVal));
 			continue;
@@ -93,9 +91,18 @@ void *xngrab_video(void *arg)
 		xnGetDepthMetaData(hDepth, pDepthMD);
 		pDepthMap = pDepthMD->pData;
 
-		/* todo: COPY MATRIX */
+		/*printf("Resolution X: %d Y: %d\n", pDepthMD->pMap->Res.X, pDepthMD->pMap->Res.Y);*/
+		/*die(NULL);*/
 
-		*next_frame = 0;
+		/* copy matrix */
+		for (unsigned int i = 0; i < pDepthMD->pMap->Res.Y; ++i) {
+			for (unsigned int j = 0; j < pDepthMD->pMap->Res.X; ++j) {
+				(matrix->values)[i][j] = pDepthMap[i * pDepthMD->pMap->Res.X + j];
+			}
+		}
+
+		*next_frame = THREAD_PAUSED;
+
 	}
 
 	xnFreeDepthMetaData(pDepthMD);
