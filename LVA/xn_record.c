@@ -1,14 +1,10 @@
 #include <XnOpenNI.h>
 
-#define SAMPLE_XML_PATH "/usr/share/openni/SamplesConfig.xml"
-#define SAMPLE_XML_PATH_LOCAL "SamplesConfig.xml"
+#include "xn_record.h"
 
-#define CHECK_RC(rc, what)											\
-	if (rc != XN_STATUS_OK)											\
-	{																\
-		printf("%s failed: %s\n", what, xnGetStatusString(rc));		\
-		return rc;													\
-	}
+#include "matrix.h"
+#include "patterns.h"
+#include "utils.h"
 
 XnBool fileExists(const char *fn)
 {
@@ -17,7 +13,7 @@ XnBool fileExists(const char *fn)
 	return exists;
 }
 
-void xngrab_video(void *arg)
+void *xngrab_video(void *arg)
 {
 	XnStatus nRetVal = XN_STATUS_OK;
 	XnContext *pContext;
@@ -32,7 +28,6 @@ void xngrab_video(void *arg)
 	nRetVal = xnEnumerationErrorsAllocate(&pErrors);
 	CHECK_RC(nRetVal, "Allocate errors object");
 
-
 	if (fileExists(SAMPLE_XML_PATH)) {
 		fn = SAMPLE_XML_PATH;
 	}
@@ -42,6 +37,7 @@ void xngrab_video(void *arg)
 	else {
 		printf("Could not find '%s' nor '%s'. Aborting.\n", SAMPLE_XML_PATH,
 			SAMPLE_XML_PATH_LOCAL);
+		/* todo: handle error */
 		return XN_STATUS_ERROR;
 	}
 
@@ -68,7 +64,20 @@ void xngrab_video(void *arg)
 
 	pDepthMD = xnAllocateDepthMetaData();
 
-	while (!xnOSWasKeyboardHit()) {
+	/* get parameters */
+	matrix_t *matrix;
+	int *next_frame;
+	thread_info_t *thread_info;
+
+	thread_info = (thread_info_t *) arg;
+	matrix = thread_info->matrix;
+	next_frame = thread_info->next_frame;
+
+	while (*(next_frame) != THREAD_EXIT) {
+
+		while (*(next_frame) != 1) {
+			usleep(100);
+		}
 
 		nRetVal = xnWaitOneUpdateAll(pContext, hDepth);
 		
@@ -79,11 +88,10 @@ void xngrab_video(void *arg)
 
 		xnGetDepthMetaData(hDepth, pDepthMD);
 		pDepthMap = pDepthMD->pData;
-		middlePoint = pDepthMap[pDepthMD->pMap->Res.X * pDepthMD->pMap->Res.Y / 2 
-						+ pDepthMD->pMap->Res.X / 2];
 
-		printf("Frame %d Middle point is: %u\n", pDepthMD->pMap->pOutput->nFrameID,
-			   middlePoint);
+		/* todo: COPY MATRIX */
+
+		*next_frame = 0;
 	}
 
 	xnFreeDepthMetaData(pDepthMD);
