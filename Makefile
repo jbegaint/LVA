@@ -16,11 +16,11 @@ LVA_OBJXX_DBG := $(LVA_SRCXX:%.cpp=%.dbg.o)
 LVA_OBJ = $(LVA_OBJC) $(LVA_OBJXX)
 
 # check for opencv
-ifneq ($(wildcard /usr/include/opencv/cv.h),)
-	CFLAGS_OPENCV = `pkg-config opencv --cflags`
-	LDFLAGS_OPENCV = `pkg-config opencv --libs`
-	CFLAGS += -DOPENCV
-endif
+#ifneq ($(wildcard /usr/include/opencv/cv.h),)
+#	CFLAGS_OPENCV = `pkg-config opencv --cflags`
+#	LDFLAGS_OPENCV = `pkg-config opencv --libs`
+#	CFLAGS += -DOPENCV
+#endif
 
 all: $(LVA_LIB)
 
