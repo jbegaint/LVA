@@ -8,11 +8,10 @@
 #define THREAD_PAUSED 0
 #define THREAD_QUIT -1
 
-
 typedef struct thread_info_t {
 	matrix_t *matrix;
+	int *thread_status;
 	const char *filepath;
-	int *next_frame;
 } thread_info_t;
 
 

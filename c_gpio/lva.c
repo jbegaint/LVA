@@ -78,17 +78,17 @@ void cleanup(void)
 	iolib_free();
 }
 
-void *set_pins_values(void *arg)
+void *set_matrix_values(void *arg)
 {
 	UNUSED(arg);
 
-	while (1) {
-		set_pattern_from_xn(led_matrix);
+	while (running) {
+		set_pattern_from_xn(led_matrix, running);
 		usleep(100 * 1000);
 	}
 }
 
-void set_led_values(void)
+void set_pins_values(void)
 {
 	int l, row;
 
@@ -122,8 +122,8 @@ int main(void)
 	setup();
 
 	/* start thread */
-	pthread_create(&thread, NULL, set_pins_values, NULL);
-	set_led_values();
+	pthread_create(&thread, NULL, set_matrix_values, NULL);
+	set_pins_values();
 
 	pthread_join(thread, NULL);
 	cleanup();

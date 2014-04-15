@@ -110,7 +110,7 @@ void set_pattern_from_oni(matrix_t *m)
 	static thread_info_t thread_info[1];
 
 	static int first_run = 1;
-	static int next_frame = 1;
+	static int thread_status = 1;
 
 	matrix_t *tmp;
 
@@ -119,7 +119,7 @@ void set_pattern_from_oni(matrix_t *m)
 
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
-		thread_info->next_frame = &next_frame;
+		thread_info->thread_status = &thread_status;
 
 		pthread_create(&conversion_thread, NULL, convert_frames, (void *) &thread_info);
 		first_run = 0;
@@ -130,7 +130,7 @@ void set_pattern_from_oni(matrix_t *m)
 	copy_matrix(m, tmp);
 	free_matrix(tmp);
 
-	next_frame = 1;
+	thread_status = 1;
 }
 
 void set_pattern_from_pgm(matrix_t *m)
@@ -149,14 +149,14 @@ void set_pattern_from_pgm(matrix_t *m)
 	first_run = 0;
 }
 
-void set_pattern_from_xn(matrix_t *m)
+void set_pattern_from_xn(matrix_t *m, int status)
 {
 	static matrix_t *oni_matrix;
 	static pthread_t capture_thread;
 	static thread_info_t thread_info[1];
 
 	static int first_run = 1;
-	static int next_frame = THREAD_RUNNING;
+	static int thread_status = THREAD_RUNNING;
 
 	matrix_t *tmp;
 
@@ -164,7 +164,7 @@ void set_pattern_from_xn(matrix_t *m)
 		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);
 
 		thread_info->matrix = oni_matrix;
-		thread_info->next_frame = &next_frame;
+		thread_info->thread_status = &thread_status;
 
 		/* launch thread with convert_frames */
 		/* todo: catch errors */
@@ -173,13 +173,21 @@ void set_pattern_from_xn(matrix_t *m)
 		first_run = 0;
 	}
 
-	tmp = get_resized_matrix(oni_matrix, N_ROWS, N_COLS);
+	/* check end of capture thread */
+	if (status != 1) {
+		/* wait for capture thread to end */
+		thread_status = THREAD_QUIT;
+		pthread_join(capture_thread, NULL);
+		return;
+	}
 
+	/* matrix operations */
+	tmp = get_resized_matrix(oni_matrix, N_ROWS, N_COLS);
 	center_and_threshold_matrix(tmp);
 	copy_matrix(m, tmp);
 	free_matrix(tmp);
 
-	next_frame = THREAD_RUNNING;
+	thread_status = THREAD_RUNNING;
 }
 
 void set_pattern_full(matrix_t *m) 

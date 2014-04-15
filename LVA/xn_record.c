@@ -34,12 +34,12 @@ void *xngrab_video(void *arg)
 
 	/* get parameters */
 	matrix_t *matrix;
-	int *next_frame;
+	int *thread_status;
 	thread_info_t *thread_info;
 
 	thread_info = (thread_info_t *) arg;
 	matrix = thread_info->matrix;
-	next_frame = thread_info->next_frame;
+	thread_status = thread_info->thread_status;
 
 	nRetVal = xnEnumerationErrorsAllocate(&pErrors);
 	CHECK_RC(nRetVal, "Allocate errors object");
@@ -72,9 +72,9 @@ void *xngrab_video(void *arg)
 
 	pDepthMD = xnAllocateDepthMetaData();
 	
-	while (*(next_frame) != THREAD_QUIT) {
+	while (*(thread_status) != THREAD_QUIT) {
 
-		while (*(next_frame) == THREAD_PAUSED) {
+		while (*(thread_status) == THREAD_PAUSED) {
 			usleep(100);
 		}
 
@@ -97,7 +97,7 @@ void *xngrab_video(void *arg)
 		}
 
 		/* wait */
-		*next_frame = THREAD_PAUSED;
+		*thread_status = THREAD_PAUSED;
 
 	}
 
