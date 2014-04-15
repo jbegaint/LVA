@@ -169,6 +169,31 @@ void threshold_matrix(matrix_t *matrix)
 	}
 }
 
+void center_and_threshold_matrix(matrix_t *matrix)
+{
+	int max, min, val, tmp;
+
+	max = get_matrix_max(matrix);
+	min = get_matrix_min(matrix);
+
+	for (int i = 0; i < matrix->n_rows; ++i) {
+		for (int j = 0; j < matrix->n_cols; ++j) {
+			val  = (matrix->values)[i][j];
+			tmp = (255 * val) / (max - min + 1);
+
+			if (tmp > 100)
+				(matrix->values)[i][j] = 3;
+			else if (tmp > 60)
+				(matrix->values)[i][j] = 2;
+			else if (tmp > 20)
+				(matrix->values)[i][j] = 1;
+			else 
+				(matrix->values)[i][j] = 0;
+		}
+	}
+}
+
+
 /*
  * @brief Get the minimal value in a matrix structure
  *

@@ -23,6 +23,7 @@ matrix_t *get_cropped_matrix(matrix_t *m, int xmin, int ymin, int xmax, int ymax
 
 void reset_matrix(matrix_t *matrix);
 void threshold_matrix(matrix_t *matrix);
+void center_and_threshold_matrix(matrix_t *matrix)
 void center_matrix(matrix_t *matrix);
 void free_matrix(matrix_t *matrix);
 void copy_matrix(matrix_t *dest, matrix_t *src);
