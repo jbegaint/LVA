@@ -48,8 +48,7 @@ void *xngrab_video(void *arg)
 		fn = SAMPLE_XML_PATH_LOCAL;
 	}
 	else {
-		printf("Could not find '%s'. Aborting.\n", SAMPLE_XML_PATH_LOCAL);
-		return XN_STATUS_ERROR;
+		die("Could not find '%s'. Aborting.\n", SAMPLE_XML_PATH_LOCAL);
 	}
 
 	printf("Reading config from: '%s'\n", fn);
@@ -58,14 +57,12 @@ void *xngrab_video(void *arg)
 	if (nRetVal == XN_STATUS_NO_NODE_PRESENT) {
 		XnChar strError[1024];
 		xnEnumerationErrorsToString(pErrors, strError, 1024);
-		printf("%s\n", strError);
+		die("%s\n", strError);
 		xnEnumerationErrorsFree(pErrors);
-		return (nRetVal);
 	}
 	else if (nRetVal != XN_STATUS_OK) {
-		printf("Open failed: %s\n", xnGetStatusString(nRetVal));
+		die("Open failed: %s\n", xnGetStatusString(nRetVal));
 		xnEnumerationErrorsFree(pErrors);
-		return (nRetVal);
 	}
 
 	xnEnumerationErrorsFree(pErrors);

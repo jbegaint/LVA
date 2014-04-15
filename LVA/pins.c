@@ -356,7 +356,7 @@ void unselect_row_by_pin(pin_t *pin)
 	BBBIO_GPIO_low(pin->gpio, pin->id);
 }
 
-void unselect_rows(pin_t *pins, int n_pins)
+void unselect_rows(int n_pins)
 {
 	/* set pins off for each gpio */
 	for (int i = 0; i < N_GPIOS; ++i) {
