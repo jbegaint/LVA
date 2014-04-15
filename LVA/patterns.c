@@ -182,7 +182,7 @@ void set_pattern_from_xn(matrix_t *m)
 
  	/* center_matrix(tmp);	
 	threshold_matrix(tmp);	*/
-	center_matrix(tmp);
+	center_and_threshold_matrix(tmp);
 	
 	copy_matrix(m, tmp);
 
