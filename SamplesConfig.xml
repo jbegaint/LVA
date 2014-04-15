@@ -34,16 +34,13 @@
 				-->
 			</Query>
 			<Configuration>
-				<MapOutputMode xRes="320" yRes="240" FPS="30"/> 
+				<MapOutputMode xRes="160" yRes="120" FPS="30"/> 
 				<!-- Uncomment to override global mirror
 				<Mirror on="false" /> 
 				-->
 			</Configuration>
 		</Node>
 		
-		<!-- Create an image node. If it fails, continue anyway. -->
-		<Node type="Image" stopOnError="false" />
-
 		<!-- Uncomment nodes from here if you need them.
 		<Node type="Audio" />
 		<Node type="User" />

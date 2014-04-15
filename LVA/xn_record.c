@@ -91,9 +91,6 @@ void *xngrab_video(void *arg)
 		xnGetDepthMetaData(hDepth, pDepthMD);
 		pDepthMap = pDepthMD->pData;
 
-		/*printf("Resolution X: %d Y: %d\n", pDepthMD->pMap->Res.X, pDepthMD->pMap->Res.Y);*/
-		/*die(NULL);*/
-
 		/* copy matrix */
 		for (unsigned int i = 0; i < pDepthMD->pMap->Res.Y; ++i) {
 			for (unsigned int j = 0; j < pDepthMD->pMap->Res.X; ++j) {
@@ -101,6 +98,7 @@ void *xngrab_video(void *arg)
 			}
 		}
 
+		/* wait */
 		*next_frame = THREAD_PAUSED;
 
 	}

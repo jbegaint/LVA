@@ -126,8 +126,9 @@ matrix_t *get_resized_matrix(matrix_t *matrix, int n_rows, int n_cols)
 	/* Seuillage des coefficients */
 	for (int i = 0; i < n_rows; ++i) {
 		for (int j =  0; j < n_cols; ++j) {
-			(new_matrix->values)[i][j] = (int) Moyenne(matrix->values, i * dX, j 
-					* dY, dX, dY);
+			/* (new_matrix->values)[i][j] = (int) Moyenne(matrix->values, i * dX, j 
+					* dY, dX, dY); */
+			(new_matrix->values)[i][j] = (matrix->values)[i * dX + dX/2][j * dY + dY/2];
 		}
 	}	
 

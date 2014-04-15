@@ -178,14 +178,12 @@ void set_pattern_from_xn(matrix_t *m)
 	}
 
 	/* todo: clean hard written values */
-	tmp1 = get_cropped_matrix(oni_matrix, 20, 10, PIXELS_X - 20, PIXELS_Y - 10);
-	tmp = get_resized_matrix(tmp1, N_ROWS, N_COLS);
+	tmp = get_resized_matrix(oni_matrix, N_ROWS, N_COLS);
 
 	center_matrix(tmp);	
 	threshold_matrix(tmp);	
 	copy_matrix(m, tmp);
 
-	free_matrix(tmp1);
 	free_matrix(tmp);
 
 	next_frame = THREAD_RUNNING;
