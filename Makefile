@@ -15,13 +15,6 @@ LVA_OBJXX_DBG := $(LVA_SRCXX:%.cpp=%.dbg.o)
 
 LVA_OBJ = $(LVA_OBJC) $(LVA_OBJXX)
 
-# check for opencv
-#ifneq ($(wildcard /usr/include/opencv/cv.h),)
-#	CFLAGS_OPENCV = `pkg-config opencv --cflags`
-#	LDFLAGS_OPENCV = `pkg-config opencv --libs`
-#	CFLAGS += -DOPENCV
-#endif
-
 all: $(LVA_LIB)
 
 lib: $(LVA_LIB)
@@ -44,38 +37,31 @@ options:
 
 # GPIOs demos
 demo_pattern_7x5: $(DEMO_DIR)/demo_pattern_7x5.o 
-	$(CC) $^ $(LDFLAGS) $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
 
 demo_pattern_7x5_ng: $(DEMO_DIR)/demo_pattern_7x5_ng.o 
-	$(CC) $^ $(LDFLAGS) $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
 
 demo_matrix: $(DEMO_DIR)/demo_matrix.o
-	$(CC) $^ $(LDFLAGS) $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
 
 demo_one_row: $(DEMO_DIR)/demo_one_row.o 
-	$(CC) $^ $(LDFLAGS) $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
 
 demo_cycle: $(DEMO_DIR)/demo_cycle.o 
-	$(CC) $^ $(LDFLAGS) $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
-
-# oni recording (via opencv) test
-oni_record_test: $(TESTS_DIR)/oni_record_test.o
-	$(CC) $^ $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) $(LDFLAGS) -o $(BUILD_DIR)/$@ 
-
-$(TESTS_DIR)/oni_record_test.o: $(TESTS_DIR)/oni_record_test.c
-	@$(CC) $< $(CFLAGS) $(CFLAGS_OPENCV) -c -o $@
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
 
 # Simulator
 gleds: GLeds/gleds.o
 	@mkdir -p $(BUILD_DIR)
-	@$(CC) $^  $(LDFLAGS_GTK) $(LDFLAGS_OPENCV) $(LDFLAGS_LVA) $(LDFLAGS) -o $(BUILD_DIR)/$@ 
+	@$(CC) $^  $(LDFLAGS_GTK) $(LDFLAGS_LVA) $(LDFLAGS) -o $(BUILD_DIR)/$@ 
 
 GLeds/gleds.o: GLeds/gleds.c
 	@$(CC) $< $(CFLAGS) $(CFLAGS_GTK) -c -o $@
 
 # Generic
 %.o: %.c
-	@$(CC) $< $(CFLAGS) $(CFLAGS_OPENCV) -c -o $@ 
+	@$(CC) $< $(CFLAGS) -c -o $@ 
 
 %.o: %.cpp
 	@$(CXX) $< $(CFLAGS) -c -o $@ 

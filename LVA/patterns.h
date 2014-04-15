@@ -5,7 +5,6 @@
 
 #define FILE_ONI_TEST "./ONI/jb.oni"
 #define FILE_PGM_TEST "./lena.pgm"
-/*#define FILE_PGM_TEST "./test.pgm"*/
 
 typedef struct pattern_t {
 	int id;
@@ -24,10 +23,6 @@ void set_pattern_from_oni(matrix_t *m);
 void set_pattern_from_xn(matrix_t *m);
 void set_pattern_from_pgm(matrix_t *m);
 void set_pattern_full(matrix_t *m);
-
-#ifdef OPENCV
-void set_pattern_from_xtion(matrix_t *m);
-#endif
 
 void print_patterns(void);
 
