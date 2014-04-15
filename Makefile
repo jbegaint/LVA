@@ -1,7 +1,6 @@
 # LVA global makefile
 
-#	todo: rls/ dbg mode
-#	help : http://stackoverflow.com/a/14665908
+# todo: rls/ dbg mode
 
 include config.mk
 
