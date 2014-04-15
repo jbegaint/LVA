@@ -152,7 +152,7 @@ void set_pattern_from_pgm(matrix_t *m)
 void set_pattern_from_xn(matrix_t *m)
 {
 	static matrix_t *oni_matrix;
-	static pthread_t conversion_thread;
+	static pthread_t capture_thread;
 	static thread_info_t thread_info[1];
 
 	static int first_run = 1;
@@ -168,7 +168,7 @@ void set_pattern_from_xn(matrix_t *m)
 
 		/* launch thread with convert_frames */
 		/* todo: catch errors */
-		pthread_create(&conversion_thread, NULL, xngrab_video, (void *) &thread_info);
+		pthread_create(&capture_thread, NULL, xngrab_video, (void *) &thread_info);
 
 		first_run = 0;
 	}
