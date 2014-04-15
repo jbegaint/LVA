@@ -173,15 +173,10 @@ void set_pattern_from_xn(matrix_t *m)
 		first_run = 0;
 	}
 
-	/* todo: clean hard written values */
 	tmp = get_resized_matrix(oni_matrix, N_ROWS, N_COLS);
 
- 	/* center_matrix(tmp);	
-	threshold_matrix(tmp);	*/
 	center_and_threshold_matrix(tmp);
-	
 	copy_matrix(m, tmp);
-
 	free_matrix(tmp);
 
 	next_frame = THREAD_RUNNING;

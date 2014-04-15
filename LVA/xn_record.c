@@ -78,6 +78,7 @@ void *xngrab_video(void *arg)
 			usleep(100);
 		}
 
+		/* grab image */
 		nRetVal = xnWaitOneUpdateAll(pContext, hDepth);
 
 		if (nRetVal != XN_STATUS_OK) {
