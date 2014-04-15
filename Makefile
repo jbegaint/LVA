@@ -34,6 +34,9 @@ options:
 	@echo "LDFLAGS = ${LDFLAGS}"
 	@echo "LDFLAGS_GTK = ${LDFLAGS_GTK}"
 
+lva: $(DEMO_DIR)/lva.o 
+	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 
+
 # GPIOs demos
 demo_pattern_7x5: $(DEMO_DIR)/demo_pattern_7x5.o 
 	$(CC) $^ $(LDFLAGS) $(LDFLAGS_LVA) -o $(BUILD_DIR)/$@ 

@@ -158,7 +158,7 @@ void set_pattern_from_xn(matrix_t *m)
 	static int first_run = 1;
 	static int next_frame = THREAD_RUNNING;
 
-	matrix_t *tmp, *tmp1;
+	matrix_t *tmp;
 
 	if (first_run) {
 		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);

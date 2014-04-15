@@ -53,5 +53,6 @@ void unselect_rows(int n_pins);
 
 void set_pins_row_on_for_level(matrix_t *m, pin_t *pins, int row_id, int level_id);
 void set_pins_row_off(pin_t *pins, int n_pins);
+void set_pins_off(pin_t *pins_cols, pin_t *pins_rows, int n_cols);
 
 #endif

@@ -395,3 +395,9 @@ void set_pins_row_off(pin_t *pins, int n_pins)
 		set_pins_row_off_by_gpio(i, ctrls[i]);
 	}
 }
+
+void set_pins_off(pin_t *pins_cols, pin_t *pins_rows, int n_cols)
+{
+	set_pins_row_off(pins_cols, n_cols);
+	unselect_rows(pins_rows);
+}

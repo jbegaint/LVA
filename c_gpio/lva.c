@@ -12,26 +12,38 @@
 #include "pins.h"
 #include "utils.h"
 
-static int running;
+static int running = 1;
 
 static const char* pins_rows_names[] =
 {
-
-}
+	"P8_36",
+	"P8_37",
+	"P8_38",
+	"P8_39",
+	"P8_40",
+	"P8_41",
+	"P8_42"
+};
 
 static const char* pins_cols_names[] =
 {
-
-}
+	"P8_11", 
+	"P8_12", 
+	"P8_15", 
+	"P8_16", 
+	"P8_26"
+};
 
 static matrix_t *led_matrix;
-static const pin_t *pins_rows;
-static const pin_t *pins_cols;
+static pin_t *pins_rows;
+static pin_t *pins_cols;
 
 void handler_sigint(int sig)
 {
+	UNUSED(sig);
+
 	running = 0;
-	printf("Exiting...\n")
+	printf("Exiting...\n");
 }
 
 void setup(void)
@@ -41,16 +53,15 @@ void setup(void)
 	enable_gpios();
 
 	/* get pins from pins names */
-	pins_rows = get_pins_by_names(pins_rows_names);
-	pins_cols = get_pins_by_names(pins_cols_names);
+	pins_rows = get_pins_by_names(pins_rows_names, ARRAY_SIZE(pins_rows_names));
+	pins_cols = get_pins_by_names(pins_cols_names, ARRAY_SIZE(pins_cols_names));
 
 	/* set direction as output */
 	set_dir_pins_output(pins_rows, N_ROWS);
 	set_dir_pins_output(pins_cols, N_COLS);
 
 	/* set all pins off */
-	set_pins_row_off(pins_cols, N_COLS);
-	unselect_rows(pins_rows, N_ROWS);
+	set_pins_off(pins_cols, pins_rows, N_COLS);
 
 	/* allocate matrix */
 	led_matrix = init_matrix(N_ROWS, N_COLS);
@@ -60,8 +71,7 @@ void setup(void)
 void cleanup(void)
 {
 	/* set all pins off */
-	set_pins_row_off(pins_cols, N_COLS);
-	unselect_rows(pins_rows, N_ROWS);
+	set_pins_off(pins_cols, pins_rows, N_COLS);
 
 	/* frees */
 	free_matrix(led_matrix);
@@ -73,7 +83,7 @@ void *set_pins_values(void *arg)
 	UNUSED(arg);
 
 	while (1) {
-		set_pattern_from_xtion(led_matrix);
+		set_pattern_from_xn(led_matrix);
 		usleep(100 * 1000);
 	}
 }
@@ -93,7 +103,7 @@ void set_led_values(void)
 			for (l = N_LEVELS - 2; l >= 0 ; --l) {
 	
 				set_pins_row_off(pins_cols, N_COLS);
-				set_pins_row_on_for_level(LED_MATRIX, pins_cols, row, l);
+				set_pins_row_on_for_level(led_matrix, pins_cols, row, l);
 	
 				level_sleep(l);
 			}
