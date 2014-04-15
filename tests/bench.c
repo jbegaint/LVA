@@ -29,7 +29,7 @@ double time_spent(clock_t start, clock_t end)
 }
 
 /* video bench, takes numbers of laps as argument */
-void bench_video(void)
+double bench_video(void)
 {
 	/* openni related stuff */
 	XnStatus nRetVal = XN_STATUS_OK;
@@ -119,9 +119,10 @@ void bench_video(void)
 	xnProductionNodeRelease(hScriptNode);
 	xnContextRelease(pContext);
 
+	return avg_time_spent;
 }
 
-void bench_mat_operations(void)
+double bench_mat_operations(void)
 {
 	clock_t start, end;
 	matrix_t *tmp_mat, *res;
@@ -151,18 +152,25 @@ void bench_mat_operations(void)
 	}
 
 	printf("\naverage time: %lf us (matrixes operations)\n", avg_time_spent / N_LAPS * 1000 * 1000);
-
+	return avg_time_spent;
 }
 
 int main(int argc, char **argv)
 {
+	double avg_video, avg_mat;
+
 	/* arg parsing */
-	if (argc != 2) {
+	if (argc > 2) {
 		die("error: missing argument or bad usage: %s [n_laps] \n", argv[0]);
 	}
-
-	N_LAPS = atoi(argv[1]);
-
+	else if (argc == 2) {
+		N_LAPS = atoi(argv[1]);
+	}
+	else {
+		/* default value */
+		N_LAPS = 10;
+	}
+	
 	/* todo: fix mem leak */
 	matrixes = (matrix_t **) calloc(N_LAPS, sizeof(matrix_t *));
 
@@ -172,16 +180,20 @@ int main(int argc, char **argv)
 	}
 
 	println("=== Depth data capture ===");
-	/*bench_video();*/
+	/* avg_video = bench_video();*/
 
 	println("\n=== Matrix operations ===");
-	bench_mat_operations();
+	avg_mat = bench_mat_operations();
 
 	/* free matrixes */
 	for (int c = 0; c < N_LAPS; ++c) {
 		free_matrix(matrixes[c]);
 	}
 	free(matrixes);
+
+	println("\n=== Resume ===");
+	printf("average time: %lf us (video operations)\n", avg_video / N_LAPS * 1000 * 1000);
+	printf("average time: %lf us (matrixes operations)\n", avg_mat / N_LAPS * 1000 * 1000);
 
 	return 0;
 }
