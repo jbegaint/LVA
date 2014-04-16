@@ -92,9 +92,6 @@ double bench_video(void)
 		}
 
 		xnGetDepthMetaData(hDepth, pDepthMD);
-
-		end = clock();
-
 		pDepthMap = pDepthMD->pData;
 
 		/* copy tmp_matrix */
@@ -104,6 +101,7 @@ double bench_video(void)
 			}
 		}
 
+		end = clock();
 		tmp = time_spent(start, end);
 		printf("lap %d, time spent: %lf\n", c, tmp);
 		avg_time_spent += tmp;
@@ -182,7 +180,7 @@ int main(int argc, char **argv)
 	}
 
 	println("=== Depth data capture ===");
-	avg_video = bench_video();
+	/* avg_video = bench_video();*/
 
 	println("\n=== Matrix operations ===");
 	avg_mat = bench_mat_operations();

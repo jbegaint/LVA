@@ -13,7 +13,7 @@ LVA_LIB = liblva.so
 
 INCS = -I$(LVA_DIR) -I/usr/include/ni
 
-CFLAGS = -Wall -Wextra -Wshadow -pedantic -std=gnu99 $(INCS) -g -fPIC
+CFLAGS = -Wall -Wextra -pedantic -Wshadow -std=gnu99 $(INCS) -g -fPIC
 CFLAGS_GTK =`pkg-config gtk+-3.0 --cflags` 
 
 # CFLAGS_RLS = $(CFLAGS) -O3

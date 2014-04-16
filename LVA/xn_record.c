@@ -97,8 +97,7 @@ void *xngrab_video(void *arg)
 		}
 
 		/* wait */
-		if (*thread_status != THREAD_QUIT) 
-			*thread_status = THREAD_PAUSED;
+		*thread_status = THREAD_PAUSED;
 
 	}
 

@@ -181,11 +181,11 @@ void center_and_threshold_matrix(matrix_t *matrix)
 			val  = (matrix->values)[i][j];
 			tmp = (255 * val) / (max - min + 1);
 
-			if (tmp > 100)
+			if (tmp > 192)
 				(matrix->values)[i][j] = 3;
-			else if (tmp > 60)
+			else if (tmp > 128)
 				(matrix->values)[i][j] = 2;
-			else if (tmp > 20)
+			else if (tmp > 64)
 				(matrix->values)[i][j] = 1;
 			else 
 				(matrix->values)[i][j] = 0;

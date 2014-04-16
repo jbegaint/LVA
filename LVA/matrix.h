@@ -1,15 +1,6 @@
 #ifndef _MATRIX_H_
 #define _MATRIX_H_
 
-#define PIXELS_X 160
-#define PIXELS_Y 120
-
-#define N_ROWS 14
-#define N_COLS 25
-#define N_GPIOS 4
-
-#define N_LEVELS 4
-
 typedef struct matrix_t {
 	int **values;
 	int n_rows;

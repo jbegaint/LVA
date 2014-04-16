@@ -9,12 +9,12 @@
 /* 
 	Credits: Phelma 1st Year nano-projet
 	see here : http://tdinfo.phelma.grenoble-inp.fr/1Apet/td2.html
-	(slighlty modified to be used with matrix structure)
+	(slighlty modified to be used with matrix structure and P2 pgm)
 */
 matrix_t *read_pgm_file(char *fileName)
 {
 	FILE *filein;
-	filein = fopen(fileName, "rb");
+	filein = fopen(fileName, "r");
 
 	int n_cols, n_rows;
 
@@ -26,18 +26,8 @@ matrix_t *read_pgm_file(char *fileName)
 
 	char line[256];
 
-	/*lecture de la première ligne */
-	if (fgets(line, sizeof(line), filein) != NULL) {
-		if (strcmp(line, "P5\n") != 0) {
-			fprintf(stderr, "Erreur pas un fichier P5");
-			return NULL;
-		}
-	}
-
-	/*affichage du commentaire */
-	if (fgets(line, sizeof(line), filein) != NULL) {
-		printf("Commmentaire: %s", line);
-	}
+	/* read first 3 lines*/
+	fgets(line, sizeof(line), filein);
 
 	/*Pour récupérer n_cols et n_rows */
 	if (fgets(line, sizeof(line), filein) != NULL) {
@@ -55,27 +45,16 @@ matrix_t *read_pgm_file(char *fileName)
 		return NULL;
 	}
 
-	/*on vérifie si la valeur max dépasse pas 255 */
-	if (fgets(line, sizeof(line), filein) != NULL) {
-		int len = atoi(line);
-		if (len > 255) {
-			fprintf(stderr,
-				"Erreur: sur la valeur max d'un pixel\n");
-		}
-	} else {
-		return NULL;
-	}
-
 	matrix_t *img;
 	img = init_matrix(n_rows, n_cols);
 
+	int tmp;
 
-	int nr;
-	nr = fread(*(img->values), sizeof(unsigned char),
-		   img->n_cols * img->n_rows, filein);
-	if (nr != img->n_cols * img->n_rows) {
-		fprintf(stderr, "Erreur : erreur de lecture du fichier\n");
-		return NULL;
+	for (int row = 0; row < n_rows; ++row) {
+		for (int col = 0; col < n_cols; ++col) {
+			fscanf(filein,"%d", &tmp);
+			(img->values)[row][col] = tmp;
+		}
 	}
 
 	fclose(filein);

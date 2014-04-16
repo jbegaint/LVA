@@ -110,12 +110,12 @@ void set_pattern_from_oni(matrix_t *m)
 	static thread_info_t thread_info[1];
 
 	static int first_run = 1;
-	static int thread_status = 1;
+	static int thread_status = THREAD_RUNNING;
 
 	matrix_t *tmp;
 
 	if (first_run) {
-		oni_matrix = init_matrix(240, 320);
+		oni_matrix = init_matrix(ONI_PIXELS_Y, ONI_PIXELS_X);
 
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
@@ -142,9 +142,9 @@ void set_pattern_from_pgm(matrix_t *m)
 		return;
 
 	pgm_matrix = read_pgm_file(FILE_PGM_TEST);
-	tmp = get_led_matrix(pgm_matrix);
+	tmp = get_resized_matrix(pgm_matrix, N_ROWS, N_COLS);
+	center_and_threshold_matrix(tmp);
 	copy_matrix(m, tmp);
-	free_matrix(tmp);
 
 	first_run = 0;
 }

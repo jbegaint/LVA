@@ -14,53 +14,24 @@
 
 static int running = 1;
 
-/* 14 rows */
 static const char* pins_rows_names[] =
 {
-	"P8_39",
-	"P8_41",
-	"P8_43",
-	"P8_45",
-	"P8_46",
-	"P8_44",
-	"P8_42",
-	"P8_40",
-	"P8_38",
 	"P8_36",
-	"P8_32",
-	"P8_30",
-	"P8_28",
-	"P8_26",
+	"P8_37",
+	"P8_38",
+	"P8_39",
+	"P8_40",
+	"P8_41",
+	"P8_42"
 };
 
-/* 25 columns */
 static const char* pins_cols_names[] =
 {
-	"P8_18", 
-	"P8_16", 
-	"P8_14", 
+	"P8_11", 
 	"P8_12", 
-	"P8_10",
-	"P8_08",
-	"P8_37",
-	"P8_33",
-	"P8_31",
-	"P8_29",
-	"P8_27",
-	"P8_19",
-	"P8_17",
-	"P8_15",
-	"P8_13",
-	"P8_11",
-	"P8_09",
-	"P8_07",
-	"P9_26",
-	"P9_11",
-	"P9_13",
-	"P9_23",
-	"P9_24",
-	"P9_14",
-	"P9_12",
+	"P8_15", 
+	"P8_16", 
+	"P8_26"
 };
 
 static matrix_t *led_matrix;
@@ -111,15 +82,10 @@ void *set_matrix_values(void *arg)
 {
 	UNUSED(arg);
 
-	while (1) {
+	while (running) {
 		set_pattern_from_xn(led_matrix, running);
 		usleep(100 * 1000);
-
-		if (!running)
-			break;
 	}
-
-	return NULL;
 }
 
 void set_pins_values(void)
