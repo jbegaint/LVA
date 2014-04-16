@@ -146,6 +146,8 @@ void set_pattern_from_pgm(matrix_t *m)
 	center_and_threshold_matrix(tmp);
 	copy_matrix(m, tmp);
 
+	free_matrix(tmp);
+
 	first_run = 0;
 }
 
