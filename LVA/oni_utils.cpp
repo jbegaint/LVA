@@ -71,7 +71,7 @@ void *convert_frames(void *arg)
 
 		/* pause conversion */
 		*thread_status = THREAD_PAUSED;
-
+		*thread_status = 0;
 	}
  
 	// stop

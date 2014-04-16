@@ -290,7 +290,7 @@ void print_pin(pin_t *pin)
 /**
  * @brief Display an array of pin structures
  * 
- * @param pins the pin structures array
+ * @param pins a pin_t structure array
  * @param n_pins the number of pins in the array
 */
 void print_pins(pin_t **pins, int n_pins)
@@ -301,21 +301,45 @@ void print_pins(pin_t **pins, int n_pins)
 	}
 }
 
+/**
+ * @brief Switch row pins on by gpio id and pins controls. Pins must be on the same gpio
+ * 
+ * @param gpio the id of the gpio to use
+ * @param pins pins to set on (32bits control)
+*/
 void set_pins_row_on_by_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_low(gpio, pins);
 }
 
+/**
+ * @brief Switch row pins off by gpio id and pins controls. Pins must be on the same gpio
+ * 
+ * @param gpio the id of the gpio to use
+ * @param pins pins to set on (32bits control)
+*/
 void set_pins_row_off_by_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_high(gpio, pins);
 }
 
+/**
+ * @brief Select a row by gpio id and pins controls. (ie: allow all pins on the row to be set)
+ * 
+ * @param gpio the id of the gpio to use
+ * @param pins pins to set on (32bits control)
+*/
 void select_row_by_id_and_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_high(gpio, pins);
 }
 
+/**
+ * @brief Unselect a row by gpio id and pins controls. (ie: forbid all pins on the row to be set)
+ * 
+ * @param gpio the id of the gpio to use
+ * @param pins pins to set on (32bits control)
+*/
 void unselect_row_by_id_and_gpio(int gpio, int pins)
 {
 	BBBIO_GPIO_low(gpio, pins);
@@ -323,6 +347,9 @@ void unselect_row_by_id_and_gpio(int gpio, int pins)
 
 /* Generic */
 
+/**
+ * @brief Enable all gpios (0 to 3) to be used. 
+*/
 void enable_gpios(void)
 {
 	for (int i = 0; i < N_GPIOS; ++i) {
@@ -330,6 +357,12 @@ void enable_gpios(void)
 	}
 }
 
+/**
+ * @brief Set pin direction: declare pins as output
+ * 
+ * @param pins a pin_t structure array
+ * @param n_pins number of element in the array
+*/
 void set_dir_pins_output(pin_t *pins, int n_pins)
 {
 	int ctrls[4] = {0, 0, 0, 0};
@@ -347,17 +380,32 @@ void set_dir_pins_output(pin_t *pins, int n_pins)
 	}
 }
 
+/**
+ * @brief Select a row by a pin_t structure
+ * 
+ * @param pin the pin structure
+*/
 void select_row_by_pin(pin_t *pin)
 {
 	BBBIO_GPIO_high(pin->gpio, pin->id);
 }
 
+/**
+ * @brief Unselect a row by a pin_t structure
+ * 
+ * @param pin the pin structure
+*/
 void unselect_row_by_pin(pin_t *pin)
 {
 	BBBIO_GPIO_low(pin->gpio, pin->id);
 }
 
-void unselect_rows(int n_pins)
+/**
+ * @brief Unselect all rows
+ * 
+ * @param n_pins the pin structure
+*/
+void unselect_rows(void)
 {
 	/* set pins off for each gpio */
 	for (int i = 0; i < N_GPIOS; ++i) {
@@ -365,6 +413,16 @@ void unselect_rows(int n_pins)
 	}
 }
 
+
+/**
+ * @brief Set pins on according to a specifice level. 
+ * 	ie: set pin on for the given pins, if the pins levels stored in the matrix 
+ * 	are greater than the given level.
+ * @param m the matrix_t structure
+ * @param pins the pin_t structure
+ * @param row_id the row id
+ * @param level_id the level value
+*/
 void set_pins_row_on_for_level(matrix_t *m, pin_t *pins, int row_id, int level_id)
 {
 	int ctrls[4] = {0, 0, 0, 0};
@@ -382,6 +440,12 @@ void set_pins_row_on_for_level(matrix_t *m, pin_t *pins, int row_id, int level_i
 	}
 }
 
+/**
+ * @brief Set row pins off.
+ *
+ * @param pins the pin_t structure array
+ * @param n_pins the array size
+*/
 void set_pins_row_off(pin_t *pins, int n_pins)
 {
 	int ctrls[4] = {0, 0, 0, 0};
@@ -397,8 +461,17 @@ void set_pins_row_off(pin_t *pins, int n_pins)
 	}
 }
 
+/**
+ * @brief Set all pins off.
+ * 	(we do no need the number of rows, 
+ * 	as we deactivate all rows by unselecting all their pins with a mask 0xFFFFFFFF)
+ *
+ * @param pins_cols the pin_t structure array for the columns
+ * @param pins_rows the pin_t structure array for the rows
+ * @param n_cols number of columns
+*/
 void set_pins_off(pin_t *pins_cols, pin_t *pins_rows, int n_cols)
 {
 	set_pins_row_off(pins_cols, n_cols);
-	unselect_rows(pins_rows);
+	unselect_rows();
 }

@@ -49,7 +49,7 @@ void set_dir_pins_output(pin_t *pins, int n_pin);
 
 void select_row_by_pin(pin_t *pins);
 void unselect_row_by_pin(pin_t *pins);
-void unselect_rows(int n_pins);
+void unselect_rows(void);
 
 void set_pins_row_on_for_level(matrix_t *m, pin_t *pins, int row_id, int level_id);
 void set_pins_row_off(pin_t *pins, int n_pins);

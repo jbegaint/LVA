@@ -115,8 +115,7 @@ void setup(void)
 	set_dir_pins_output(pins_cols, N_COLS);
 
 	/* set all pins to low */
-	set_pins_row_off(pins_cols, N_COLS);
-	unselect_rows(pins_rows);
+	set_pins_off(pins_cols, pins_rows, N_COLS);
 
 	/* allocate matrix */
 	LED_MATRIX = init_matrix(N_ROWS, N_COLS);
@@ -125,8 +124,7 @@ void setup(void)
 void cleanup(void)
 {
 	/* set all pins to low */
-	set_pins_row_off(pins_cols, N_COLS);
-	unselect_rows(pins_rows);
+	set_pins_off(pins_cols, pins_rows, N_COLS);
 
 	free_matrix(LED_MATRIX);
 	iolib_free();
