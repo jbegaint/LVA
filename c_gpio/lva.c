@@ -29,9 +29,9 @@ static const char* pins_cols_names[] =
 {
 	"P8_11", 
 	"P8_12", 
-	"P8_15", 
-	"P8_16", 
-	"P8_26"
+	"P8_13", 
+	"P8_14", 
+	"P8_15"
 };
 
 static matrix_t *led_matrix;
