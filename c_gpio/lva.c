@@ -54,10 +54,10 @@ static const char* pins_cols_names[] =
 	"P8_11",
 	"P8_09",
 	"P8_07",
-	"P9_25",
-	"P9_23",
-	"P9_13",
+	"P9_26",
 	"P9_11",
+	"P9_13",
+	"P9_23",
 	"P9_24",
 	"P9_14",
 	"P9_12",
@@ -111,10 +111,15 @@ void *set_matrix_values(void *arg)
 {
 	UNUSED(arg);
 
-	while (running) {
+	while (1) {
 		set_pattern_from_xn(led_matrix, running);
 		usleep(100 * 1000);
+
+		if (!running)
+			break;
 	}
+
+	return NULL;
 }
 
 void set_pins_values(void)

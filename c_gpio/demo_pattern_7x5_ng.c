@@ -58,12 +58,12 @@ static const char* pins_cols_names[] =
 	"P8_09",
 	"P8_07",
 	"P9_25",
+	"P9_12",
+	"P9_14",
+	"P9_24",
 	"P9_23",
 	"P9_13",
 	"P9_11",
-	"P9_24",
-	"P9_14",
-	"P9_12",
 };
 
 static const pin_t *pins_rows; 

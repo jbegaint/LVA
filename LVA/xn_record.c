@@ -97,11 +97,10 @@ void *xngrab_video(void *arg)
 		}
 
 		/* wait */
-		*thread_status = THREAD_PAUSED;
+		if (*thread_status != THREAD_QUIT) 
+			*thread_status = THREAD_PAUSED;
 
 	}
-
-	fprintf(stderr, "closing video capture\n");
 
 	xnFreeDepthMetaData(pDepthMD);
 
