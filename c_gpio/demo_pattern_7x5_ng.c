@@ -18,22 +18,22 @@ extern pattern_t patterns[];
 static int running = 1;
 
 static const char* pins_rows_names[] = {"P8_36", "P8_37", "P8_38", "P8_39", "P8_40", "P8_41", "P8_42"};
-static const char* pins_cols_names[] = {"P8_11", "P8_12", "P8_15", "P8_16", "P8_26"};
+static const char* pins_cols_names[] = {"P8_11", "P8_12", "P8_13", "P8_14", "P8_15"};
 
 static const pin_t *pins_rows; 
 static const pin_t *pins_cols; 
 
 static matrix_t *LED_MATRIX;
 
-void (*ptrn_func_ptr)(matrix_t*);
+void (*ptrn_func_ptr)();
 
 void *set_pins_values(void *arg)
 {
 	UNUSED(arg);
 	
-	while (1) {
+	while (running) {
 		/* call pattern */
-		ptrn_func_ptr(LED_MATRIX);
+		ptrn_func_ptr(LED_MATRIX, running);
 		/* sleep 100 ms */
 		usleep(100 * 1000);
 	}
