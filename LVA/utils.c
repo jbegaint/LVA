@@ -4,6 +4,11 @@
 
 #include "matrix.h"
 
+/**
+ * @brief exit program with failure
+ *
+ * @param err errors to print, followed by format
+ */
 void die(char *err, ...)
 {
 	va_list e;
@@ -15,6 +20,12 @@ void die(char *err, ...)
 	exit(EXIT_FAILURE);
 }
 
+
+/**
+ * @brief display the 32 bits for an int
+ *
+ * @param val the int
+ */
 void print_bits(int val)
 {
 	for (int i = 31; i >= 0; --i)

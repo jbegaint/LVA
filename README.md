@@ -11,6 +11,8 @@ todo:
 * ~~threads (playing oni)~~
 * ~~pthread_join~~
 * Makefile (debug/ release)
+* doxygen
+* parrallel matrix and video operations 
 
 Help:
 * https://stackoverflow.com/questions/3673226/c-how-to-print-time-in-format-20090810181754-811
