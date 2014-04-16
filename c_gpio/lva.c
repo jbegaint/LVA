@@ -4,6 +4,7 @@
 #include <signal.h>
 #include <time.h>
 #include <unistd.h>
+#include <libconfig.h>
 
 #include "../BBBIOlib/BBBio_lib/BBBiolib.h"
 
@@ -14,54 +15,8 @@
 
 static int running = 1;
 
-/* 14 rows */
-static const char* pins_rows_names[] =
-{
-	"P8_39",
-	"P8_41",
-	"P8_43",
-	"P8_45",
-	"P8_46",
-	"P8_44",
-	"P8_42",
-	"P8_40",
-	"P8_38",
-	"P8_36",
-	"P8_32",
-	"P8_30",
-	"P8_28",
-	"P8_26",
-};
-
-/* 25 columns */
-static const char* pins_cols_names[] =
-{
-	"P8_18", 
-	"P8_16", 
-	"P8_14", 
-	"P8_12", 
-	"P8_10",
-	"P8_08",
-	"P8_37",
-	"P8_33",
-	"P8_31",
-	"P8_29",
-	"P8_27",
-	"P8_19",
-	"P8_17",
-	"P8_15",
-	"P8_13",
-	"P8_11",
-	"P8_09",
-	"P8_07",
-	"P9_25",
-	"P9_12",
-	"P9_14",
-	"P9_24",
-	"P9_23",
-	"P9_13",
-	"P9_11",
-};
+static const char **pins_rows_names;
+static const char **pins_cols_names;
 
 static matrix_t *led_matrix;
 static pin_t *pins_rows;
@@ -75,11 +30,69 @@ void handler_sigint(int sig)
 	printf("Exiting...\n");
 }
 
+void parse_config(void)
+{
+	config_t cf[1];
+	const config_setting_t *row, *col;
+
+	const char *name;
+	int x, y;
+	int n_cols, n_rows;
+
+	config_init(cf);
+
+	if (!config_read_file(cf, CFG_FILE)) {
+		fprintf(stderr, "%s:%d - %s\n",
+			config_error_file(cf),
+			config_error_line(cf),
+			config_error_text(cf));
+		config_destroy(cf);
+	 
+		die("error: can't open config file %s\n", CFG_FILE);
+	}
+
+	if (config_lookup_string(cf, "name", &name))
+		printf("name: %s\n", name);
+
+	if (config_lookup_int(cf, "pixels.x", &x))
+		printf("pixels x: %d\n", x);
+
+	if (config_lookup_int(cf, "pixels.y", &y))
+		printf("pixels y: %d\n", y);
+
+	row = config_lookup(cf, "pins.row");
+	col = config_lookup(cf, "pins.col");
+	n_rows = config_setting_length(row);
+	n_cols = config_setting_length(col);
+
+	pins_cols_names = calloc(n_cols, sizeof(char *));
+	pins_rows_names = calloc(n_rows, sizeof(char *));
+
+	printf("n_rows: %d\n", n_rows);
+	int i;
+	for (i = 0; i < n_rows; ++i) {
+		printf("\t#%d. %s\n", i + 1, config_setting_get_string_elem(row, i));
+		pins_rows_names[i] = config_setting_get_string_elem(row, i);
+	}
+
+	printf("n_cols: %d\n", n_cols);
+	for (i = 0; i < n_cols; ++i) {
+		printf("\t#%d. %s\n", i + 1, config_setting_get_string_elem(col, i));
+		pins_cols_names[i] = config_setting_get_string_elem(col, i);
+	}
+
+	config_destroy(cf);
+}
+
 void setup(void)
 {
+	/* parse config file */
+	parse_config();
+	
 	/* init gpios */
 	iolib_init();
 	enable_gpios();
+
 
 	/* get pins from pins names */
 	pins_rows = get_pins_by_names(pins_rows_names, ARRAY_SIZE(pins_rows_names));
@@ -102,9 +115,16 @@ void cleanup(void)
 	/* set all pins off */
 	set_pins_off(pins_cols, pins_rows, N_COLS);
 
-	/* frees */
+	/* free pins arrays */
+	free(pins_cols_names);
+	free(pins_rows_names);
+	free(pins_cols);
+	free(pins_rows);
+
+	/* remaining frees */
 	free_matrix(led_matrix);
 	iolib_free();
+
 }
 
 void *set_matrix_values(void *arg)
