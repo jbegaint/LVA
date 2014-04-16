@@ -4,8 +4,8 @@
 #define PIXELS_X 160
 #define PIXELS_Y 120
 
-#define N_ROWS 7
-#define N_COLS 5
+#define N_ROWS 14
+#define N_COLS 25
 #define N_GPIOS 4
 
 #define N_LEVELS 4
