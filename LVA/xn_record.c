@@ -101,6 +101,8 @@ void *xngrab_video(void *arg)
 
 	}
 
+	fprintf(stderr, "closing video capture\n");
+
 	xnFreeDepthMetaData(pDepthMD);
 
 	xnProductionNodeRelease(hDepth);
