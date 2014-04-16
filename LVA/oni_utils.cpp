@@ -21,12 +21,12 @@ void *convert_frames(void *arg)
 	const char *filepath;
 	matrix_t *matrix;
 	thread_info_t *thread_info;
-	int *next_frame;
+	int *thread_status;
 
 	thread_info = (thread_info_t *) arg;
 	matrix = thread_info->matrix;
 	filepath = thread_info->filepath;
-	next_frame = thread_info->next_frame;
+	thread_status = thread_info->thread_status;
 
 	// Initial OpenNI Context
 	xn::Context xContext;
@@ -52,7 +52,7 @@ void *convert_frames(void *arg)
 	for (unsigned int i = 0; i < uFrames; ++i) {
 
 		/* waiting for the worms to come... */
-		while (*(next_frame) != 1) {
+		while (*(thread_status) != 1) {
 			usleep(1000);
 		}
 
@@ -70,7 +70,7 @@ void *convert_frames(void *arg)
 		}
 
 		/* pause conversion */
-		*next_frame = 0;
+		*thread_status = 0;
 
 	}
  
