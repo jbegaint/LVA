@@ -8,6 +8,9 @@
 #define THREAD_PAUSED 0
 #define THREAD_QUIT -1
 
+#define FILE_ONI_TEST "./ONI/jb.oni"
+#define FILE_PGM_TEST "./lena.pgm"
+
 typedef struct thread_info_t {
 	matrix_t *matrix;
 	int *thread_status;

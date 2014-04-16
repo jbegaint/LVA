@@ -3,9 +3,6 @@
 
 #include "matrix.h"
 
-#define FILE_ONI_TEST "../ONI/jb.oni"
-#define FILE_PGM_TEST "../lena.pgm"
-
 typedef struct pattern_t {
 	int id;
 	const char *desc;

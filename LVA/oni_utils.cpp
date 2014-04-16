@@ -52,7 +52,7 @@ void *convert_frames(void *arg)
 	for (unsigned int i = 0; i < uFrames; ++i) {
 
 		/* waiting for the worms to come... */
-		while (*(thread_status) != 1) {
+		while (*(thread_status) == THREAD_PAUSED) {
 			usleep(1000);
 		}
 
@@ -70,7 +70,7 @@ void *convert_frames(void *arg)
 		}
 
 		/* pause conversion */
-		*thread_status = 0;
+		*thread_status = THREAD_PAUSED;
 
 	}
  

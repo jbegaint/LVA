@@ -115,7 +115,7 @@ void set_pattern_from_oni(matrix_t *m)
 	matrix_t *tmp;
 
 	if (first_run) {
-		oni_matrix = init_matrix(480, 640);
+		oni_matrix = init_matrix(240, 320);
 
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
@@ -130,7 +130,7 @@ void set_pattern_from_oni(matrix_t *m)
 	copy_matrix(m, tmp);
 	free_matrix(tmp);
 
-	thread_status = 1;
+	thread_status = THREAD_RUNNING;
 }
 
 void set_pattern_from_pgm(matrix_t *m)
