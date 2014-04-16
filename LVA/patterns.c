@@ -115,7 +115,7 @@ void set_pattern_from_oni(matrix_t *m)
 	matrix_t *tmp;
 
 	if (first_run) {
-		oni_matrix = init_matrix(PIXELS_Y, PIXELS_X);
+		oni_matrix = init_matrix(480, 640);
 
 		thread_info->matrix = oni_matrix;
 		thread_info->filepath = FILE_ONI_TEST;
