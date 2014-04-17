@@ -91,7 +91,7 @@ void *xngrab_video(void *arg)
 
 		/* copy matrix */
 		for (unsigned int i = 0; i < pDepthMD->pMap->Res.Y; ++i) {
-			for (unsigned int j = 0; j < pDepthMD->pMap->Res.X; ++j) {
+			for (unsigned int j = pDepthMap->pMap->Res.X - 1; j >= 0; --j) {
 				(matrix->values)[i][j] = pDepthMap[i * pDepthMD->pMap->Res.X + j];
 			}
 		}
