@@ -91,8 +91,8 @@ void setup(void)
 	parse_config();
 
 	/* get pins from pins names */
-	pins_rows = get_pins_by_names(pins_rows_names, ARRAY_SIZE(pins_rows_names));
-	pins_cols = get_pins_by_names(pins_cols_names, ARRAY_SIZE(pins_cols_names));
+	pins_rows = get_pins_by_names(pins_rows_names, N_ROWS); 
+	pins_cols = get_pins_by_names(pins_cols_names, N_COLS);
 	
 	/* init gpios */
 	iolib_init();
