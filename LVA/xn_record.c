@@ -29,7 +29,6 @@ void *xngrab_video(void *arg)
 	XnNodeHandle hDepth;
 	XnDepthMetaData* pDepthMD;
 	const XnDepthPixel* pDepthMap;
-	XnDepthPixel middlePoint;
 	const char *fn = NULL;
 
 	/* get parameters */
@@ -78,6 +77,7 @@ void *xngrab_video(void *arg)
 			usleep(100);
 		}
 
+
 		/* grab image */
 		nRetVal = xnWaitOneUpdateAll(pContext, hDepth);
 
@@ -90,9 +90,9 @@ void *xngrab_video(void *arg)
 		pDepthMap = pDepthMD->pData;
 
 		/* copy matrix */
-		for (unsigned int i = 0; i < pDepthMD->pMap->Res.Y; ++i) {
-			for (unsigned int j = pDepthMap->pMap->Res.X - 1; j >= 0; --j) {
-				(matrix->values)[i][j] = pDepthMap[i * pDepthMD->pMap->Res.X + j];
+		for (unsigned int i = 0; i <  pDepthMD->pMap->Res.Y; ++i) {
+			for (unsigned int j = 0; j < pDepthMD->pMap->Res.X; ++j) {
+				(matrix->values)[i][pDepthMD->pMap->Res.X - j -1] = pDepthMap[i * pDepthMD->pMap->Res.X + j];
 			}
 		}
 

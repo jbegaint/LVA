@@ -55,7 +55,7 @@ gboolean set_matrix_values(gpointer user_data)
 
 	for (ptrn = patterns; ptrn->desc; ptrn++) {
 		if (strcmp(ptrn->desc, mode) == 0) {
-			ptrn->func_ptr(LED_MATRIX);
+			ptrn->func_ptr(LED_MATRIX, running);
 		}
 	}
 

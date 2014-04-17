@@ -6,7 +6,7 @@
 typedef struct pattern_t {
 	int id;
 	const char *desc;
-	void (*func_ptr)(matrix_t *);
+	void (*func_ptr)();
 } pattern_t;
 
 void matrix_toggle_pin(matrix_t *m, int i, int j);
