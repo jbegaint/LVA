@@ -99,7 +99,7 @@ void set_pattern_col_by_col(matrix_t *m)
 	}
 
 	col_id++;
-	col_id = col_id % m->n_cols;
+	col_id = (col_id + 1) % m->n_cols;
 }
 
 void set_pattern_from_oni(matrix_t *m)
@@ -196,7 +196,7 @@ void set_pattern_full(matrix_t *m)
 {
 	for (int i = 0; i < m->n_rows; ++i) {
 		for (int j = 0; j < m->n_cols; ++j) {
-			(m->values)[i][j] = i % 4;
+			(m->values)[i][0] = 0;
 		}
 	}
 }
