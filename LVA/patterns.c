@@ -196,7 +196,7 @@ void set_pattern_full(matrix_t *m)
 {
 	for (int i = 0; i < m->n_rows; ++i) {
 		for (int j = 0; j < m->n_cols; ++j) {
-			(m->values)[i][0] = 0;
+			(m->values)[3][3] = 0;
 		}
 	}
 }

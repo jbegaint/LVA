@@ -6,7 +6,7 @@
 #define CFG_FILE "lva.cfg"
 
 #define FILE_ONI_TEST "./share/ONI/jb.oni"
-#define FILE_PGM_TEST "./share/phelma.pgm"
+#define FILE_PGM_TEST "./share/lva.pgm"
 
 #define PIXELS_X 160
 #define PIXELS_Y 120
@@ -15,7 +15,7 @@
 #define ONI_PIXELS_Y 240
 
 #define N_ROWS 14
-#define N_COLS 25
+#define N_COLS 25 
 #define N_GPIOS 4
 
 #define N_LEVELS 4

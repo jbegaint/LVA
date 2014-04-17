@@ -16,6 +16,7 @@
 extern pattern_t patterns[];
 
 static int running = 1;
+int next_matrix = 1;
 
 /* 14 rows */
 static const char* pins_rows_names[] =
@@ -80,9 +81,9 @@ void *set_pins_values(void *arg)
 	while (running) {
 		/* call pattern */
 		ptrn_func_ptr(LED_MATRIX, running);
-		/* sleep 100 ms */
-		usleep(100 * 1000);
+		usleep(100*1000);
 	}
+
 
 	return NULL;
 }
@@ -157,6 +158,7 @@ void switch_leds(void)
 			unselect_row_by_pin(&pins_rows[row]);
 		}
 	}
+
 	/* end of loop, exit */
 	cleanup();
 }
