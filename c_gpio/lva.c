@@ -37,6 +37,8 @@ void parse_config(void)
 
 	const char *name;
 	int x, y;
+	int i;
+
 	int n_cols, n_rows;
 
 	config_init(cf);
@@ -69,7 +71,6 @@ void parse_config(void)
 	pins_rows_names = calloc(n_rows, sizeof(char *));
 
 	printf("n_rows: %d\n", n_rows);
-	int i;
 	for (i = 0; i < n_rows; ++i) {
 		printf("\t#%d. %s\n", i + 1, config_setting_get_string_elem(row, i));
 		pins_rows_names[i] = config_setting_get_string_elem(row, i);
