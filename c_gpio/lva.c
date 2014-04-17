@@ -73,13 +73,13 @@ void parse_config(void)
 	printf("n_rows: %d\n", n_rows);
 	for (i = 0; i < n_rows; ++i) {
 		printf("\t#%d. %s\n", i + 1, config_setting_get_string_elem(row, i));
-		pins_rows_names[i] = config_setting_get_string_elem(row, i);
+		pins_rows_names[i] = strdup(config_setting_get_string_elem(row, i));
 	}
 
 	printf("n_cols: %d\n", n_cols);
 	for (i = 0; i < n_cols; ++i) {
 		printf("\t#%d. %s\n", i + 1, config_setting_get_string_elem(col, i));
-		pins_cols_names[i] = config_setting_get_string_elem(col, i);
+		pins_cols_names[i] = strdup(config_setting_get_string_elem(col, i));
 	}
 
 	config_destroy(cf);
@@ -89,15 +89,14 @@ void setup(void)
 {
 	/* parse config file */
 	parse_config();
-	
-	/* init gpios */
-	iolib_init();
-	enable_gpios();
-
 
 	/* get pins from pins names */
 	pins_rows = get_pins_by_names(pins_rows_names, ARRAY_SIZE(pins_rows_names));
 	pins_cols = get_pins_by_names(pins_cols_names, ARRAY_SIZE(pins_cols_names));
+	
+	/* init gpios */
+	iolib_init();
+	enable_gpios();
 
 	/* set direction as output */
 	set_dir_pins_output(pins_rows, N_ROWS);

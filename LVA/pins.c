@@ -201,7 +201,7 @@ pin_t *get_pins_by_names(const char **names, int n_pins)
 		p = get_pin_by_name(names[i]);
 
 		if (!p) {
-			die("unknown pin: %s\n", names[i]);
+			die("unknown pin: %s %d\n", names[i], i);
 		}
 
 		memcpy(table+i, p, sizeof(*p));
