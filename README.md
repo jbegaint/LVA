@@ -1,9 +1,31 @@
 LVA
 ===
 
-Augmented Vision
+_LVA = Lunettes à Vision Augmentée (~Augmented Vision Glasses)_
 
-todo:
+School project, second year.
+
+Augmented Vision
+----------------
+
+Provide a way for partially blind people (but sensitive to light) to walk around
+in a closed environment.
+
+Components
+----------
+
+* [BeagleBoneBlack](http://beagleboard.org/black), _à la_ raspberry pi board
+* [Xtion Pro](http://www.asus.com/Multimedia/Xtion_PRO/), depth sensor (~kinect_)
+* [OpenNI](https://github.com/OpenNI/OpenNI), read data from the depth camera
+* [ArchlinuARM](http://archlinuxarm.org/), linux distribution
+
+DEMO
+----
+
+Youtube channel [link](https://www.youtube.com/playlist?list=PLQOvkFFH_MHpGyxOkTCT55TL4DnkGuFKl)
+
+Todo:
+-----
 
 * ~~independant pin gpios setup~~
 * ~~rts~~
@@ -13,6 +35,5 @@ todo:
 * Makefile (debug/ release)
 
 Help:
-* https://stackoverflow.com/questions/3673226/c-how-to-print-time-in-format-20090810181754-811
-* http://stackoverflow.com/a/14665908
-* ...
+-----
+* http://gcc.gnu.org/onlinedocs/gcc/Link-Options.html
