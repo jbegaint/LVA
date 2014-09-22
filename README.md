@@ -19,7 +19,7 @@ Components
 * [OpenNI](https://github.com/OpenNI/OpenNI), read data from the depth camera
 * [ArchlinuARM](http://archlinuxarm.org/), linux distribution
 
-DEMO
+Demo
 ----
 
 ![img](https://raw.githubusercontent.com/jeanbroid/LVA/master/demo.gif)
